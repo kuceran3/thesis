@@ -1,0 +1,13 @@
+year:dim,event:dim,person:string,time:float
+1996,Dash,Bailey,9.84
+1996,Steeplechase,Keter,487.12
+1996,Marathon,Thugwane,7956
+2000,Dash,Greene,9.87
+2000,Steeplechase,Kosgei,508.17
+2000,Marathon,Abera,7811
+2004,Dash,Gatlin,9.85
+2004,Steeplechase,Kemboi,485.81
+2004,Marathon,Baldini,7855
+2008,Dash,Bolt,9.69
+2008,Steeplechase,Kipruto,490.34
+2008,Marathon,Wanjiru,7596
