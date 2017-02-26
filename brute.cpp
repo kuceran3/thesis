@@ -4,9 +4,10 @@
 #include <vector>
 //#include "object.h"
 #include "dimension.h"
-//hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich vstupu
+//hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich hodnot
 using namespace std;
 
+//File reading
 vector<pair<string, string> > readHeader(string row, vector<Dimension> &dim){
 	vector<pair<string, string> > res;
 	int pos1, pos2, len2;
@@ -76,6 +77,8 @@ void * * readData(ifstream &file, vector<pair<string, string> > attrHeader, vect
 	return res;	
 }
 
+//--------------------------------------------------------------------------------------------------------------------------
+//Data printing
 string toString(void * data, string type) {
 	if(type.length() >= 3 && type.substr(0, 3) == "int") {
 		return to_string(*((int*)data));
@@ -110,6 +113,8 @@ void printData(void * * data, vector<pair<string, string> > attrHeader, vector<D
 	printData(data, attrHeader, dim, 0);
 }
 
+//--------------------------------------------------------------------------------------------------------------------------
+//Cleaning
 void deleteType(void * data, string type) {
 	if(type.length() >= 3 && type.substr(0, 3) == "int") {
 		delete (int *)data;
@@ -140,8 +145,79 @@ void deleteData(void * * data, vector<pair<string, string> > attrHeader, vector<
 	delete data;
 }
 
-int find() {
+//--------------------------------------------------------------------------------------------------------------------------
+//Returns upper left position of solution
+int compareType(void * first, void * second, string type) {
+	if(type.length() >= 3 && type.substr(0, 3) == "int") {
+		return *(int *)first - *(int *)second;
+	} else {
+		return ((string *)first) -> compare(*(string *)second);
+	}
+}
 
+bool checkOneLine(void * * data, void * * dataP, vector<pair<string, string> > attrH, vector<pair<string, string> > AttrHP) {
+	int j = 0;
+	for (unsigned int i = 0; i < attrH.size(); ++i) {
+		if (attrH[i].first == AttrHP[j].first && attrH[i].second == AttrHP[j].second) {
+			if (compareType(data[i], data[j], attrH[i].second) != 0) {
+				return false;
+			}
+			++j;
+		}
+	}
+	return true;
+}
+
+bool findB(void * * data, void * * dataP, vector<pair<string, string> > attrH, vector<pair<string, string> > AttrHP, \
+	vector<Dimension> dim, vector<Dimension> dimP, int posDim, int posDimP) {
+
+	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+		if (dim[posDim].getName() == dimP[posDimP].getName()) {
+			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
+				if (checkOneLine(data, dataP, attrH, AttrHP)) {
+					if(findB(data, dataP, attrH, AttrHP, dim, dimP, posDim + 1, posDimP + 1)) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<pair<string, string> > attrH, \
+	vector<pair<string, string> > AttrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP) {
+
+	vector<vector<unsigned int> > res;
+	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+		if (dim[posDim].getName() == dimP[posDimP].getName()) {
+			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
+				if (checkOneLine(data, dataP, attrH, AttrHP)) {
+					if(findB(data, dataP, attrH, AttrHP, dim, dimP, posDim + 1, posDimP + 1)) {
+						res[i].push_back(posDim);
+						find(data, dataP, attrH, AttrHP, dim, dimP, posDim + 1, posDimP + 1);
+					}
+				}
+			}
+		} else {
+
+			if (posDim + 1 >= dim.size()) {
+				if (checkOneLine(data, dataP, attrH, AttrHP)) {
+					res[i].push_back(posDim);
+				}
+				find(data, dataP, attrH, AttrHP, dim, dimP, posDim + 1, posDimP);
+			}
+		}
+	}
+	return res;
+}
+
+
+
+vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<pair<string, string> > attrH, \
+	vector<pair<string, string> > AttrHP, vector<Dimension> dim, vector<Dimension> dimP) {
+	return find(data, dataP, attrH, AttrHP, dim, dimP, 0, 0);
 }
 
 void run(const char * in, const char * p) {
@@ -160,10 +236,10 @@ void run(const char * in, const char * p) {
 
 	vector<pair<string, string> > patternAttrHeader;
 	vector<Dimension> dimPatt;
-
+	
 	getline(file, value, '\n');
 	attrHeader = readHeader(value, dim);
-
+	
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
 	
@@ -173,8 +249,15 @@ void run(const char * in, const char * p) {
 	data = readData(file, attrHeader, dim, 0);
 	dataPatt = readData(pattern, patternAttrHeader, dimPatt, 0);
 
-	find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
+	vector<vector<unsigned int> > res;
+	res = find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
 
+	for (unsigned int i = 0; i < res.size(); ++i) {
+		for (unsigned int j = 0; j < res[i].size(); ++j) {
+			cout << res[i][j] << ", ";
+		}
+	}
+	cout << endl;
 //	printData(data, attrHeader, dim);
 //	printData(dataPatt, patternAttrHeader, dimPatt);
 

@@ -14,5 +14,6 @@ public:
 	int getSize();
 	void addVal(string val);
 	string getOneVal(int pos);
+	string getName();
 }; 
 #endif

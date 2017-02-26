@@ -1,4 +1,4 @@
-event:dim3,person:string
-Dash,Bolt
-Steeplechase,Kipruto
-Marathon,Wanjiru
+i:dim3,a:int
+2,9
+3,12
+4,15

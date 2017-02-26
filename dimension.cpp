@@ -30,3 +30,6 @@ string Dimension::getOneVal(int pos) {
 	return values[pos];
 }
 
+string Dimension::getName() {
+	return name;
+}
