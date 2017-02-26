@@ -1,4 +1,4 @@
-year:dim,event:dim,person:string,time:float,price:int
+year:dim4,event:dim3,person:string,time:float,price:int
 1996,Dash,Bailey,9.84,100
 1996,Steeplechase,Keter,487.12,100
 1996,Marathon,Thugwane,7956,100

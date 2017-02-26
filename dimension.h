@@ -8,8 +8,9 @@ using namespace std;
 class Dimension {
 	string name;
 	vector<string> values;
+	int count;
 public:
-	Dimension(string n);
+	Dimension(string n, int c);
 	int getSize();
 	void addVal(string val);
 	string getOneVal(int pos);

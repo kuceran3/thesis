@@ -4,12 +4,13 @@
 
 using namespace std;
 
-Dimension::Dimension(string n){
+Dimension::Dimension(string n, int c){
 	name = n;
+	count = c;
 }
 
 int Dimension::getSize() {
-	return values.size();
+	return count;
 }	
 
 void Dimension::addVal(string val) {

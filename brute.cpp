@@ -4,7 +4,7 @@
 #include <vector>
 //#include "object.h"
 #include "dimension.h"
-//hlavicka patternu je podmnozina hlavicky dat
+//hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich vstupu
 using namespace std;
 
 vector<pair<string, string> > readHeader(string row, vector<Dimension> &dim){
@@ -20,8 +20,8 @@ vector<pair<string, string> > readHeader(string row, vector<Dimension> &dim){
 		len2 = pos2 - pos1 - 1;
 		name = row.substr(0, pos1);
 		type = row.substr(pos1 + 1, len2);
-		if(type == "dim") {
-			dim.push_back(Dimension(name));
+		if(type.find("dim") == 0) {
+			dim.push_back(Dimension(name, stoi(type.substr(3))));
 		} else {
 			res.push_back(pair<string, string>(name, type));
 		}
@@ -34,38 +34,44 @@ vector<pair<string, string> > readHeader(string row, vector<Dimension> &dim){
 }
 
 void * readType(string type, string data) {
-	//void * res;
 	if(type.length() >= 3 && type.substr(0, 3) == "int") {
-
 		return (void *)(new int(stoi(data)));
 	} else {
 		return (void *)(new string(data));
 	}
 }
 
-vector<vector<void*> > readData(ifstream &file, vector<pair<string, string> > attrHeader, vector<Dimension> &dim) {
-	vector<vector<void*> > res;
-	int pos = 0;
+void * * readOneLine(string line, vector<pair<string, string> > attrHeader, vector<Dimension> &dim) {
+	void * * res = new void * [attrHeader.size()];
+	int pos;
+
+	for (unsigned int i = 0; i < dim.size(); ++i) {
+		pos = line.find(",");
+		dim[i].addVal(line.substr(0, pos));
+		line = line.substr(pos + 1);
+	}
+
+	for (unsigned int i = 0; i < attrHeader.size(); ++i) {
+		pos = line.find(",");
+		res[i] = readType(attrHeader[i].second, line.substr(0, pos));
+		line = line.substr(pos + 1);
+	}
+	return res;
+}
+
+void * * readData(ifstream &file, vector<pair<string, string> > attrHeader, vector<Dimension> &dim, unsigned int posDim) {
+	void * * res;
 	string data;
-	//Object ** row;
-	//row = new * Object[size];
-	//res.resize(size, vector<Object> (num_of_rows, initial_value))
-	// data budou serazeny podle dimenzi
-	while(1) {
-		getline(file, data, '\n');
-		if (!file.good())
-			break;
-		res.push_back(vector<void*>());
-		for (unsigned int i = 0; i < dim.size(); ++i) {
-			pos = data.find(",");
-			dim[i].addVal(data.substr(0, pos));
-			data = data.substr(pos + 1);
-		}
-		for (unsigned int i = 0; i < attrHeader.size(); ++i) {
-			pos = data.find(",");
-			res[res.size() - 1].push_back(readType(attrHeader[i].second, data.substr(0, pos)));
-			data = data.substr(pos + 1);
-		}
+	
+	res = new void * [dim[posDim].getSize()];
+
+	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+		if (posDim + 1 >= dim.size()) {
+			getline(file, data, '\n');
+			res[i] = (void *)readOneLine(data, attrHeader, dim);
+		} else {
+			res[i] = (void *)readData(file, attrHeader, dim, posDim + 1);
+		}	
 	}
 	return res;	
 }
@@ -77,73 +83,115 @@ string toString(void * data, string type) {
 		return *((string*)data);
 }
 
-void printData(vector<vector<void*> > data, vector<pair<string, string> > attrHeader) {
+void printOneLine(void * * line, vector<pair<string, string> > attrHeader) {
+	for (unsigned int i = 0; i < attrHeader.size(); ++i) {
+		cout << toString(line[i], attrHeader[i].second) << ", ";
+	}
+	cout << endl;
+}
+
+void printData(void * * data, vector<pair<string, string> > attrHeader, vector<Dimension> &dim, unsigned int posDim) {
+	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+		if (posDim + 1 >= dim.size()) {
+			printOneLine((void * *)data[i], attrHeader);
+		} else {
+			printData((void * *)data[i], attrHeader, dim, posDim + 1);
+		}
+	}
+	cout << endl;
+}
+
+void printData(void * * data, vector<pair<string, string> > attrHeader, vector<Dimension> &dim) {
 	for (unsigned int i = 0; i < attrHeader.size(); ++i)	{
 		cout << attrHeader[i].first << ", ";
 	}
-	cout << endl;
 
-	cout << "Data: " << endl;
-	for (unsigned int i = 0; i < data.size(); ++i) {
-		//cout << data[i].size() << " " << attrHeader.size() << endl;
-		for (unsigned int j = 0; j < data[i].size(); ++j) {
-			cout << toString(data[i][j], attrHeader[j].second) << ", ";
-		}
-		cout << endl;
+	cout << endl << "Data: " << endl;
+	printData(data, attrHeader, dim, 0);
+}
+
+void deleteType(void * data, string type) {
+	if(type.length() >= 3 && type.substr(0, 3) == "int") {
+		delete (int *)data;
+	} else {
+		delete (string *)data;
 	}
+}
+
+void deleteOneLine(void * * line, vector<pair<string, string> > attrHeader) {
+	for (unsigned int i = 0; i < attrHeader.size(); ++i) {
+		deleteType(line[i], attrHeader[i].second);
+	}
+}
+
+void deleteData(void * * data, vector<pair<string, string> > attrHeader, vector<Dimension> &dim, unsigned int posDim) {
+	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+		if (posDim + 1 >= dim.size()) {
+			deleteOneLine((void * *)data[i], attrHeader);
+		} else {
+			deleteData((void * *)data[i], attrHeader, dim, posDim + 1);
+		}
+		delete (void * *)data[i];
+	}
+}
+
+void deleteData(void * * data, vector<pair<string, string> > attrHeader, vector<Dimension> &dim) {
+	deleteData(data, attrHeader, dim, 0);
+	delete data;
+}
+
+int find() {
 
 }
 
-int main(int argc, char* argv[])
-{
-	if(argc < 2) {
-		cout << "Usage: " << argv[0] << " <INPUTFILE>" << endl;
-		return 0;
-	}
-	string inpFile(argv[1]);
+void run(const char * in, const char * p) {
+	string inpFile(in);
 	ifstream file;
 	file.open(inpFile.c_str());
-	string value, tmp;
+
+	string inpPattern(p);
+	ifstream pattern;
+	pattern.open(inpPattern.c_str());
+	
+	string value, valuePatt;
 
 	vector<pair<string, string> > attrHeader;
 	vector<Dimension> dim;
 
+	vector<pair<string, string> > patternAttrHeader;
+	vector<Dimension> dimPatt;
+
 	getline(file, value, '\n');
 	attrHeader = readHeader(value, dim);
+
+	getline(pattern, valuePatt, '\n');
+	patternAttrHeader = readHeader(valuePatt, dimPatt);
 	
-	//for (unsigned int i = 0; i < attrHeader.size(); ++i)	{
-	//	cout << attrHeader[i].first << " " << attrHeader[i].second << endl;
-	//}	
+	void * * data;
+	void * * dataPatt;
 	
-	vector<vector<void*> > data;
-	data = readData(file, attrHeader, dim);
+	data = readData(file, attrHeader, dim, 0);
+	dataPatt = readData(pattern, patternAttrHeader, dimPatt, 0);
 
-	printData(data, attrHeader);
-	/*
-	for (unsigned int i = 0; i < attrHeader.size(); ++i)	{
-		cout << attrHeader[i].first << ", ";
-	}
-	cout << endl;
-	*/
-	/*for (unsigned int i = 0; i < dim.size(); ++i)	{
-		for (int j = 0; j < dim[i].getSize(); ++j) {
-			cout << dim[i].getOneVal(j) << ", ";
-		}
-		cout << endl;
-	}
-	cout << "Data: " << endl;
-	for (unsigned int i = 0; i < data.size(); ++i) {
-		for (unsigned int j = 0; j < data[i].size(); ++j) {
-			cout << data[i][j] << ", ";
-		}
-		cout << endl;
-	}*/
-	/*while(file.good()) {
-		getline(file, value, '\n');
+	find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
 
-		cout << value << endl;
-	}*/
+//	printData(data, attrHeader, dim);
+//	printData(dataPatt, patternAttrHeader, dimPatt);
 
+	deleteData(data, attrHeader, dim);
+	deleteData(dataPatt, patternAttrHeader, dimPatt);
+
+	pattern.close();
 	file.close();
+}
+
+int main(int argc, char* argv[])
+{
+	if(argc < 3) {
+		cout << "Usage: " << argv[0] << " <INPUTFILE>" << " <PATTERN>" << endl;
+		return 0;
+	}
+	run(argv[1], argv[2]);
+
 	return 0;
 }
