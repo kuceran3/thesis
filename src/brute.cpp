@@ -1,9 +1,10 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
+//#include <iostream>
+//#include <fstream>
+//#include <string>
+//#include <vector>
 //#include "object.h"
 #include "dimension.h"
+#include "brute.h"
 //hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich hodnot
 using namespace std;
 
@@ -186,26 +187,10 @@ bool checkOneLine(void * * data, void * * dataP, vector<pair<string, string> > a
 			++j;
 		}
 	}
+	if (j < attrHP.size())
+		return false;
 	//cout << "compare true" << endl;
 	return true;
-}
-
-bool findB(void * * data, void * * dataP, vector<pair<string, string> > attrH, vector<pair<string, string> > attrHP, \
-	vector<Dimension> dim, vector<Dimension> dimP, int posDim, int posDimP) {
-
-	for (int i = 0; i < dim[posDim].getSize(); ++i) {
-		if (dim[posDim].getName() == dimP[posDimP].getName()) {
-			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
-				if (checkOneLine(data, dataP, attrH, attrHP)) {
-					if(findB(data, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1)) {
-						return true;
-					}
-				}
-			}
-		}
-	}
-
-	return false;
 }
 
 bool findRest(void * * data, void * * dataP, vector<pair<string, string> > attrH, \
@@ -240,19 +225,17 @@ bool findRest(void * * data, void * * dataP, vector<pair<string, string> > attrH
 	//return true;
 }
 
-
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<pair<string, string> > attrH, \
 	vector<pair<string, string> > attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP) {
 
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 	bool isRes;
-	cout << "Dim: " << dim[posDim].getName() << endl;
+	//cout << "Dim: " << dim[posDim].getName() << endl;
 	for (int i = 0; i < dim[posDim].getSize(); ++i) {
 		//find dimensions with the same name
 		if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 			if (i + dimP[posDimP].getSize() > dim[posDim].getSize()) break;
-			//cout << dim[posDim].getOneVal(i) << " " << dimP[posDimP].getOneVal(0) << endl;
 			//find same value in the dimension
 			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
 				if (posDim + 1 >= dim.size()) {
@@ -366,8 +349,8 @@ void run(const char * in, const char * p) {
 			cout << endl;
 		}
 	}
-//	printData(data, attrHeader, dim);
-//	printData(dataPatt, patternAttrHeader, dimPatt);
+	//printData(data, attrHeader, dim);
+	//printData(dataPatt, patternAttrHeader, dimPatt);
 
 	deleteData(data, attrHeader, dim);
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
@@ -376,13 +359,11 @@ void run(const char * in, const char * p) {
 	file.close();
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 	if(argc < 3) {
 		cout << "Usage: " << argv[0] << " <INPUTFILE>" << " <PATTERN>" << endl;
 		return 0;
 	}
 	run(argv[1], argv[2]);
-
 	return 0;
 }
