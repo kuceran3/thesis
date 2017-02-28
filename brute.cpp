@@ -77,6 +77,16 @@ void * * readData(ifstream &file, vector<pair<string, string> > attrHeader, vect
 	return res;	
 }
 
+void * * readData(ifstream &file, vector<pair<string, string> > attrHeader, vector<Dimension> &dim) {
+	if (dim.size() <= 0) {
+		string line;
+		getline(file, line, '\n');
+		return readOneLine(line, attrHeader, dim);
+	}
+	else 
+		return readData(file, attrHeader, dim, 0);
+}
+
 //--------------------------------------------------------------------------------------------------------------------------
 //Data printing
 string toString(void * data, string type) {
@@ -110,7 +120,10 @@ void printData(void * * data, vector<pair<string, string> > attrHeader, vector<D
 	}
 
 	cout << endl << "Data: " << endl;
-	printData(data, attrHeader, dim, 0);
+	if (dim.size() <= 0)
+		printOneLine(data, attrHeader);
+	else 
+		printData(data, attrHeader, dim, 0);
 }
 
 //--------------------------------------------------------------------------------------------------------------------------
@@ -141,7 +154,10 @@ void deleteData(void * * data, vector<pair<string, string> > attrHeader, vector<
 }
 
 void deleteData(void * * data, vector<pair<string, string> > attrHeader, vector<Dimension> &dim) {
-	deleteData(data, attrHeader, dim, 0);
+	if (dim.size() <= 0)
+		deleteOneLine(data, attrHeader);
+	else 
+		deleteData(data, attrHeader, dim, 0);
 	delete data;
 }
 
@@ -155,27 +171,33 @@ int compareType(void * first, void * second, string type) {
 	}
 }
 
-bool checkOneLine(void * * data, void * * dataP, vector<pair<string, string> > attrH, vector<pair<string, string> > AttrHP) {
-	int j = 0;
+bool checkOneLine(void * * data, void * * dataP, vector<pair<string, string> > attrH, vector<pair<string, string> > attrHP) {
+	unsigned int j = 0;
 	for (unsigned int i = 0; i < attrH.size(); ++i) {
-		if (attrH[i].first == AttrHP[j].first && attrH[i].second == AttrHP[j].second) {
-			if (compareType(data[i], data[j], attrH[i].second) != 0) {
+		if (j >= attrHP.size()) break;
+		if (attrH[i].first == attrHP[j].first && attrH[i].second == attrHP[j].second) {
+			//cout << "Comparing ";
+			//cout << i << " " << j << endl;
+			//cout << *((string*)data) << " first " << attrH[i].second << endl;
+			if (compareType(data[i], dataP[j], attrH[i].second) != 0) {
+				//cout << "compare false" << endl;
 				return false;
 			}
 			++j;
 		}
 	}
+	//cout << "compare true" << endl;
 	return true;
 }
 
-bool findB(void * * data, void * * dataP, vector<pair<string, string> > attrH, vector<pair<string, string> > AttrHP, \
+bool findB(void * * data, void * * dataP, vector<pair<string, string> > attrH, vector<pair<string, string> > attrHP, \
 	vector<Dimension> dim, vector<Dimension> dimP, int posDim, int posDimP) {
 
 	for (int i = 0; i < dim[posDim].getSize(); ++i) {
 		if (dim[posDim].getName() == dimP[posDimP].getName()) {
 			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
-				if (checkOneLine(data, dataP, attrH, AttrHP)) {
-					if(findB(data, dataP, attrH, AttrHP, dim, dimP, posDim + 1, posDimP + 1)) {
+				if (checkOneLine(data, dataP, attrH, attrHP)) {
+					if(findB(data, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1)) {
 						return true;
 					}
 				}
@@ -186,38 +208,117 @@ bool findB(void * * data, void * * dataP, vector<pair<string, string> > attrH, v
 	return false;
 }
 
-vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<pair<string, string> > attrH, \
-	vector<pair<string, string> > AttrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP) {
+bool findRest(void * * data, void * * dataP, vector<pair<string, string> > attrH, \
+	vector<pair<string, string> > attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> indices, int posInd) {
 
-	vector<vector<unsigned int> > res;
-	for (int i = 0; i < dim[posDim].getSize(); ++i) {
-		if (dim[posDim].getName() == dimP[posDimP].getName()) {
-			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
-				if (checkOneLine(data, dataP, attrH, AttrHP)) {
-					if(findB(data, dataP, attrH, AttrHP, dim, dimP, posDim + 1, posDimP + 1)) {
-						res[i].push_back(posDim);
-						find(data, dataP, attrH, AttrHP, dim, dimP, posDim + 1, posDimP + 1);
+	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
+		if (dim[posDim].getOneVal(indices[posInd]) == dimP[posDimP].getOneVal(0)) {
+			if (posDim + 1 >= dim.size()) {
+				for (int j = 0; j < dimP[posDimP].getSize(); ++j) {
+					if (!checkOneLine((void * *)data[indices[posInd] + j], (void * *)dataP[j], attrH, attrHP)) {
+						return false;
 					}
 				}
+				return true;
+			} else {
+				for (int k = 0; k < dimP[posDimP].getSize(); ++k) {
+					if (!findRest((void * *)data[indices[posInd] + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, indices, posInd + 1)) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
+	} else {
+		if (posDim + 1 >= dim.size()) {
+			return checkOneLine((void * *)data[indices[posInd]], dataP, attrH, attrHP);
+		} else {
+			return findRest((void * *)data[indices[posInd]], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, indices, posInd + 1);			
+		}
+	}
+	//return true;
+}
+
+
+vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<pair<string, string> > attrH, \
+	vector<pair<string, string> > attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP) {
+
+	vector<vector<unsigned int> > res, returned;
+	vector<unsigned int> one;
+	bool isRes;
+	cout << "Dim: " << dim[posDim].getName() << endl;
+	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+		//find dimensions with the same name
+		if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
+			if (i + dimP[posDimP].getSize() > dim[posDim].getSize()) break;
+			//cout << dim[posDim].getOneVal(i) << " " << dimP[posDimP].getOneVal(0) << endl;
+			//find same value in the dimension
+			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
+				if (posDim + 1 >= dim.size()) {
+					if (checkOneLine((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
+						isRes = true;
+						for (int j = 1; j < dimP[posDimP].getSize(); ++j) {
+							if (dim[posDim].getOneVal(i + j) != dimP[posDimP].getOneVal(j)) {
+								isRes = false;
+								break;
+							}
+							if (!checkOneLine((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
+								isRes = false;
+								break;
+							}
+								
+						}
+						if (isRes) {
+							one.push_back(i);
+							res.push_back(one);
+							one.clear();
+						}
+					}
+				} else {
+					returned = find((void * *)data[i], (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1);
+					for (unsigned int j = 0; j < returned.size(); ++j) {
+						isRes = true;
+						for (int k = 1; k < dimP[posDimP].getSize(); ++k) {
+							if (dim[posDim].getOneVal(i + k) != dimP[posDimP].getOneVal(k)) {
+								isRes = false;
+								break;
+							}
+							if (!findRest((void * *)data[i + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, returned[j], 0)) {
+								isRes = false;
+								break;
+							}
+						}
+						if (isRes) {
+							returned[j].insert(returned[j].begin(), i);
+							res.push_back(returned[j]);	
+						}
+					}
+				}
+				break;
 			}
 		} else {
-
 			if (posDim + 1 >= dim.size()) {
-				if (checkOneLine(data, dataP, attrH, AttrHP)) {
-					res[i].push_back(posDim);
+				if (checkOneLine((void * *)data[i], dataP, attrH, attrHP)) {
+					one.push_back(i);
+					res.push_back(one);
+					one.clear();
 				}
-				find(data, dataP, attrH, AttrHP, dim, dimP, posDim + 1, posDimP);
+			} else {
+				returned = find((void * *)data[i], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP);
+				for (unsigned int j = 0; j < returned.size(); ++j) {
+					returned[j].insert(returned[j].begin(), i);
+					res.push_back(returned[j]);
+				}
 			}
 		}
 	}
 	return res;
 }
 
-
-
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<pair<string, string> > attrH, \
-	vector<pair<string, string> > AttrHP, vector<Dimension> dim, vector<Dimension> dimP) {
-	return find(data, dataP, attrH, AttrHP, dim, dimP, 0, 0);
+	vector<pair<string, string> > attrHP, vector<Dimension> dim, vector<Dimension> dimP) {
+	return find(data, dataP, attrH, attrHP, dim, dimP, 0, 0);
 }
 
 void run(const char * in, const char * p) {
@@ -246,18 +347,25 @@ void run(const char * in, const char * p) {
 	void * * data;
 	void * * dataPatt;
 	
-	data = readData(file, attrHeader, dim, 0);
-	dataPatt = readData(pattern, patternAttrHeader, dimPatt, 0);
-
+	data = readData(file, attrHeader, dim);
+	dataPatt = readData(pattern, patternAttrHeader, dimPatt);
+	cout << " Find" << endl;
 	vector<vector<unsigned int> > res;
 	res = find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
-
-	for (unsigned int i = 0; i < res.size(); ++i) {
-		for (unsigned int j = 0; j < res[i].size(); ++j) {
-			cout << res[i][j] << ", ";
+	if (res.size() == 0){
+		cout << "no solutions found" << endl;
+	} else {
+		for (unsigned int i = 0; i < res.size(); ++i) {
+			for (unsigned int j = 0; j < res[i].size(); ++j) {
+				cout << res[i][j] << ", ";
+			}
+			cout << " ... ";
+			for (unsigned int j = 0; j < res[i].size(); ++j) {
+				cout << dim[j].getOneVal(res[i][j]) << ", ";
+			}
+			cout << endl;
 		}
 	}
-	cout << endl;
 //	printData(data, attrHeader, dim);
 //	printData(dataPatt, patternAttrHeader, dimPatt);
 
