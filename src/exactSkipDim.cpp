@@ -1,4 +1,11 @@
+//#include <iostream>
+//#include <fstream>
+//#include <string>
+//#include <vector>
+//#include "object.h"
+#include "dimension.h"
 #include "brute.h"
+#include "attribute.h"
 
 //hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich hodnot
 using namespace std;
