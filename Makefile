@@ -4,11 +4,11 @@ IDIR	= include
 ODIR	= obj
 SDIR	= src
 
-DEPS	= $(IDIR)/dimension.h $(IDIR)/attribute.h
+DEPS	= $(IDIR)/dimension.h $(IDIR)/attribute.h $(IDIR)/lib.h 
 
 all: brute clean
 
-brute: $(ODIR)/brute.o $(ODIR)/dimension.o $(ODIR)/attribute.o
+brute: $(ODIR)/brute.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/lib.o
 	$(CXX) -o $@ $^
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(IDIR)/%.h

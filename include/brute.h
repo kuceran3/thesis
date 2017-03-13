@@ -7,29 +7,11 @@
 //#include "object.h"
 #include "dimension.h"
 #include "attribute.h"
+#include "lib.h"
 
 //hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich hodnot
 using namespace std;
 
-//File reading
-vector<Attribute> readHeader(string row, vector<Dimension> &dim);
-void * readType(string type, string data);
-void * * readOneLine(string line, vector<Attribute > attrHeader, vector<Dimension> &dim);
-void * * readData(ifstream &file, vector<Attribute > attrHeader, vector<Dimension> &dim, unsigned int posDim);
-void * * readData(ifstream &file, vector<Attribute > attrHeader, vector<Dimension> &dim);
-//--------------------------------------------------------------------------------------------------------------------------
-//Data printing
-string toString(void * data, string type);
-void printOneLine(void * * line, vector<Attribute > attrHeader);
-void printData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim, unsigned int posDim);
-void printData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim);
-//--------------------------------------------------------------------------------------------------------------------------
-//Cleaning
-void deleteType(void * data, string type);
-void deleteOneLine(void * * line, vector<Attribute > attrHeader);
-void deleteData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim, unsigned int posDim);
-void deleteData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim);
-//--------------------------------------------------------------------------------------------------------------------------
 //Returns upper left position of solution
 int compareType(void * first, void * second, string type);
 //compares one item in the data
