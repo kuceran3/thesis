@@ -6,7 +6,7 @@ SDIR	= src
 
 DEPS	= $(IDIR)/dimension.h $(IDIR)/attribute.h $(IDIR)/lib.h 
 
-all: brute clean
+all: brute exactSkipDim clean
 
 brute: $(ODIR)/brute.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/lib.o
 	$(CXX) -o $@ $^
@@ -16,6 +16,12 @@ $(ODIR)/%.o: $(SDIR)/%.cpp $(IDIR)/%.h
 
 $(ODIR)/brute.o: $(DEPS)
 
+exactSkipDim: $(ODIR)/exactSkipDim.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/lib.o
+	$(CXX) -o $@ $^
+
+$(ODIR)/exactSkipDim.o: $(DEPS)
+
+
 .PHONY: clean cleanest
 
 clean:
@@ -23,3 +29,4 @@ clean:
 
 cleanest: clean
 	rm -f brute
+	rm -f exactSkipDim
