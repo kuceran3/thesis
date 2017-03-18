@@ -6,7 +6,7 @@ SDIR	= src
 
 DEPS	= $(IDIR)/dimension.h $(IDIR)/attribute.h $(IDIR)/lib.h 
 
-all: brute exactSkipDim clean
+all: brute exactSkipDim appSplitDyn clean
 
 brute: $(ODIR)/brute.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/lib.o
 	$(CXX) -o $@ $^
@@ -21,6 +21,10 @@ exactSkipDim: $(ODIR)/exactSkipDim.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(O
 
 $(ODIR)/exactSkipDim.o: $(DEPS)
 
+appSplitDyn: $(ODIR)/appSplitDyn.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/lib.o
+	$(CXX) -o $@ $^
+
+$(ODIR)/appSplitDyn.o: $(DEPS)
 
 .PHONY: clean cleanest
 
@@ -30,3 +34,4 @@ clean:
 cleanest: clean
 	rm -f brute
 	rm -f exactSkipDim
+	rm -f appSplitDyn
