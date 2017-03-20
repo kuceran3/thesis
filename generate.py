@@ -12,15 +12,15 @@ def loop_rec(length, dimNum, pos, printDim, attNum, attMax, outF):
 		for j in range(0, length):
 			printDim[pos] = j
 			for x in range(0, len(printDim)):
-				print(printDim[x], ",", sep='', end='')
+				#print(printDim[x], ",", sep="", end="")
 				outF.write(str(printDim[x]) + ",")
 			for x in range(0, attNum):
-				print(random.randint(0, attMax), sep='', end='')
+				#print(random.randint(0, attMax), sep='', end='')
 				outF.write(str(random.randint(0, attMax)))
 				if(x + 1 < attNum):
-					print(",", sep='', end='')
+				#	print(",", sep='', end='')
 					outF.write(",")
-			print()
+			#print()
 			outF.write('\n')
 
 if (len(sys.argv) < 6):
@@ -37,15 +37,15 @@ outF = sys.argv[5]
 outF = open(outF, 'w')
 
 for x in range(0, dimNum):
-	print(x, ":dim", length, ",", sep='', end='')
+	#print(x, ":dim", length, ",", sep='', end='')
 	outF.write(str(x) + ":dim" + str(length) + ",")
 for x in range(0, attNum):
-	print(x, ":int", sep='', end='')
+	#print(x, ":int", sep='', end='')
 	outF.write(str(x) + ":int")
 	if (x < attNum - 1):
-		print(",", sep='', end='')
+	#	print(",", sep='', end='')
 		outF.write(",")
-print()
+#print()
 outF.write('\n')
 
 printDim = []

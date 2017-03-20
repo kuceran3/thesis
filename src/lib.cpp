@@ -155,3 +155,31 @@ void deleteData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &
 		deleteData(data, attrHeader, dim, 0);
 	delete data;
 }
+
+//--------------------------------------------------------------------------------------------------------------------------
+//Checks header
+bool checkHeaders(vector<Dimension> dim, vector<Dimension> dimPatt, vector<Attribute> attrHeader, vector<Attribute> patternAttrHeader) {
+	unsigned int j = 0;
+	for (unsigned int i = 0; i < attrHeader.size(); ++i) {
+		if (patternAttrHeader[j].getName() == attrHeader[i].getName() && patternAttrHeader[j].getType() == attrHeader[i].getType()) {
+				j++;
+		}
+		if (j >= patternAttrHeader.size())
+			break;
+	}
+	if (j != patternAttrHeader.size())
+		return false;
+
+	j = 0;
+	for (unsigned int i = 0; i < dim.size(); ++i) {
+		if (dimPatt[j].getName() == dim[i].getName() && dimPatt[j].getSize() <= dim[i].getSize()) {
+				j++;
+		}
+		if (j >= dimPatt.size())
+			break;
+	}
+	if (j != dimPatt.size())
+		return false;
+
+	return true;
+}

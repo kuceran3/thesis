@@ -18,6 +18,7 @@ int compareType(void * first, void * second, string type) {
 
 bool checkOneLine(void * * data, void * * dataP, vector<Attribute> attrH, vector<Attribute> attrHP) {
 	unsigned int j = 0;
+
 	for (unsigned int i = 0; i < attrH.size(); ++i) {
 		if (j >= attrHP.size()) break;
 		if (attrH[i].getName() == attrHP[j].getName() && attrH[i].getType() == attrHP[j].getType()) {
@@ -34,7 +35,6 @@ bool checkOneLine(void * * data, void * * dataP, vector<Attribute> attrH, vector
 
 bool checkRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, vector<unsigned int> indices) {
-
 	if (posDim >= dim.size()) {
 		return checkOneLine(data, dataP, attrH, attrHP);
 	} else {
@@ -46,7 +46,6 @@ vector<vector<unsigned int> > checkFirst(void * * data, void * * dataP, vector<A
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim) {
 
 	vector<vector<unsigned int> > res, returned;
-
 	if (posDim >= dim.size()) {
 		if (checkOneLine(data, dataP, attrH, attrHP)) {
 			res.push_back(vector<unsigned int>(dim.size(), 0));
@@ -70,7 +69,7 @@ vector<vector<unsigned int> > checkPart(void * * data, void * * dataP, vector<At
 	vector<vector<unsigned int> > res, returned;
 	bool isRes = true;
 
-	returned = checkFirst((void * *)data[0], (void * *)dataP[0], attrH, attrHP, dim, posDim);
+	returned = checkFirst((void * *)data[0], (void * *)dataP[0], attrH, attrHP, dim, posDim + 1);
 
 	for (unsigned int i = 0; i < returned.size(); ++i) {
 		isRes = true;
@@ -92,14 +91,14 @@ vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<A
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions) {
 
 	vector<vector<unsigned int> > res, returned;
-	
-	if (posDimP >= dimP.size()) {
+
+	if (posDimP + 1 >= dimP.size()) {
 		int partSize = getPartSize(dimP[posDimP]);
 
-		for (int i = 0; i < dimP[posDimP].getSize() - partSize; i += partSize) {
+		for (int i = 0; i < dimP[posDimP].getSize() - partSize + 1; i += partSize) {
 			returned = checkPart(data, &dataP[i], attrH, attrHP, dim, posDim, partSize);
 			for (unsigned int k = 0; k < returned.size(); ++k) {
-				returned[k][dimPositions[posDimP]] -= (dim[posDimP].getSize() - 1 - i);
+				returned[k][dimPositions[posDimP]] -= i;
 				res.push_back(returned[k]);	
 			}	
 		}
@@ -107,7 +106,8 @@ vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<A
 		for (int i = 0; i < dimP[posDimP].getSize(); ++i) {
 			returned = checkParts(data, (void * *)dataP[i], attrH, attrHP, dim, dimP, posDim, posDimP + 1, dimPositions);
 			for (unsigned int k = 0; k < returned.size(); ++k) {
-				returned[k][dimPositions[posDimP]] -= (dim[posDimP].getSize() - 1 - i);
+				//returned[k][dimPositions[posDimP]] -= (dim[posDimP].getSize() - 1 - i);
+				returned[k][dimPositions[posDimP]] -= i;
 				res.push_back(returned[k]);
 			}		
 		}
@@ -115,16 +115,14 @@ vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<A
 	return res;
 }
 
-
 //split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions) {
 
 	vector<vector<unsigned int> > res, returned;
 	int partSize = getPartSize(dimP[posDimP]);
-
 	for (int i = dimP[posDimP].getSize() - partSize; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
-		for (int j = 0; j < partSize - 1; ++j)	{
+		for (int j = 0; j < partSize; ++j)	{
 			returned = checkParts(&data[i - j], dataP, attrH, attrHP, dim, dimP, posDim, 0, dimPositions);
 			for (unsigned int k = 0; k < returned.size(); ++k) {
 				returned[k][posDim] += (i - j);
@@ -143,8 +141,8 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	vector<unsigned int> one;
 
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
-		dimPositions.push_back(posDimP);
-		if (posDimP >= dimP.size()) {
+		dimPositions.push_back(posDim);
+		if (posDimP + 1 >= dimP.size()) {
 			returned = findParts(data, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions);
 			for (unsigned int j = 0; j < returned.size(); ++j) {
 				//returned[j][posDim] += i;
@@ -171,12 +169,16 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	return res;
 }
 
+
+
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP) {
 
-	vector<vector<unsigned int> > res = find(data, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>());
+	vector<vector<unsigned int> > res = find(data, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>()), sol;
 
 	//Approximate check of the rest of the pattern
+
+	//sol = dynCheck(data, dataP, attrH, attrHP, dim, dimP, res);
 
 	return res;
 }
@@ -203,6 +205,11 @@ void run(const char * in, const char * p) {
 	
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
+
+	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
+		cout << "Invalid pattern" << endl;
+		return;
+	}
 	
 	void * * data;
 	void * * dataPatt;
@@ -220,9 +227,9 @@ void run(const char * in, const char * p) {
 				cout << res[i][j] << ", ";
 			}
 			cout << " ... ";
-			for (unsigned int j = 0; j < res[i].size(); ++j) {
-				cout << dim[j].getOneVal(res[i][j]) << ", ";
-			}
+			//for (unsigned int j = 0; j < res[i].size(); ++j) {
+			//	cout << dim[j].getOneVal(res[i][j]) << ", ";
+			//}
 			cout << endl;
 		}
 	}

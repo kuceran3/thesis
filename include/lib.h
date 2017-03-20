@@ -28,4 +28,5 @@ void deleteOneLine(void * * line, vector<Attribute > attrHeader);
 void deleteData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim, unsigned int posDim);
 void deleteData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim);
 //--------------------------------------------------------------------------------------------------------------------------
+bool checkHeaders(vector<Dimension> dim, vector<Dimension> dimPatt, vector<Attribute> attrHeader, vector<Attribute> patternAttrHeader);
 #endif

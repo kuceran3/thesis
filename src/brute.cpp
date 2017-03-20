@@ -167,16 +167,21 @@ void run(const char * in, const char * p) {
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
 	
+	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
+		cout << "Invalid pattern" << endl;
+		return;
+	}
+
 	void * * data;
 	void * * dataPatt;
 	
 	data = readData(file, attrHeader, dim);
 	dataPatt = readData(pattern, patternAttrHeader, dimPatt);
-	cout << " Find" << endl;
+	cout << "Finding..." << endl;
 	vector<vector<unsigned int> > res;
 	res = find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
 	if (res.size() == 0){
-		cout << "no solutions found" << endl;
+		cout << "No solutions found" << endl;
 	} else {
 		for (unsigned int i = 0; i < res.size(); ++i) {
 			for (unsigned int j = 0; j < res[i].size(); ++j) {

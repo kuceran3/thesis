@@ -190,6 +190,11 @@ void run(const char * in, const char * p) {
 	
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
+
+	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
+		cout << "Invalid pattern" << endl;
+		return;
+	}
 	
 	void * * data;
 	void * * dataPatt;
