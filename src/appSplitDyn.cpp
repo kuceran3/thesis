@@ -7,7 +7,6 @@ int getPartSize(Dimension dim) {
 	return (int)sqrt(dim.getSize());
 }
 
-//Returns upper left position of solution
 int compareType(void * first, void * second, string type) {
 	if(type.length() >= 3 && type.substr(0, 3) == "int") {
 		return *(int *)first - *(int *)second;
@@ -53,7 +52,7 @@ vector<vector<unsigned int> > checkFirst(void * * data, void * * dataP, vector<A
 		return res;
 	}
 
-	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 	 	returned = checkFirst((void * *)data[i], dataP, attrH, attrHP, dim, posDim + 1);
 		for (unsigned int j = 0; j < returned.size(); ++j) {
 			returned[j][posDim] += i;
@@ -95,7 +94,7 @@ vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<A
 	if (posDimP + 1 >= dimP.size()) {
 		int partSize = getPartSize(dimP[posDimP]);
 
-		for (int i = 0; i < dimP[posDimP].getSize() - partSize + 1; i += partSize) {
+		for (unsigned int i = 0; i < dimP[posDimP].getSize() - partSize + 1; i += partSize) {
 			returned = checkPart(data, &dataP[i], attrH, attrHP, dim, posDim, partSize);
 			for (unsigned int k = 0; k < returned.size(); ++k) {
 				returned[k][dimPositions[posDimP]] -= i;
@@ -103,7 +102,7 @@ vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<A
 			}	
 		}
 	} else {
-		for (int i = 0; i < dimP[posDimP].getSize(); ++i) {
+		for (unsigned int i = 0; i < dimP[posDimP].getSize(); ++i) {
 			returned = checkParts(data, (void * *)dataP[i], attrH, attrHP, dim, dimP, posDim, posDimP + 1, dimPositions);
 			for (unsigned int k = 0; k < returned.size(); ++k) {
 				//returned[k][dimPositions[posDimP]] -= (dim[posDimP].getSize() - 1 - i);
@@ -121,7 +120,7 @@ vector<vector<unsigned int> > findParts(void * * data, void * * dataP, vector<At
 
 	vector<vector<unsigned int> > res, returned;
 	int partSize = getPartSize(dimP[posDimP]);
-	for (int i = dimP[posDimP].getSize() - partSize; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
+	for (unsigned int i = dimP[posDimP].getSize() - partSize; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
 		for (int j = 0; j < partSize; ++j)	{
 			returned = checkParts(&data[i - j], dataP, attrH, attrHP, dim, dimP, posDim, 0, dimPositions);
 			for (unsigned int k = 0; k < returned.size(); ++k) {
@@ -149,7 +148,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 				res.push_back(returned[j]);	
 			}
 		} else {
-			for (int i = dimP[posDimP].getSize() - 1; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
+			for (unsigned int i = dimP[posDimP].getSize() - 1; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
 				returned = find((void * *)data[i], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions);
 				for (unsigned int j = 0; j < returned.size(); ++j) {
 					returned[j][posDim] += i;
@@ -158,7 +157,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 			}
 		}	
 	} else {
-		for (int i = 0; i < dim[posDim].getSize(); ++i) {
+		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 			returned = find((void * *)data[i], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, dimPositions);
 			for (unsigned int j = 0; j < returned.size(); ++j) {
 				returned[j][posDim] += i;
@@ -169,16 +168,177 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	return res;
 }
 
+void * * getItem(void * * data, vector<unsigned int> indices, unsigned int posDim) {
+	if (posDim >= indices.size()) {
+		return data;
+	} else {
+		return getItem((void * *)data[indices[posDim]], indices, posDim + 1);
+	}
+}
 
+vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim) {
+	vector<void * *> res;
+
+	if (posDim == dimInd) {
+		for (unsigned int i = indices[posDim]; i < indices[posDim] + length; ++i) {
+			res.push_back(getItem((void * *)data[i], indices, posDim + 1));
+		}
+	} else {
+		res = getDim((void * *)data[indices[posDim]], dimInd, length, indices, posDim + 1);
+	}
+
+	return res;
+}
+
+vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, unsigned int posDim, unsigned int posDimP) {
+
+	vector<vector<unsigned int> > indices, ret;
+
+	unsigned int max;
+
+	if (posDimP >= dimP.size()) {
+		indices.push_back(vector<unsigned int>(res.begin() + posDim, res.end()));
+		return indices;
+	} 
+
+	if (posDimP == pos) {
+		indices = getIndices(dim, dimP, pos, res, posDim + 1, posDimP + 1);
+		for (unsigned int i = 0; i < indices.size(); ++i) {
+			indices[i].insert(indices[i].begin(), res[posDim]);
+		}
+	} else if (dim[posDim].getName() != dimP[posDimP].getName()) {
+		ret = getIndices(dim, dimP, pos, res, posDim + 1, posDimP);
+		for (unsigned int i = 0; i < indices.size(); ++i) {
+			indices[i].insert(indices[i].begin(), res[posDim]);
+		}
+	} else {
+		ret = getIndices(dim, dimP, pos, res, posDim + 1, posDimP + 1);
+		for (unsigned int i = 0; i < ret.size(); ++i) {
+			ret[i].insert(ret[i].begin(), 0);
+		}
+		max = (res[posDim] + dimP[posDimP].getSize() > dim[posDim].getSize()) ? dim[posDim].getSize() : (res[posDim] + dimP[posDimP].getSize());
+		for (unsigned int i = res[posDim]; i < max; ++i) {
+			for (unsigned int j = 0; j < ret.size(); ++j) {
+				ret[j][0] = i;
+				indices.push_back(ret[j]);
+			}
+		}
+	} 
+	return indices;
+}
+
+int editDistance(vector<void * *> col, vector<void * *> colP, vector<Attribute> attrH, vector<Attribute> attrHP) {
+
+	int l1 = col.size() + 1;
+	int l2 = colP.size() + 1;
+	int res = 0;
+	int * * table = new int*[l1];
+
+	for (int i = 0; i < l1; ++i) {
+		table[i] = new int[l2];
+		table[i][0] = i;
+	}
+	for (int i = 0; i < l2; ++i) {
+		table[0][i] = i;
+	}
+
+	for (int i = 1; i < l1; ++i) {
+		for (int j = 1; j < l2; ++j) {
+			if (checkOneLine(col[i - 1], colP[j - 1], attrH, attrHP)) {
+				table[i][j] = table[i - 1][j - 1];
+			} else {
+				table[i][j] = table[i - 1][j] + 1;
+				if (table[i][j - 1] + 1 < table[i][j]) {
+					table[i][j] = table[i][j - 1] + 1;
+				}
+				if (table[i - 1][j - 1] + 1 < table[i][j]) {
+					table[i][j] = table[i - 1][j - 1] + 1;
+				}
+			}
+		}
+	}
+
+	res = table[l1 - 1][l2 - 1];
+	for (int i = 0; i < l1; ++i) {
+		delete table[i];
+	}
+	delete table;
+	return res;
+}
+
+//returns sum of errors in 1 dimension
+int dynDimCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res) {
+
+	vector<void * *> dataCol, dataPCol;
+	vector<vector<unsigned int> > indices;
+	vector<unsigned int> indicesP;
+	unsigned int pos2 = 0;
+	int sum = 0;
+
+	for (unsigned int i = 0; i < dim.size(); ++i) {
+		if (dimP[pos].getName() == dim[i].getName()) {
+			pos2 = i;
+			break;
+		}
+	}
+
+	indices = getIndices(dim, dimP, pos, res, 0, 0);
+
+	unsigned int posDimP;
+	for (unsigned int i = 0; i < indices.size(); ++i) {
+		indicesP.clear();
+		posDimP = 0;
+		for (unsigned int j = 0; j < indices[i].size(); ++j) {
+			if (dim[j].getName() == dimP[posDimP].getName()){
+				indicesP.push_back(indices[i][j] - res[j]);
+				posDimP++;
+				if (posDimP >= dimP.size()) break;
+			}
+		}
+		dataCol = getDim(data, pos2, dimP[pos].getSize(), indices[i], 0);
+		dataPCol = getDim(dataP, pos, dimP[pos].getSize(), indicesP, 0);
+		sum += editDistance(dataCol, dataPCol, attrH, attrHP);
+	}
+
+	return sum;
+}
+
+// max error d*m^(d-1)
+bool dynCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res){
+
+	vector<unsigned int> indices;
+	vector<int> err;
+
+	for (unsigned int i = 0; i < dimP.size(); ++i) {
+		err.push_back(dynDimCheck(data, dataP, attrH, attrHP, dim, dimP, i, res));
+	}
+
+	//check suma chyb v err, mensi nez ... ok
+	int sum = 0;
+	for (unsigned int i = 0; i < err.size(); ++i) {
+		sum += err[i];
+	}
+	if (sum < 1) {
+		return true;
+	}
+
+	return false;
+}
 
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP) {
 
-	vector<vector<unsigned int> > res = find(data, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>()), sol;
+	vector<vector<unsigned int> > res = find(data, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>());
 
 	//Approximate check of the rest of the pattern
-
-	//sol = dynCheck(data, dataP, attrH, attrHP, dim, dimP, res);
+	for (vector<vector<unsigned int> >::iterator it = res.begin(); it != res.end();) {
+		if (!dynCheck(data, dataP, attrH, attrHP, dim, dimP, *it))
+			it = res.erase(it);
+		else
+			++it;
+	}
 
 	return res;
 }
@@ -226,10 +386,6 @@ void run(const char * in, const char * p) {
 			for (unsigned int j = 0; j < res[i].size(); ++j) {
 				cout << res[i][j] << ", ";
 			}
-			cout << " ... ";
-			//for (unsigned int j = 0; j < res[i].size(); ++j) {
-			//	cout << dim[j].getOneVal(res[i][j]) << ", ";
-			//}
 			cout << endl;
 		}
 	}

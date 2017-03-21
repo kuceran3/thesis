@@ -34,14 +34,14 @@ bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 		if (dim[posDim].getOneVal(indices[posInd]) == dimP[posDimP].getOneVal(0)) {
 			if (posDim + 1 >= dim.size()) {
-				for (int j = 0; j < dimP[posDimP].getSize(); ++j) {
+				for (unsigned int j = 0; j < dimP[posDimP].getSize(); ++j) {
 					if (!checkOneLine((void * *)data[indices[posInd] + j], (void * *)dataP[j], attrH, attrHP)) {
 						return false;
 					}
 				}
 				return true;
 			} else {
-				for (int k = 0; k < dimP[posDimP].getSize(); ++k) {
+				for (unsigned int k = 0; k < dimP[posDimP].getSize(); ++k) {
 					if (!findRest((void * *)data[indices[posInd] + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, indices, posInd + 1)) {
 						return false;
 					}
@@ -84,7 +84,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	vector<unsigned int> one;
 	bool isRes;
 
-	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 		//find dimensions with the same name
 		if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 			if (i + dimP[posDimP].getSize() > dim[posDim].getSize()) break;
@@ -93,7 +93,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 				if (posDim + 1 >= dim.size()) {
 					if (checkOneLine((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
 						isRes = true;
-						for (int j = 1; j < dimP[posDimP].getSize(); ++j) {
+						for (unsigned int j = 1; j < dimP[posDimP].getSize(); ++j) {
 							if (dim[posDim].getOneVal(i + j) != dimP[posDimP].getOneVal(j)) {
 								isRes = false;
 								break;
@@ -114,7 +114,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 					returned = find((void * *)data[i], (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1);
 					for (unsigned int j = 0; j < returned.size(); ++j) {
 						isRes = true;
-						for (int k = 1; k < dimP[posDimP].getSize(); ++k) {
+						for (unsigned int k = 1; k < dimP[posDimP].getSize(); ++k) {
 							if (dim[posDim].getOneVal(i + k) != dimP[posDimP].getOneVal(k)) {
 								isRes = false;
 								break;
@@ -156,8 +156,8 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	
 	vector<vector<unsigned int> > res, subres, found;
 
-	for (int i = dimP[0].getSize() - 1; i < dim[0].getSize(); i += dimP[0].getSize()) {
-		for (int j = 0; j < dimP[0].getSize(); ++j) {
+	for (unsigned int i = dimP[0].getSize() - 1; i < dim[0].getSize(); i += dimP[0].getSize()) {
+		for (unsigned int j = 0; j < dimP[0].getSize(); ++j) {
 			subres = find((void * *)data[i], (void * *)dataP[j], attrH, attrHP, dim, dimP, 1, 1);
 			if (!subres.empty()) {
 				found = checkRest(data, dataP, attrH, attrHP, dim, dimP, i, j, subres);

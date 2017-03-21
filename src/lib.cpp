@@ -17,7 +17,7 @@ vector<Attribute> readHeader(string row, vector<Dimension> &dim){
 		name = row.substr(0, pos1);
 		type = row.substr(pos1 + 1, len2);
 		if(type.find("dim") == 0) {
-			dim.push_back(Dimension(name, stoi(type.substr(3))));
+			dim.push_back(Dimension(name, (unsigned int)stoi(type.substr(3))));
 		} else {
 			res.push_back(Attribute(name, type));
 		}
@@ -61,7 +61,7 @@ void * * readData(ifstream &file, vector<Attribute> attrHeader, vector<Dimension
 	
 	res = new void * [dim[posDim].getSize()];
 
-	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 		if (posDim + 1 >= dim.size()) {
 			getline(file, data, '\n');
 			res[i] = (void *)readOneLine(data, attrHeader, dim);
@@ -99,7 +99,7 @@ void printOneLine(void * * line, vector<Attribute> attrHeader) {
 }
 
 void printData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &dim, unsigned int posDim) {
-	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 		if (posDim + 1 >= dim.size()) {
 			printOneLine((void * *)data[i], attrHeader);
 		} else {
@@ -138,7 +138,7 @@ void deleteOneLine(void * * line, vector<Attribute> attrHeader) {
 }
 
 void deleteData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &dim, unsigned int posDim) {
-	for (int i = 0; i < dim[posDim].getSize(); ++i) {
+	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 		if (posDim + 1 >= dim.size()) {
 			deleteOneLine((void * *)data[i], attrHeader);
 		} else {

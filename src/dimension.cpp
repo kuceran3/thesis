@@ -4,12 +4,12 @@
 
 using namespace std;
 
-Dimension::Dimension(string n, int c){
+Dimension::Dimension(string n, unsigned int c){
 	name = n;
 	count = c;
 }
 
-int Dimension::getSize() {
+unsigned int Dimension::getSize() {
 	return count;
 }	
 
