@@ -29,4 +29,14 @@ void deleteData(void * * data, vector<Attribute > attrHeader, vector<Dimension> 
 void deleteData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim);
 //--------------------------------------------------------------------------------------------------------------------------
 bool checkHeaders(vector<Dimension> dim, vector<Dimension> dimPatt, vector<Attribute> attrHeader, vector<Attribute> patternAttrHeader);
+int compareType(void * first, void * second, string type);
+bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<Attribute> attrHP);
+//--------------------------------------------------------------------------------------------------------------------------
+//Framework for computing distances
+void * * getItem(void * * data, vector<unsigned int> indices, unsigned int posDim);
+vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim);
+vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, unsigned int posDim, unsigned int posDimP);
+//--------------------------------------------------------------------------------------------------------------------------
+//Edit distance
+int editDistance(vector<void * *> col, vector<void * *> colP, vector<Attribute> attrH, vector<Attribute> attrHP);
 #endif

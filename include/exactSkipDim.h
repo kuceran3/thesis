@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <time.h>
 
 #include "dimension.h"
 #include "attribute.h"

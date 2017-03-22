@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <math.h>
+#include <time.h>
 
 #include "dimension.h"
 #include "attribute.h"
@@ -12,15 +13,10 @@
 
 using namespace std;
 
-//first dimension of pattern and data must have the same name! otherwise not functional
-
-
+//Returns sqrt of dimensions count as a size of parts that pattern will be split to
 int getPartSize(Dimension dim);
-//Returns upper left position of solution
-int compareType(void * first, void * second, string type);
-//compares one item in the data
-bool checkOneLine(void * * data, void * * dataP, vector<Attribute > attrH, vector<Attribute > attrHP);
-
+//--------------------------------------------------------------------------------------------------------------------------
+//functions checking partial solutions
 vector<vector<unsigned int> > checkRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int pos, \
 	int posP, vector<vector<unsigned int> > subres);
@@ -32,15 +28,16 @@ vector<vector<unsigned int> > checkPart(void * * data, void * * dataP, vector<At
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize);
 vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions);
+//--------------------------------------------------------------------------------------------------------------------------
 //split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions);
-
 //finds upper left position of the subpattern and checks if the rest of the subpattern is the same by calling findRest, returns coordinates of "top left" corner
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> dimPositions);
 //skips first dimension of the pattern and data and calls function find, recursion function, to found if subpatterns can be placed in the data
+//returns vector of solutions, where every item has less than (k) errors
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP);
 //--------------------------------------------------------------------------------------------------------------------------

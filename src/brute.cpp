@@ -4,35 +4,6 @@
 using namespace std;
 
 //Returns upper left position of solution
-int compareType(void * first, void * second, string type) {
-	if(type.length() >= 3 && type.substr(0, 3) == "int") {
-		return *(int *)first - *(int *)second;
-	} else {
-		return ((string *)first) -> compare(*(string *)second);
-	}
-}
-
-bool checkOneLine(void * * data, void * * dataP, vector<Attribute> attrH, vector<Attribute> attrHP) {
-	unsigned int j = 0;
-	for (unsigned int i = 0; i < attrH.size(); ++i) {
-		if (j >= attrHP.size()) break;
-		if (attrH[i].getName() == attrHP[j].getName() && attrH[i].getType() == attrHP[j].getType()) {
-			//cout << "Comparing ";
-			//cout << i << " " << j << endl;
-			//cout << *((string*)data) << " first " << attrH[i].getType() << endl;
-			if (compareType(data[i], dataP[j], attrH[i].getType()) != 0) {
-				//cout << "compare false" << endl;
-				return false;
-			}
-			++j;
-		}
-	}
-	if (j < attrHP.size())
-		return false;
-	//cout << "compare true" << endl;
-	return true;
-}
-
 bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> indices, int posInd) {
 
@@ -40,7 +11,7 @@ bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 		if (dim[posDim].getOneVal(indices[posInd]) == dimP[posDimP].getOneVal(0)) {
 			if (posDim + 1 >= dim.size()) {
 				for (unsigned int j = 0; j < dimP[posDimP].getSize(); ++j) {
-					if (!checkOneLine((void * *)data[indices[posInd] + j], (void * *)dataP[j], attrH, attrHP)) {
+					if (!compareItem((void * *)data[indices[posInd] + j], (void * *)dataP[j], attrH, attrHP)) {
 						return false;
 					}
 				}
@@ -57,7 +28,7 @@ bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 		return false;
 	} else {
 		if (posDim + 1 >= dim.size()) {
-			return checkOneLine((void * *)data[indices[posInd]], dataP, attrH, attrHP);
+			return compareItem((void * *)data[indices[posInd]], dataP, attrH, attrHP);
 		} else {
 			return findRest((void * *)data[indices[posInd]], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, indices, posInd + 1);			
 		}
@@ -79,14 +50,14 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 			//find same value in the dimension
 			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
 				if (posDim + 1 >= dim.size()) {
-					if (checkOneLine((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
+					if (compareItem((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
 						isRes = true;
 						for (unsigned int j = 1; j < dimP[posDimP].getSize(); ++j) {
 							if (dim[posDim].getOneVal(i + j) != dimP[posDimP].getOneVal(j)) {
 								isRes = false;
 								break;
 							}
-							if (!checkOneLine((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
+							if (!compareItem((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
 								isRes = false;
 								break;
 							}
@@ -122,7 +93,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 			}
 		} else {
 			if (posDim + 1 >= dim.size()) {
-				if (checkOneLine((void * *)data[i], dataP, attrH, attrHP)) {
+				if (compareItem((void * *)data[i], dataP, attrH, attrHP)) {
 					one.push_back(i);
 					res.push_back(one);
 					one.clear();
@@ -187,10 +158,10 @@ void run(const char * in, const char * p) {
 			for (unsigned int j = 0; j < res[i].size(); ++j) {
 				cout << res[i][j] << ", ";
 			}
-			cout << " ... ";
-			for (unsigned int j = 0; j < res[i].size(); ++j) {
-				cout << dim[j].getOneVal(res[i][j]) << ", ";
-			}
+			//cout << " ... ";
+			//for (unsigned int j = 0; j < res[i].size(); ++j) {
+			//	cout << dim[j].getOneVal(res[i][j]) << ", ";
+			//}
 			cout << endl;
 		}
 	}
@@ -209,6 +180,8 @@ int main(int argc, char* argv[]) {
 		cout << "Usage: " << argv[0] << " <INPUTFILE>" << " <PATTERN>" << endl;
 		return 0;
 	}
+	const clock_t begin_time = clock();
 	run(argv[1], argv[2]);
+	cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
 	return 0;
 }

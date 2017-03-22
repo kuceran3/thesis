@@ -81,7 +81,6 @@ void * * readData(ifstream &file, vector<Attribute> attrHeader, vector<Dimension
 	else 
 		return readData(file, attrHeader, dim, 0);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------
 //Data printing
 string toString(void * data, string type) {
@@ -120,7 +119,6 @@ void printData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &d
 	else 
 		printData(data, attrHeader, dim, 0);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------
 //Cleaning
 void deleteType(void * data, string type) {
@@ -155,7 +153,6 @@ void deleteData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &
 		deleteData(data, attrHeader, dim, 0);
 	delete data;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------
 //Checks header
 bool checkHeaders(vector<Dimension> dim, vector<Dimension> dimPatt, vector<Attribute> attrHeader, vector<Attribute> patternAttrHeader) {
@@ -182,4 +179,129 @@ bool checkHeaders(vector<Dimension> dim, vector<Dimension> dimPatt, vector<Attri
 		return false;
 
 	return true;
+}
+
+int compareType(void * first, void * second, string type) {
+	if(type.length() >= 3 && type.substr(0, 3) == "int") {
+		return *(int *)first - *(int *)second;
+	} else {
+		return ((string *)first) -> compare(*(string *)second);
+	}
+}
+
+bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<Attribute> attrHP) {
+	unsigned int j = 0;
+
+	for (unsigned int i = 0; i < attrH.size(); ++i) {
+		if (j >= attrHP.size()) break;
+		if (attrH[i].getName() == attrHP[j].getName() && attrH[i].getType() == attrHP[j].getType()) {
+			if (compareType(data[i], dataP[j], attrH[i].getType()) != 0) {
+				return false;
+			}
+			++j;
+		}
+	}
+	if (j < attrHP.size())
+		return false;
+	return true;
+}
+//--------------------------------------------------------------------------------------------------------------------------
+//Framework for computing distances
+void * * getItem(void * * data, vector<unsigned int> indices, unsigned int posDim) {
+	if (posDim >= indices.size()) {
+		return data;
+	} else {
+		return getItem((void * *)data[indices[posDim]], indices, posDim + 1);
+	}
+}
+
+vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim) {
+	vector<void * *> res;
+
+	if (posDim == dimInd) {
+		for (unsigned int i = indices[posDim]; i < indices[posDim] + length; ++i) {
+			res.push_back(getItem((void * *)data[i], indices, posDim + 1));
+		}
+	} else {
+		res = getDim((void * *)data[indices[posDim]], dimInd, length, indices, posDim + 1);
+	}
+
+	return res;
+}
+
+vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, unsigned int posDim, unsigned int posDimP) {
+
+	vector<vector<unsigned int> > indices, ret;
+
+	unsigned int max;
+
+	if (posDimP >= dimP.size()) {
+		indices.push_back(vector<unsigned int>(res.begin() + posDim, res.end()));
+		return indices;
+	} 
+
+	if (posDimP == pos) {
+		indices = getIndices(dim, dimP, pos, res, posDim + 1, posDimP + 1);
+		for (unsigned int i = 0; i < indices.size(); ++i) {
+			indices[i].insert(indices[i].begin(), res[posDim]);
+		}
+	} else if (dim[posDim].getName() != dimP[posDimP].getName()) {
+		ret = getIndices(dim, dimP, pos, res, posDim + 1, posDimP);
+		for (unsigned int i = 0; i < indices.size(); ++i) {
+			indices[i].insert(indices[i].begin(), res[posDim]);
+		}
+	} else {
+		ret = getIndices(dim, dimP, pos, res, posDim + 1, posDimP + 1);
+		for (unsigned int i = 0; i < ret.size(); ++i) {
+			ret[i].insert(ret[i].begin(), 0);
+		}
+		max = (res[posDim] + dimP[posDimP].getSize() > dim[posDim].getSize()) ? dim[posDim].getSize() : (res[posDim] + dimP[posDimP].getSize());
+		for (unsigned int i = res[posDim]; i < max; ++i) {
+			for (unsigned int j = 0; j < ret.size(); ++j) {
+				ret[j][0] = i;
+				indices.push_back(ret[j]);
+			}
+		}
+	} 
+	return indices;
+}
+//--------------------------------------------------------------------------------------------------------------------------
+//Edit distance
+int editDistance(vector<void * *> col, vector<void * *> colP, vector<Attribute> attrH, vector<Attribute> attrHP) {
+
+	int l1 = col.size() + 1;
+	int l2 = colP.size() + 1;
+	int res = 0;
+	int * * table = new int*[l1];
+
+	for (int i = 0; i < l1; ++i) {
+		table[i] = new int[l2];
+		table[i][0] = i;
+	}
+	for (int i = 0; i < l2; ++i) {
+		table[0][i] = i;
+	}
+
+	for (int i = 1; i < l1; ++i) {
+		for (int j = 1; j < l2; ++j) {
+			if (compareItem(col[i - 1], colP[j - 1], attrH, attrHP)) {
+				table[i][j] = table[i - 1][j - 1];
+			} else {
+				table[i][j] = table[i - 1][j] + 1;
+				if (table[i][j - 1] + 1 < table[i][j]) {
+					table[i][j] = table[i][j - 1] + 1;
+				}
+				if (table[i - 1][j - 1] + 1 < table[i][j]) {
+					table[i][j] = table[i - 1][j - 1] + 1;
+				}
+			}
+		}
+	}
+
+	res = table[l1 - 1][l2 - 1];
+	for (int i = 0; i < l1; ++i) {
+		delete table[i];
+	}
+	delete table;
+	return res;
 }
