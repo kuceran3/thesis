@@ -185,7 +185,7 @@ int dynDimCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
 
 // max error d*m^(d)
 bool dynCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res){
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors){
 
 	vector<unsigned int> indices;
 	vector<int> err;
@@ -199,7 +199,7 @@ bool dynCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
 	for (unsigned int i = 0; i < err.size(); ++i) {
 		sum += err[i];
 	}
-	if (sum < 2) {
+	if (sum <= errors) {
 		return true;
 	}
 
@@ -207,12 +207,12 @@ bool dynCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
 }
 
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP) {
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int errors) {
 
 	vector<vector<unsigned int> > res = find(data, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>());
 	//Approximate check of the rest of the pattern
 	for (vector<vector<unsigned int> >::iterator it = res.begin(); it != res.end();) {
-		if (!dynCheck(data, dataP, attrH, attrHP, dim, dimP, *it))
+		if (!dynCheck(data, dataP, attrH, attrHP, dim, dimP, *it, errors))
 			it = res.erase(it);
 		else
 			++it;
@@ -220,7 +220,13 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	return res;
 }
 
-void run(const char * in, const char * p) {
+int charToInt(const char * n) {
+	string i(n);
+	return stoi(i.c_str());
+
+}
+
+void run(const char * in, const char * p, const char * err) {
 	string inpFile(in);
 	ifstream file;
 	file.open(inpFile.c_str());
@@ -247,6 +253,8 @@ void run(const char * in, const char * p) {
 		cout << "Invalid pattern" << endl;
 		return;
 	}
+
+	int errors = charToInt(err);
 	
 	void * * data;
 	void * * dataPatt;
@@ -255,7 +263,7 @@ void run(const char * in, const char * p) {
 	dataPatt = readData(pattern, patternAttrHeader, dimPatt);
 	cout << "Finding..." << endl;
 	vector<vector<unsigned int> > res;
-	res = find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
+	res = find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt, errors);
 	if (res.size() == 0){
 		cout << "no solutions found" << endl;
 	} else {
@@ -277,12 +285,12 @@ void run(const char * in, const char * p) {
 }
 
 int main(int argc, char* argv[]) {
-	if(argc < 3) {
-		cout << "Usage: " << argv[0] << " <INPUTFILE>" << " <PATTERN>" << endl;
+	if(argc < 4) {
+		cout << "Usage: " << argv[0] << " <INPUTFILE>" << " <PATTERN>" << " <NUMBER_OF_ERRORS>" << endl;
 		return 0;
 	}
 	const clock_t begin_time = clock();
-	run(argv[1], argv[2]);
+	run(argv[1], argv[2], argv[3]);
 	cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
 	return 0;
 }
