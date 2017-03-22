@@ -223,7 +223,6 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 int charToInt(const char * n) {
 	string i(n);
 	return stoi(i.c_str());
-
 }
 
 void run(const char * in, const char * p, const char * err) {

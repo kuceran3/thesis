@@ -1,0 +1,23 @@
+appSplitDyn:
+in - 3D50 3A, pattern - 16x_x16x3 - exact
+0 errors	2.008s, 1.968s, 1.968s
+1 errors	2.008s, 1.980s, 2.008s
+in - 3D50 3A, pattern - 16x_x16x3 - 1 error
+1 errors	1.968s, 2.008s, 2.008s
+10 errors	2.012s, 1.956s, 1.988s
+
+
+
+ExactSkipDim:
+in - 3D50 3A, pattern - 16x_x16x3
+0.444s, 0.456s, 0.440s
+in - 3D50 3A, pattern - 16x_x16x3 - 1 error
+0.452s, 0.440s, 0.460s
+
+
+
+Brute:
+in - 3D50 3A, pattern - 16x_x16x3
+0.488s, 0.432s, 0.432s
+in - 3D50 3A, pattern - 16x_x16x3 - 1 error
+0.432s, 0.424s, 0.432s
