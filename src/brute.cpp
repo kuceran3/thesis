@@ -180,8 +180,11 @@ int main(int argc, char* argv[]) {
 		cout << "Usage: " << argv[0] << " <INPUTFILE>" << " <PATTERN>" << endl;
 		return 0;
 	}
-	const clock_t begin_time = clock();
+	//const clock_t begin_time = clock();
+	chrono::system_clock::time_point start = chrono::system_clock::now();
 	run(argv[1], argv[2]);
-	cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
+	//cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
+	chrono::duration<double> sec = chrono::system_clock::now() - start;
+    cout << "took " << sec.count() << " seconds\n";
 	return 0;
 }
