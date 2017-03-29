@@ -1,29 +1,28 @@
-#include "brute.h"
+#include "brute2.h"
 
 //hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich hodnot
 using namespace std;
 
 //Returns upper left position of solution
 bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> indices, int posInd) {
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
+	unsigned int posDimP, vector<unsigned int> indices, int posInd) {
 
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
-		if (dim[posDim].getOneVal(indices[posInd]) == dimP[posDimP].getOneVal(0)) {
-			if (posDim + 1 >= dim.size()) {
-				for (unsigned int j = 0; j < dimP[posDimP].getSize(); ++j) {
-					if (!compareItem((void * *)data[indices[posInd] + j], (void * *)dataP[j], attrH, attrHP)) {
-						return false;
-					}
+		if (posDim + 1 >= dim.size()) {
+			for (unsigned int j = 0; j < dimP[posDimP].getSize(); ++j) {
+				if (!compareItem((void * *)data[indices[posInd] + j], (void * *)dataP[j], attrH, attrHP)) {
+					return false;
 				}
-				return true;
-			} else {
-				for (unsigned int k = 0; k < dimP[posDimP].getSize(); ++k) {
-					if (!findRest((void * *)data[indices[posInd] + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, indices, posInd + 1)) {
-						return false;
-					}
-				}
-				return true;
 			}
+			return true;
+		} else {
+			for (unsigned int k = 0; k < dimP[posDimP].getSize(); ++k) {
+				if (!findRest((void * *)data[indices[posInd] + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, indices, posInd + 1)) {
+					return false;
+				}
+			}
+			return true;
 		}
 		return false;
 	} else {
@@ -33,7 +32,6 @@ bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 			return findRest((void * *)data[indices[posInd]], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, indices, posInd + 1);			
 		}
 	}
-	//return true;
 }
 
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
@@ -42,54 +40,40 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 	bool isRes;
-	//cout << "Dim: " << dim[posDim].getName() << endl;
 	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 		//find dimensions with the same name
 		if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 			if (i + dimP[posDimP].getSize() > dim[posDim].getSize()) break;
-			//find same value in the dimension
-			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
-				if (posDim + 1 >= dim.size()) {
-					if (compareItem((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
-						isRes = true;
-						for (unsigned int j = 1; j < dimP[posDimP].getSize(); ++j) {
-							if (dim[posDim].getOneVal(i + j) != dimP[posDimP].getOneVal(j)) {
-								isRes = false;
-								break;
-							}
-							if (!compareItem((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
-								isRes = false;
-								break;
-							}
-								
-						}
-						if (isRes) {
-							one.push_back(i);
-							res.push_back(one);
-							one.clear();
+			if (posDim + 1 >= dim.size()) {
+				if (compareItem((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
+					isRes = true;
+					for (unsigned int j = 1; j < dimP[posDimP].getSize(); ++j) {
+						if (!compareItem((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
+							isRes = false;
+							break;
 						}
 					}
-				} else {
-					returned = find((void * *)data[i], (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1);
-					for (unsigned int j = 0; j < returned.size(); ++j) {
-						isRes = true;
-						for (unsigned int k = 1; k < dimP[posDimP].getSize(); ++k) {
-							if (dim[posDim].getOneVal(i + k) != dimP[posDimP].getOneVal(k)) {
-								isRes = false;
-								break;
-							}
-							if (!findRest((void * *)data[i + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, returned[j], 0)) {
-								isRes = false;
-								break;
-							}
-						}
-						if (isRes) {
-							returned[j].insert(returned[j].begin(), i);
-							res.push_back(returned[j]);	
-						}
+					if (isRes) {
+						one.push_back(i);
+						res.push_back(one);
+						one.clear();
 					}
 				}
-				break;
+			} else {
+				returned = find((void * *)data[i], (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1);
+				for (unsigned int j = 0; j < returned.size(); ++j) {
+					isRes = true;
+					for (unsigned int k = 1; k < dimP[posDimP].getSize(); ++k) {
+						if (!findRest((void * *)data[i + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, returned[j], 0)) {
+							isRes = false;
+							break;
+						}
+					}
+					if (isRes) {
+						returned[j].insert(returned[j].begin(), i);
+						res.push_back(returned[j]);	
+					}
+				}
 			}
 		} else {
 			if (posDim + 1 >= dim.size()) {
@@ -155,7 +139,7 @@ void run(const char * in, const char * p) {
 	res = find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "took " << sec.count() << " seconds\n";
-    
+
 	if (res.size() == 0){
 		cout << "No solutions found" << endl;
 	} else {
@@ -163,16 +147,9 @@ void run(const char * in, const char * p) {
 			for (unsigned int j = 0; j < res[i].size(); ++j) {
 				cout << res[i][j] << ", ";
 			}
-			//cout << " ... ";
-			//for (unsigned int j = 0; j < res[i].size(); ++j) {
-			//	cout << dim[j].getOneVal(res[i][j]) << ", ";
-			//}
 			cout << endl;
 		}
 	}
-	//printData(data, attrHeader, dim);
-	//printData(dataPatt, patternAttrHeader, dimPatt);
-
 	deleteData(data, attrHeader, dim);
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
 
@@ -185,9 +162,6 @@ int main(int argc, char* argv[]) {
 		cout << "Usage: " << argv[0] << " <INPUTFILE>" << " <PATTERN>" << endl;
 		return 0;
 	}
-	//const clock_t begin_time = clock();
 	run(argv[1], argv[2]);
-	//cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
-	
 	return 0;
 }

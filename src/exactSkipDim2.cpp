@@ -1,15 +1,21 @@
-#include "exactSkipDim.h"
+#include "exactSkipDim2.h"
 
 using namespace std;
 
+static int calls = 0;
+static int callsFind = 0;
+static int compares1 = 0;
+static int compares2 = 0;
 //Returns upper left position of solution
 bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> indices, int posInd) {
 
+	++calls;
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
-		if (dim[posDim].getOneVal(indices[posInd]) == dimP[posDimP].getOneVal(0)) {
+		//if (dim[posDim].getOneVal(indices[posInd]) == dimP[posDimP].getOneVal(0)) {
 			if (posDim + 1 >= dim.size()) {
 				for (unsigned int j = 0; j < dimP[posDimP].getSize(); ++j) {
+					++compares2;
 					if (!compareItem((void * *)data[indices[posInd] + j], (void * *)dataP[j], attrH, attrHP)) {
 						return false;
 					}
@@ -23,10 +29,11 @@ bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 				}
 				return true;
 			}
-		}
+		//}
 		return false;
 	} else {
 		if (posDim + 1 >= dim.size()) {
+			++compares2;
 			return compareItem((void * *)data[indices[posInd]], dataP, attrH, attrHP);
 		} else {
 			return findRest((void * *)data[indices[posInd]], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, indices, posInd + 1);			
@@ -38,6 +45,7 @@ vector<vector<unsigned int> > checkRest(void * * data, void * * dataP, vector<At
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int pos, \
 	int posP, vector<vector<unsigned int> > subres) {
 
+	++calls;
 	vector<vector<unsigned int> > res;
 
 	for (unsigned int i = 0; i < subres.size(); ++i)	{
@@ -45,9 +53,7 @@ vector<vector<unsigned int> > checkRest(void * * data, void * * dataP, vector<At
 		if (findRest(data, dataP, attrH, attrHP, dim, dimP, 0, 0, subres[i], 0)) {
 			res.push_back(subres[i]);
 		}
-
 	}
-	
 	return res;
 }
 
@@ -55,6 +61,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP) {
 
+	++callsFind;
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 	bool isRes;
@@ -63,52 +70,43 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 		//find dimensions with the same name
 		if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 			if (i + dimP[posDimP].getSize() > dim[posDim].getSize()) break;
-			//find same value in the dimension
-			if (dim[posDim].getOneVal(i) == dimP[posDimP].getOneVal(0)) {
-				if (posDim + 1 >= dim.size()) {
-					if (compareItem((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
-						isRes = true;
-						for (unsigned int j = 1; j < dimP[posDimP].getSize(); ++j) {
-							if (dim[posDim].getOneVal(i + j) != dimP[posDimP].getOneVal(j)) {
-								isRes = false;
-								break;
-							}
-							if (!compareItem((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
-								isRes = false;
-								break;
-							}
-								
+			if (posDim + 1 >= dim.size()) {
+				++compares1;
+				if (compareItem((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
+					isRes = true;
+					for (unsigned int j = 1; j < dimP[posDimP].getSize(); ++j) {
+						++compares2;
+						if (!compareItem((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
+							isRes = false;
+							break;
 						}
-						if (isRes) {
-							one.push_back(i);
-							res.push_back(one);
-							one.clear();
-						}
+							
 					}
-				} else {
-					returned = find((void * *)data[i], (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1);
-					for (unsigned int j = 0; j < returned.size(); ++j) {
-						isRes = true;
-						for (unsigned int k = 1; k < dimP[posDimP].getSize(); ++k) {
-							if (dim[posDim].getOneVal(i + k) != dimP[posDimP].getOneVal(k)) {
-								isRes = false;
-								break;
-							}
-							if (!findRest((void * *)data[i + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, returned[j], 0)) {
-								isRes = false;
-								break;
-							}
-						}
-						if (isRes) {
-							returned[j].insert(returned[j].begin(), i);
-							res.push_back(returned[j]);	
-						}
+					if (isRes) {
+						one.push_back(i);
+						res.push_back(one);
+						one.clear();
 					}
 				}
-				break;
+			} else {
+				returned = find((void * *)data[i], (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1);
+				for (unsigned int j = 0; j < returned.size(); ++j) {
+					isRes = true;
+					for (unsigned int k = 1; k < dimP[posDimP].getSize(); ++k) {
+						if (!findRest((void * *)data[i + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, returned[j], 0)) {
+							isRes = false;
+							break;
+						}
+					}
+					if (isRes) {
+						returned[j].insert(returned[j].begin(), i);
+						res.push_back(returned[j]);	
+					}
+				}
 			}
 		} else {
 			if (posDim + 1 >= dim.size()) {
+				++compares1;
 				if (compareItem((void * *)data[i], dataP, attrH, attrHP)) {
 					one.push_back(i);
 					res.push_back(one);
@@ -129,6 +127,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP) {
 	
+	++callsFind;
 	vector<vector<unsigned int> > res, subres, found;
 
 	for (unsigned int i = dimP[0].getSize() - 1; i < dim[0].getSize(); i += dimP[0].getSize()) {
@@ -181,6 +180,11 @@ void run(const char * in, const char * p) {
 	
 	chrono::system_clock::time_point start = chrono::system_clock::now();
 	res = find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
+	cout << "Calls: " << calls << endl;
+	cout << "CallsFind: " << callsFind << endl;
+	cout << "Compares1: " << compares1 << endl; 
+	cout << "Compares2: " << compares2 << endl; 
+
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "took " << sec.count() << " seconds\n";
 
@@ -191,16 +195,9 @@ void run(const char * in, const char * p) {
 			for (unsigned int j = 0; j < res[i].size(); ++j) {
 				cout << res[i][j] << ", ";
 			}
-			//cout << " ... ";
-			//for (unsigned int j = 0; j < res[i].size(); ++j) {
-			//	cout << dim[j].getOneVal(res[i][j]) << ", ";
-			//}
 			cout << endl;
 		}
 	}
-	//printData(data, attrHeader, dim);
-	//printData(dataPatt, patternAttrHeader, dimPatt);
-
 	deleteData(data, attrHeader, dim);
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
 
