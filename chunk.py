@@ -53,8 +53,8 @@ class Eighth:
 		#print("addCell eighth\n")
 		#print("vals: " + str(self.vals))
 		#print(row[l-1])
-		for i in range(l - self.split, l):
-			self.vals += (int(row[i]).to_bytes(2, byteorder='little'))
+		#for i in range(l - self.split, l):
+		#	self.vals += (int(row[i]).to_bytes(2, byteorder='little'))
 		#print(self.vals)
 		self.cells += 1
 		for i in range(len(row[l:])):

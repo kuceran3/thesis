@@ -13,7 +13,7 @@ class Reader {
 	vector<Attribute> attr;
 	vector<void * *> cache;
 	vector<bool *> fileMasks;
-	queue<void * *> files;
+	queue<int> files;
 
 public:
 	Reader(int dimNum, string name);
