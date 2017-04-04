@@ -1,4 +1,5 @@
 #include "brute2.h"
+#include <dirent.h>
 
 //hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich hodnot
 using namespace std;
@@ -100,28 +101,31 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 }
 
 void run(const char * in, const char * p) {
+
 	string inpFile(in);
 	ifstream file;
 	file.open(inpFile.c_str());
 
 	string inpPattern(p);
-	ifstream pattern;
+	ifstream pattern;	
 	pattern.open(inpPattern.c_str());
 	
 	string value, valuePatt;
 
 	vector<Attribute> attrHeader;
 	vector<Dimension> dim;
-
+	int dimInName = 0;
+	
 	vector<Attribute> patternAttrHeader;
 	vector<Dimension> dimPatt;
+	int dimInNamePatt = 0;
 	
 	getline(file, value, '\n');
 	attrHeader = readHeader(value, dim);
-	
+
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
-	
+
 	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
 		cout << "Invalid pattern" << endl;
 		return;
@@ -155,6 +159,7 @@ void run(const char * in, const char * p) {
 
 	pattern.close();
 	file.close();
+	//closedir(dp);
 }
 
 int main(int argc, char* argv[]) {

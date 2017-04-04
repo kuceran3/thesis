@@ -14,8 +14,6 @@ brute: $(ODIR)/brute.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/lib.o
 $(ODIR)/%.o: $(SDIR)/%.cpp $(IDIR)/%.h $(DEPS)
 	$(CXX) -c $(CFLAGS) $< -o $@
 
-$(ODIR)/brute.o: $(DEPS)
-
 brute2: $(ODIR)/brute2.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/lib.o
 	$(CXX) -o $@ $^
 

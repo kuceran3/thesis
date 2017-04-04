@@ -29,6 +29,13 @@ vector<Attribute> readHeader(string row, vector<Dimension> &dim){
 	return res;
 }
 
+int readDimNum(string row) {
+	int pos = 8; //dimName:_ 
+	cout << row << endl;
+	string num = row.substr(pos, row.length() - 1);
+	return stoi(num);
+}
+
 void * readType(string type, string data) {
 	if(type.length() >= 3 && type.substr(0, 3) == "int") {
 		return (void *)(new int(stoi(data)));

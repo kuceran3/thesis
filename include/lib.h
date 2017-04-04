@@ -12,6 +12,7 @@ using namespace std;
 
 //File reading
 vector<Attribute> readHeader(string row, vector<Dimension> &dim);
+int readDimNum(string row);
 void * readType(string type, string data);
 void * * readOneLine(string line, vector<Attribute > attrHeader, vector<Dimension> &dim);
 void * * readData(ifstream &file, vector<Attribute > attrHeader, vector<Dimension> &dim, unsigned int posDim);
