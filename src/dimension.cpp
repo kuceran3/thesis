@@ -1,5 +1,3 @@
-//#include <String>
-//#include <vector>
 #include "dimension.h"
 
 using namespace std;

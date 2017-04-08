@@ -1,11 +1,15 @@
-#include "brute2.h"
+#include "brute_chunks.h"
 
 using namespace std;
 
 //Returns upper left position of solution
-bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
+bool findRest(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
-	unsigned int posDimP, vector<unsigned int> indices, int posInd) {
+	unsigned int posDimP, vector<unsigned int> indices, int posInd, vector<unsigned int> cacheInd) {
+
+	if (posDim == cache->getDimInName()) {
+		data = cache->read(cacheInd);
+	}
 
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 		if (posDim + 1 >= dim.size()) {
@@ -17,8 +21,15 @@ bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 			return true;
 		} else {
 			for (unsigned int k = 0; k < dimP[posDimP].getSize(); ++k) {
-				if (!findRest((void * *)data[indices[posInd] + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, indices, posInd + 1)) {
-					return false;
+				if (posDim < cache->getDimInName()) {
+					cacheInd[posDim] = indices[posInd] + k;
+					if (!findRest(NULL, cache, (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, indices, posInd + 1, cacheInd)) {
+						return false;
+					}
+				} else {
+					if (!findRest((void * *)data[indices[posInd] + k], cache, (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, indices, posInd + 1, cacheInd)) {
+						return false;
+					}
 				}
 			}
 			return true;
@@ -28,17 +39,28 @@ bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 		if (posDim + 1 >= dim.size()) {
 			return compareItem((void * *)data[indices[posInd]], dataP, attrH, attrHP);
 		} else {
-			return findRest((void * *)data[indices[posInd]], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, indices, posInd + 1);			
+			if (posDim < cache->getDimInName()) {
+				cacheInd[posDim] = indices[posInd];
+				return findRest(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, indices, posInd + 1, cacheInd);			
+			} else {
+				return findRest((void * *)data[indices[posInd]], cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, indices, posInd + 1, cacheInd);			
+			}
 		}
 	}
 }
 
-vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP) {
+vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
+	vector<unsigned int> cacheInd) {
 
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 	bool isRes;
+
+	if (posDim == cache->getDimInName()) {
+		data = cache->read(cacheInd);
+	}
+
 	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 		//find dimensions with the same name
 		if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
@@ -59,13 +81,27 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 					}
 				}
 			} else {
-				returned = find((void * *)data[i], (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1);
+				if (posDim < cache->getDimInName()) {
+					cacheInd[posDim] = i;
+					returned = find(NULL, cache, (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, cacheInd);
+				} else {
+					returned = find((void * *)data[i], cache, (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, cacheInd);
+				}
+
 				for (unsigned int j = 0; j < returned.size(); ++j) {
 					isRes = true;
 					for (unsigned int k = 1; k < dimP[posDimP].getSize(); ++k) {
-						if (!findRest((void * *)data[i + k], (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, returned[j], 0)) {
-							isRes = false;
-							break;
+						if (posDim < cache->getDimInName()) {
+							cacheInd[posDim] = i;
+							if (!findRest(NULL, cache, (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, returned[j], 0, cacheInd)) {
+								isRes = false;
+								break;
+							}
+						} else {
+							if (!findRest((void * *)data[i + k], cache, (void * *)dataP[k], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, returned[j], 0, cacheInd)) {
+								isRes = false;
+								break;
+							}
 						}
 					}
 					if (isRes) {
@@ -82,7 +118,12 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 					one.clear();
 				}
 			} else {
-				returned = find((void * *)data[i], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP);
+				if (posDim < cache->getDimInName()) {
+					cacheInd[posDim] = i;
+					returned = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, cacheInd);
+				} else {
+					returned = find((void * *)data[i], cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, cacheInd);
+				}
 				for (unsigned int j = 0; j < returned.size(); ++j) {
 					returned[j].insert(returned[j].begin(), i);
 					res.push_back(returned[j]);
@@ -93,9 +134,14 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	return res;
 }
 
-vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
+vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP) {
-	return find(data, dataP, attrH, attrHP, dim, dimP, 0, 0);
+	
+	vector<unsigned int> cacheInd;
+	for (unsigned int i = 0; i < cache->getDimInName(); ++i) {
+		cacheInd.push_back(0);
+	}
+	return find(NULL, cache, dataP, attrH, attrHP, dim, dimP, 0, 0, cacheInd);
 }
 
 void run(const char * in, const char * p) {
@@ -112,31 +158,35 @@ void run(const char * in, const char * p) {
 
 	vector<Attribute> attrHeader;
 	vector<Dimension> dim;
+	//int dimInName = 0;
 	
 	vector<Attribute> patternAttrHeader;
 	vector<Dimension> dimPatt;
+	//int dimInNamePatt = 0;
 	
 	getline(file, value, '\n');
 	attrHeader = readHeader(value, dim);
 
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
+	
+	Reader * cache = new Reader(inpFile, dim, attrHeader);
 
 	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
 		cout << "Invalid pattern" << endl;
 		return;
 	}
 
-	void * * data;
-	void * * dataPatt;
+	//void * * data;
+	//data = readData(file, attrHeader, dim);
 	
-	data = readData(file, attrHeader, dim);
-	dataPatt = readData(pattern, patternAttrHeader, dimPatt);
-	cout << "Finding..." << endl;
+	void * * dataPatt = readData(pattern, patternAttrHeader, dimPatt);
 	vector<vector<unsigned int> > res;
+
+	cout << "Finding..." << endl;
 	
 	chrono::system_clock::time_point start = chrono::system_clock::now();
-	res = find(data, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
+	res = find(cache, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "took " << sec.count() << " seconds\n";
 
@@ -150,7 +200,8 @@ void run(const char * in, const char * p) {
 			cout << endl;
 		}
 	}
-	deleteData(data, attrHeader, dim);
+	//deleteData(data, attrHeader, dim);
+	delete cache;
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
 
 	pattern.close();

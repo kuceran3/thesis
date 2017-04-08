@@ -157,7 +157,7 @@ with open(sys.argv[1], 'r') as csvF:
 		size = 1
 		for d in range(len(dim) -1, -1, -1):
 			size *= dim[d][1]
-			if (size > 200000):
+			if (size > 500000):
 				break
 			split += 1
 
@@ -166,7 +166,7 @@ with open(sys.argv[1], 'r') as csvF:
 				meta.write(str(attr[a][0]) + ":" + str(attr[a][1]) + ",")
 			else:
 				meta.write(str(attr[a][0]) + ":" + str(attr[a][1]) + '\n')
-		meta.write("dimName: " + str(split - 1))
+		meta.write("dimName: " + str(len(dim) - split))
 		
 		s = 1
 		pos = [0] * (len(dim) - split)

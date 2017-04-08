@@ -1,15 +1,5 @@
 #ifndef APPSPLITDYNASHFLHAFOEFBQOHQ
 #define APPSPLITDYNASHFLHAFOEFBQOHQ
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <math.h>
-#include <time.h>
-//#include <boost/chrono.hpp>
-
-#include "dimension.h"
-#include "attribute.h"
 #include "lib.h"
 
 using namespace std;

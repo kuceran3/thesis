@@ -4,9 +4,12 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <math.h>
+//#include <queue>
 #include <chrono>
 #include "dimension.h"
 #include "attribute.h"
+#include "reader.h"
 
 using namespace std;
 
@@ -36,7 +39,9 @@ bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<
 //--------------------------------------------------------------------------------------------------------------------------
 //Framework for computing distances
 void * * getItem(void * * data, vector<unsigned int> indices, unsigned int posDim);
+void * * getItem(Reader * cache, vector<unsigned int> indices);
 vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim);
+vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim);
 vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, unsigned int posDim, unsigned int posDimP);
 //--------------------------------------------------------------------------------------------------------------------------
 //Edit distance

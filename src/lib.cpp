@@ -149,7 +149,7 @@ void deleteData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &
 		} else {
 			deleteData((void * *)data[i], attrHeader, dim, posDim + 1);
 		}
-		delete (void * *)data[i];
+		delete [] (void * *)data[i];
 	}
 }
 
@@ -158,7 +158,7 @@ void deleteData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &
 		deleteOneLine(data, attrHeader);
 	else 
 		deleteData(data, attrHeader, dim, 0);
-	delete data;
+	delete [] data;
 }
 //--------------------------------------------------------------------------------------------------------------------------
 //Checks header
@@ -222,6 +222,16 @@ void * * getItem(void * * data, vector<unsigned int> indices, unsigned int posDi
 	}
 }
 
+void * * getItem(Reader * cache, vector<unsigned int> indices) {
+	void * * data = NULL;		
+	vector<unsigned int> dataIndices;
+	for (unsigned int i = 0; i < cache->getDimInName(); ++i) {
+		dataIndices.push_back(indices[i]);
+	}
+	data = cache->read(dataIndices);
+	return getItem((void * *)data[indices[cache->getDimInName()]], indices, cache->getDimInName());
+}
+
 vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim) {
 	vector<void * *> res;
 
@@ -233,6 +243,39 @@ vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length,
 		res = getDim((void * *)data[indices[posDim]], dimInd, length, indices, posDim + 1);
 	}
 
+	return res;
+}
+
+vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim) {
+	vector<void * *> res;
+
+	if (posDim < cache->getDimInName()) {
+		if (posDim == dimInd) {
+			for (unsigned int i = indices[posDim]; i < indices[posDim] + length; ++i) {
+				res.push_back(getItem(cache, indices));
+			}
+		} else {
+			res = getDim(cache, dimInd, length, indices, cache->getDimInName());
+		}
+	} else {
+		vector<unsigned int> dataIndices;
+		void * * data = NULL;
+		
+		if (posDim == cache->getDimInName()) {
+			for (unsigned int i = 0; i < posDim; ++i) {
+				dataIndices.push_back(indices[i]);
+			}
+			data = cache->read(dataIndices);
+		}
+		if (posDim == dimInd) {
+			for (unsigned int i = indices[posDim]; i < indices[posDim] + length; ++i) {
+				res.push_back(getItem((void * *)data[i], indices, posDim + 1));
+			}
+		} else {
+			res = getDim((void * *)data[indices[posDim]], dimInd, length, indices, posDim + 1);
+		}
+	}
+	
 	return res;
 }
 
