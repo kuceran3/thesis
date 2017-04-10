@@ -220,13 +220,12 @@ int dynDimCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
 
 	return sum;
 }
-
 // max error d*m^(d)
 bool dynCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors){
 
 	vector<unsigned int> indices;
-	vector<int> err;
+	//vector<int> err;
 	int errTmp;
 	int sum = 0;
 
@@ -236,7 +235,7 @@ bool dynCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
 		if (sum > errors || errTmp == -1) {
 			return false;
 		}
-		err.push_back(errTmp);
+	//	err.push_back(errTmp);
 	}
 	//check sum of errors in err, if lesser than number of errors allowed its ok
 	if (sum <= errors) {

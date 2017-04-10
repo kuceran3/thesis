@@ -1,5 +1,5 @@
-#ifndef APPSPLITDYN2ASHFLHAFOEFBQOHQ
-#define APPSPLITDYN2ASHFLHAFOEFBQOHQ
+#ifndef STRICTERFILTERJDKSJWHWIQPEUIRENJNJDKSLAWJQ
+#define STRICTERFILTERJDKSJWHWIQPEUIRENJNJDKSLAWJQ
 #include "lib.h"
 
 using namespace std;
@@ -32,6 +32,12 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, int errors);
 bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors);
+//--------------------------------------------------------------------------------------------------------------------------
+void preverifCheck(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
+	unsigned int posDimP, vector<unsigned int> indices, int posInd, vector<unsigned int> cacheInd, int errors, int count, int &res, int &done);
+bool preverif(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors);
 //--------------------------------------------------------------------------------------------------------------------------
 int charToInt(const char * n);

@@ -34,7 +34,7 @@ bool findRest(void * * data, Reader * cache, void * * dataP, vector<Attribute> a
 			}
 			return true;
 		}
-		return false;
+		//return false;
 	} else {
 		if (posDim + 1 >= dim.size()) {
 			return compareItem((void * *)data[indices[posInd]], dataP, attrH, attrHP);

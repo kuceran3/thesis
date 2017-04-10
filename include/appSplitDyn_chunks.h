@@ -1,5 +1,5 @@
-#ifndef APPSPLITDYNASHFLHAFOEFBQOHQ
-#define APPSPLITDYNASHFLHAFOEFBQOHQ
+#ifndef APPSPLITDYN_CHUNKSASHFLHAFOEFBQOHQ
+#define APPSPLITDYN_CHUNKSASHFLHAFOEFBQOHQ
 #include "lib.h"
 
 using namespace std;
@@ -8,9 +8,6 @@ using namespace std;
 int getPartSize(Dimension dim);
 //--------------------------------------------------------------------------------------------------------------------------
 //functions checking partial solutions
-vector<vector<unsigned int> > checkRest(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int pos, \
-	int posP, vector<vector<unsigned int> > subres);
 bool checkRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, vector<unsigned int> indices);
 vector<vector<unsigned int> > checkFirst(void * * data, void * * dataP, vector<Attribute> attrH, \
@@ -32,6 +29,12 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP);
 //--------------------------------------------------------------------------------------------------------------------------
+int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, int errors);
+bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors);
+//--------------------------------------------------------------------------------------------------------------------------
+int charToInt(const char * n);
 //only function called in main, initialize, reads data, finds solution 
 void run(const char * in, const char * p);
 //--------------------------------------------------------------------------------------------------------------------------
