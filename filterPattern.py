@@ -1,7 +1,7 @@
 import sys
 
 # in.csv (starting Dimenions) (Dimensions Size) (attributes 1/0)
-with open(sys.argv[1], 'r') as data, open(sys.argv[1].split('.')[0] + '_pattern.csv', 'w') as pattern:
+with open(sys.argv[1], 'r') as data, open(sys.argv[1].split('.')[0] + '_patternBig.csv', 'w') as pattern:
 	header = data.readline()[:-1].split(',')
 	dims = 0
 	attr = 0
@@ -29,6 +29,7 @@ with open(sys.argv[1], 'r') as data, open(sys.argv[1].split('.')[0] + '_pattern.
 		pattern.write(header[-1] + '\n')
 
 	prev = -1
+	dN = [0] * dims
 	while (True):
 		line = data.readline()
 		if (not line):
@@ -48,7 +49,15 @@ with open(sys.argv[1], 'r') as data, open(sys.argv[1].split('.')[0] + '_pattern.
 		
 		for i in range(dims):
 			if (size[i] > 1):
-				pattern.write(str(line[i]) + ',')
+				pattern.write(str(dN[i]) + ',')
+				#pattern.write(str(line[i]) + ',')
+		for i in range(dims - 1, -1, -1):
+			dN[i] += 1
+			if (dN[i] >= size[i]):
+				dN[i] = 0
+			else:
+				break
+
 		for i in range(attr - 1):
 			if (attrs[i] >= 1):
 				pattern.write(str(line[dims + i]) + ',')

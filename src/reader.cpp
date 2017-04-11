@@ -82,12 +82,12 @@ void Reader::initCache() {
 		maskSize *= dim[i].getSize();
 	}
 	maskSize /= 8;
-	cout << "maskSize: " << maskSize << endl;
+	//cout << "maskSize: " << maskSize << endl;
 
 	unsigned char * buffer = new unsigned char[maskSize + 1];
 
 	file.read((char *)buffer, maskSize + 1);
-	cout << "maskfile eof: " << file.eof() << " readable: " << file.good() << endl;
+	//cout << "maskfile eof: " << file.eof() << " readable: " << file.good() << endl;
 
 	for (unsigned int i = 0; i < dimInName; ++i) {
 		count *= dim[i].getSize();
@@ -95,7 +95,7 @@ void Reader::initCache() {
 	for (unsigned int i = dimInName; i < dim.size(); ++i) {
 		rest *= dim[i].getSize();
 	}
-	cout << "Count: " << count << " Rest: " << rest << endl;
+	//cout << "Count: " << count << " Rest: " << rest << endl;
 
 	int byte = 0;
 	int bitPos = 0;
@@ -117,18 +117,22 @@ void Reader::initCache() {
 
 void * * Reader::read(vector<unsigned int> indices) {
 	void * * res = findInCache(indices);
+	/*for (unsigned int i = 0; i < indices.size(); ++i) {
+		cout << indices[i] << ", ";
+	}*/
+		
 	if (res == NULL) {
-		cout << "not using cache: " << endl;
-		for (unsigned int i = 0; i < indices.size(); ++i) {
-			cout << indices[i] << ", ";
-		}
+		//cout << "not using cache: " << endl;
+		//for (unsigned int i = 0; i < indices.size(); ++i) {
+		//	cout << indices[i] << ", ";
+		//}
 		return readFile(indices);
 	}
-	cout << "using cache: " << indices.size() << " ";
-	for (unsigned int i = 0; i < indices.size(); ++i) {
-		cout << indices[i] << ", ";
-	}
-	cout << endl;
+	//cout << "using cache: " << indices.size() << " ";
+	//for (unsigned int i = 0; i < indices.size(); ++i) {
+	//	cout << indices[i] << ", ";
+	//}
+	//cout << endl;
 	return res;
 }
 
@@ -203,12 +207,12 @@ void * * Reader::readFile2(ifstream &file, int pos) {
 		s *= dim[i].getSize();
 	}
 	s *= (3 * attr.size());
-	cout << "File size in bits " << s << endl;
+	//cout << "File size in bits " << s << endl;
 
 	unsigned char * buffer = new unsigned char[s];
 	file.read((char *)buffer, s);
 
-	cout << "datafile eof: " << file.eof() << " readable: " << file.good() << endl;
+	//cout << "datafile eof: " << file.eof() << " readable: " << file.good() << endl;
 
 	queue<bool> cellMask;
 	unsigned int posInMask = 0, byte = 0;
@@ -226,10 +230,10 @@ void * * Reader::readFile(vector<unsigned int> indices) {
 
 	ifstream file;
 	file.open(fileName.c_str(), ios::binary);
-	cout << "Filename: " << fileName << endl;
+	//cout << "Filename: " << fileName << endl;
 	
 	if (files.size() >= cacheSize) {
-		cout << "Full cache" << endl;
+	//	cout << "Full cache" << endl;
 		deleteData(cache[files.front()], indices.size());
 		delete [] cache[files.front()];
 		cache[files.front()] = NULL;
@@ -243,7 +247,7 @@ void * * Reader::readFile(vector<unsigned int> indices) {
 			pos = pos * dim[i].getSize() + indices[i];
 		}
 	}
-	cout << "Reading Data for pos: " << pos << endl;
+	//cout << "Reading Data for pos: " << pos << endl;
 	files.push(pos);
 	cache[pos] = readFile2(file, pos);
 	//printData(cache[pos], attr, dim, dimInName);

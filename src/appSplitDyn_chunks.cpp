@@ -39,7 +39,6 @@ vector<vector<unsigned int> > checkFirst(void * * data, Reader * cache, void * *
 	//++calls;
 
 	vector<vector<unsigned int> > res, returned;
-	
 	if (posDim == cache->getDimInName()) {
 		data = cache->read(cacheInd);
 	}	
@@ -76,13 +75,13 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, void * * 
 	vector<vector<unsigned int> > res, returned;
 	bool isRes = true;
 	int start = 0;
-
 	if (posDim < cache->getDimInName()) {
+		start = cacheInd[posDim];
 		returned = checkFirst(NULL, cache, (void * *)dataP[0], attrH, attrHP, dim, posDim + 1, cacheInd);
 		for (unsigned int i = 0; i < returned.size(); ++i) {
-			cacheInd[posDim] += 1;
 			isRes = true;
 			for (int j = 1; j < partSize; ++j) {
+				cacheInd[posDim] = start + j;
 				if (!checkRest(NULL, cache, (void * *)dataP[j], attrH, attrHP, dim, posDim + 1, returned[i], cacheInd)) {
 					isRes = false;
 					break;
@@ -94,16 +93,16 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, void * * 
 			}
 		}
 	} else {
-		if (posDim == cache->getDimInName()) {
+		/*if (posDim == cache->getDimInName()) {
 			data = cache->read(cacheInd);
-			start = cacheInd[posDim];
-		}
+			//start = cacheInd[posDim];
+		}*/
 		if (posDim + 1 >= dim.size()) {
 			//++compares1;
-			if (compareItem((void * *)data[start], (void * *)dataP[0], attrH, attrHP)) {
+			if (compareItem((void * *)data[0], (void * *)dataP[0], attrH, attrHP)) {
 				for (int j = 1; j < partSize; ++j) {	
 				//++compares2;
-					if (!compareItem((void * *)data[start + j], (void * *)dataP[j], attrH, attrHP)) {
+					if (!compareItem((void * *)data[j], (void * *)dataP[j], attrH, attrHP)) {
 						return res;
 					}
 				}
@@ -111,11 +110,11 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, void * * 
 				return res;
 			}
 		} else {
-			returned = checkFirst((void * *)data[start], cache, (void * *)dataP[0], attrH, attrHP, dim, posDim + 1, cacheInd);
+			returned = checkFirst((void * *)data[0], cache, (void * *)dataP[0], attrH, attrHP, dim, posDim + 1, cacheInd);
 			for (unsigned int i = 0; i < returned.size(); ++i) {
 				isRes = true;
 				for (int j = 1; j < partSize; ++j) {
-					if (!checkRest((void * *)data[start + j], cache, (void * *)dataP[j], attrH, attrHP, dim, posDim + 1, returned[i], cacheInd)) {
+					if (!checkRest((void * *)data[j], cache, (void * *)dataP[j], attrH, attrHP, dim, posDim + 1, returned[i], cacheInd)) {
 						isRes = false;
 						break;
 					}
@@ -141,6 +140,7 @@ vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * *
 
 		for (unsigned int i = 0; i < dimP[posDimP].getSize() - partSize + 1; i += partSize) {
 			returned = checkPart(data, cache, &dataP[i], attrH, attrHP, dim, posDim, partSize, cacheInd);
+
 			for (unsigned int k = 0; k < returned.size(); ++k) {
 				//if (i > returned[k][dimPositions[posDimP]]) 
 				//	returned[k][dimPositions[posDimP]] = 0;
@@ -217,6 +217,8 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 					} else {
 						returned = find((void * *)data[i], cache, (void * *)dataP[j], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions, cacheInd);
 					}
+					//if (returned.size() > 0) {
+					//}
 					for (unsigned int k = 0; k < returned.size(); ++k) {
 						returned[k][posDim] += (i - j);
 						res.push_back(returned[k]);	
@@ -260,6 +262,7 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 
 	indices = getIndices(dim, dimP, pos, res, 0, 0);
 
+
 	unsigned int posDimP, length;
 	for (unsigned int i = 0; i < indices.size(); ++i) {
 		indicesP.clear();
@@ -288,7 +291,7 @@ bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors){
 
 	vector<unsigned int> indices;
-	vector<int> err;
+	//vector<int> err;
 	int errTmp;
 	int sum = 0;
 	for (unsigned int i = 0; i < dimP.size(); ++i) {
@@ -297,7 +300,7 @@ bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 		if (sum > errors || errTmp == -1) {
 			return false;
 		}
-		err.push_back(errTmp);
+		//err.push_back(errTmp);
 	}
 	//check sum of errors in err, if lesser than number of errors allowed its ok
 	if (sum <= errors) {
@@ -323,6 +326,12 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 	//cout << "Compares1: " << compares1 << endl; 
 	//cout << "Compares2: " << compares2 << endl; 
 	//Approximate check of the rest of the pattern
+	/*for (unsigned int i = 0; i < res.size(); ++i) {
+		for (unsigned int j = 0; j < res[i].size(); ++j) {
+			cout << res[i][j] << " ";
+		}
+		cout << endl;
+	}*/
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);

@@ -202,6 +202,8 @@ bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<
 	for (unsigned int i = 0; i < attrH.size(); ++i) {
 		if (j >= attrHP.size()) break;
 		if (attrH[i].getName() == attrHP[j].getName() && attrH[i].getType() == attrHP[j].getType()) {
+			//cout << *(int *)data << endl;
+			//cout << *(int *)dataP[j] << endl;
 			if (compareType(data[i], dataP[j], attrH[i].getType()) != 0) {
 				return false;
 			}
@@ -229,7 +231,7 @@ void * * getItem(Reader * cache, vector<unsigned int> indices) {
 		dataIndices.push_back(indices[i]);
 	}
 	data = cache->read(dataIndices);
-	return getItem((void * *)data[indices[cache->getDimInName()]], indices, cache->getDimInName());
+	return getItem((void * *)data[indices[cache->getDimInName()]], indices, cache->getDimInName() + 1);
 }
 
 vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim) {
@@ -251,8 +253,9 @@ vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length
 
 	if (posDim < cache->getDimInName()) {
 		if (posDim == dimInd) {
-			for (unsigned int i = indices[posDim]; i < indices[posDim] + length; ++i) {
+			for (unsigned int i = 0; i < length; ++i) {
 				res.push_back(getItem(cache, indices));
+				indices[posDim] += 1;
 			}
 		} else {
 			res = getDim(cache, dimInd, length, indices, cache->getDimInName());
