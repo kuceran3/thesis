@@ -287,7 +287,6 @@ vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension
 	vector<vector<unsigned int> > indices, ret;
 
 	unsigned int max;
-
 	if (posDimP >= dimP.size()) {
 		indices.push_back(vector<unsigned int>(res.begin() + posDim, res.end()));
 		return indices;
@@ -295,11 +294,12 @@ vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension
 
 	if (posDimP == pos) {
 		indices = getIndices(dim, dimP, pos, res, posDim + 1, posDimP + 1);
+		//cout << indices.size() << " " << res[posDim] <<  endl;
 		for (unsigned int i = 0; i < indices.size(); ++i) {
 			indices[i].insert(indices[i].begin(), res[posDim]);
 		}
 	} else if (dim[posDim].getName() != dimP[posDimP].getName()) {
-		ret = getIndices(dim, dimP, pos, res, posDim + 1, posDimP);
+		indices = getIndices(dim, dimP, pos, res, posDim + 1, posDimP);
 		for (unsigned int i = 0; i < indices.size(); ++i) {
 			indices[i].insert(indices[i].begin(), res[posDim]);
 		}
@@ -316,6 +316,7 @@ vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension
 			}
 		}
 	} 
+	
 	return indices;
 }
 //--------------------------------------------------------------------------------------------------------------------------

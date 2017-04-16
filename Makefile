@@ -6,7 +6,7 @@ SDIR	= src
 
 DEPS	= $(IDIR)/dimension.h $(IDIR)/attribute.h $(IDIR)/reader.h $(IDIR)/lib.h 
 
-all: brute brute2 brute_chunks exactSkipDim exactSkipDim_chunks exactSkipDim2 appSplitDyn appSplitDyn2 appSplitDyn_chunks stricterFilter_chunks clean
+all: brute brute2 brute_chunks appbrute_chunks exactSkipDim exactSkipDim_chunks exactSkipDim2 appSplitDyn appSplitDyn2 appSplitDyn_chunks stricterFilter_chunks clean
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(IDIR)/%.h $(DEPS)
 	$(CXX) -c $(CFLAGS) $< -o $@
@@ -18,6 +18,9 @@ brute2: $(ODIR)/brute2.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.
 	$(CXX) -o $@ $^
 
 brute_chunks: $(ODIR)/brute_chunks.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
+	$(CXX) -o $@ $^
+
+appbrute_chunks: $(ODIR)/appbrute_chunks.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
 	$(CXX) -o $@ $^
 
 exactSkipDim: $(ODIR)/exactSkipDim.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
@@ -50,6 +53,7 @@ cleanest: clean
 	rm -f brute
 	rm -f brute2
 	rm -f brute_chunks
+	rm -f appbrute_chunks
 	rm -f exactSkipDim
 	rm -f exactSkipDim_chunks
 	rm -f exactSkipDim2

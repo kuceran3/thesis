@@ -1,7 +1,7 @@
 import sys
 
-# in.csv (starting Dimenions) (Dimensions Size) (attributes 1/0)
-with open(sys.argv[1], 'r') as data, open(sys.argv[1].split('.')[0] + '_patternBig.csv', 'w') as pattern:
+# in.csv (starting Dimensions) (Dimensions Size) (attributes 1/0)
+with open(sys.argv[1], 'r') as data, open(sys.argv[1].split('.')[0] + '_patternBig2.csv', 'w') as pattern:
 	header = data.readline()[:-1].split(',')
 	dims = 0
 	attr = 0
