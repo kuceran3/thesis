@@ -30,6 +30,7 @@ import math
 
 def loop_rec(length, size, dimNum, pat, pos, distr, outF):
 	for x in range(0, length):
+		print(x)
 		pos1 = int(x/size)
 		pop1 = x % size
 		for y in range(0, length):
@@ -38,9 +39,13 @@ def loop_rec(length, size, dimNum, pat, pos, distr, outF):
 			for z in range(0, length):
 				pos3 = int(z/size)
 				pop3 = z % size
+				#try:
 				if(pos[pos1][pos2][pos3]):
 					outF.write(str(x) + "," + str(y) + "," + str(z) + ",")
 					outF.write(str(pat[pop1][pop2][pop3]) + '\n')
+				#except Exception:
+				#	print(pos1, pos2, pos3, len(pos), z, size)
+				#	asd = input()
 				else:
 					tmp = random.random()
 					if (tmp < distr[pos1][pos2][pos3]):
@@ -51,14 +56,16 @@ def readPattern(file, size, dim):
 	pat = []
 	file.readline()
 	for x in range(0, size ** dim):
-		pat.append(file.readline()[:-1].split(';')[-1])
+		pat.append(file.readline()[:-1].split(',')[-1])
 	res = []
 	for x in range(0, dim - 1):
-		for y in range(0, len(pat)/size):
-			res.append(pat[y * size : (y + 1) * size])
+		res = []
+		for y in range(0, len(pat), size):
+			res.append(pat[y : y + size])
 		pat = []
 		for y in res:
 			pat.append(y)
+	#print(len(pat), len(pat[0]), len(pat[0][0]))
 	return res
 
 def gaussMean(dim, l):
@@ -90,7 +97,7 @@ def gaussSum(mean, v, dim, pos):
 	return res * 5
 
 def genPos(dim, length, density, percres, patS):
-	pos = length / patS
+	pos = int(length / patS)
 	mean = gaussMean(dim, pos)
 	distr = []
 	patPos = []
@@ -106,7 +113,7 @@ def genPos(dim, length, density, percres, patS):
 				distr[x][y].append(g * density * 200000000000)
 				tmp = random.random()
 				#print(tmp)
-				if (tmp >= g * density * percres * 80 * patS**dim):
+				if (tmp >= g * density * percres * 80 * patS*dim * (1/3)):
 					patPos[x][y].append(False)
 				else:
 					patPos[x][y].append(True)
