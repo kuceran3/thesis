@@ -6,10 +6,21 @@ SDIR	= src
 
 DEPS	= $(IDIR)/dimension.h $(IDIR)/attribute.h $(IDIR)/reader.h $(IDIR)/lib.h 
 
-all: brute brute2 brute_chunks appbrute_chunks exactSkipDim exactSkipDim_chunks exactSkipDim2 appSplitDyn appSplitDyn2 appSplitDyn_chunks stricterFilter_chunks clean
+all: bruteAll exactAll appSplitAll hashAll clean
+
+bruteAll: brute brute2 brute_chunks appbrute_chunks 
+
+exactAll: exactSkipDim exactSkipDim_chunks exactSkipDim2 
+
+appSplitAll: appSplitDyn appSplitDyn2 appSplitDyn_chunks stricterFilter_chunks 
+
+hashAll: hash_chunks
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(IDIR)/%.h $(DEPS)
 	$(CXX) -c $(CFLAGS) $< -o $@
+
+hash_chunks: $(ODIR)/hash_chunks.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
+	$(CXX) -o $@ $^
 
 brute: $(ODIR)/brute.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
 	$(CXX) -o $@ $^

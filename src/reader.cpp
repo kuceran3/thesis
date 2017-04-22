@@ -122,17 +122,18 @@ void * * Reader::read(vector<unsigned int> indices) {
 	}*/
 		
 	if (res == NULL) {
-		//cout << "not using cache: " << endl;
-		//for (unsigned int i = 0; i < indices.size(); ++i) {
-		//	cout << indices[i] << ", ";
-		//}
+		/*cout << "not using cache: " << endl;
+		for (unsigned int i = 0; i < indices.size(); ++i) {
+			cout << indices[i] << ", ";
+		}
+		cout << endl;*/
 		return readFile(indices);
 	}
-	//cout << "using cache: " << indices.size() << " ";
-	//for (unsigned int i = 0; i < indices.size(); ++i) {
-	//	cout << indices[i] << ", ";
-	//}
-	//cout << endl;
+	/*cout << "using cache: " << indices.size() << " ";
+	for (unsigned int i = 0; i < indices.size(); ++i) {
+		cout << indices[i] << ", ";
+	}
+	cout << endl;*/
 	return res;
 }
 
@@ -165,7 +166,7 @@ void Reader::readMask(unsigned char * buffer, unsigned int &byte, queue<bool> &c
 	byte += attr.size();
 }
 
-void * Reader::readCell(unsigned char * buffer, unsigned int &byte, queue<bool> &cellMask) {
+void * * Reader::readCell(unsigned char * buffer, unsigned int &byte, queue<bool> &cellMask) {
 	void * * cell = new void * [attr.size()];
 
 	if (cellMask.size() == 0) {
@@ -180,7 +181,7 @@ void * Reader::readCell(unsigned char * buffer, unsigned int &byte, queue<bool> 
 		}
 		cellMask.pop();
 	}
-	return (void *)cell;
+	return cell;
 }
 
 void * * Reader::readDim(unsigned char * buffer, unsigned int posDim, unsigned int &byte, int pos, unsigned int &posInMask, queue<bool> &cellMask) {
@@ -188,7 +189,11 @@ void * * Reader::readDim(unsigned char * buffer, unsigned int posDim, unsigned i
 	if (posDim + 1 >= dim.size()) {
 		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 			if (fileMasks[pos][posInMask++]) {
-				res[i] = readCell(buffer, byte, cellMask);
+				res[i] = (void *)readCell(buffer, byte, cellMask);
+				for (unsigned int j = 0; j < attr.size(); ++j) {
+					//cout << (int *)(((void * *)(res[i]))[j]) << ", ";
+				}
+				//cout << endl;
 			} else {
 				res[i] = NULL;
 			}
@@ -257,16 +262,19 @@ void * * Reader::readFile(vector<unsigned int> indices) {
 
 void Reader::deleteOneLine(void * * line) {
 	for (unsigned int i = 0; i < attr.size(); ++i) {
-		delete (int *)line[i];
+		if (line[i] != NULL)
+			delete (int *)line[i];
 	}
 }
 
 void Reader::deleteData(void * * data, unsigned int posDim) {
 	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
-		if (posDim + 1 >= dim.size()) {
-			deleteOneLine((void * *)data[i]);
-		} else {
-			deleteData((void * *)data[i], posDim + 1);
+		if (data[i] != NULL) {
+			if (posDim + 1 >= dim.size()) {
+					deleteOneLine((void * *)data[i]);
+			} else {
+					deleteData((void * *)data[i], posDim + 1);
+			}
 		}
 		delete [] (void * *)data[i];
 	}

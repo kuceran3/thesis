@@ -4,29 +4,6 @@ import sys
 import random
 import numpy as np
 import math
-#length, length/pat1D, dimNum, 0, printDim, pat, pos, distr, outF
-#def loop_rec(length, size, dimNum, pos, printDim, pat, pos, distr, attNum, attMax, outF):
-#	if (dimNum > 1):
-#		for j in range(0, length):
-#			printDim[pos] = j
-#			loop_rec(length, dimNum - 1, pos + 1, printDim, attNum, attMax, outF)
-#	else:
-#		for j in range(0, length):
-#			printDim[pos] = j
-#			if (gauss())
-#
-#			else
-#				for x in range(0, len(printDim)):
-#					#print(printDim[x], ",", sep="", end="")
-#					outF.write(str(printDim[x]) + ",")
-#				for x in range(0, attNum):
-#					#print(random.randint(0, attMax), sep='', end='')
-#					outF.write(str(random.randint(0, attMax)))
-#					if(x + 1 < attNum):
-#					#	print(",", sep='', end='')
-#						outF.write(",")
-#				#print()
-#				outF.write('\n')
 
 def loop_rec(length, size, dimNum, pat, pos, distr, outF):
 	for x in range(0, length):
@@ -50,7 +27,7 @@ def loop_rec(length, size, dimNum, pat, pos, distr, outF):
 					tmp = random.random()
 					if (tmp < distr[pos1][pos2][pos3]):
 						outF.write(str(x) + "," + str(y) + "," + str(z) + ",")
-						outF.write(str(random.randint(0,10)) + '\n')
+						outF.write(str(random.randint(0,255)) + '\n')
 
 def readPattern(file, size, dim):
 	pat = []
@@ -93,12 +70,14 @@ def gaussVal(mean, v, dim, corr):
 def gaussSum(mean, v, dim, pos):
 	res = 0
 	for x in mean:
-		res += gaussVal(x, v, dim, float(pos)/3)
-	return res * 5
+		#res += gaussVal(x, v, dim, float(pos)/5)
+		res += gaussVal(x, v, dim, 2)
+	return res * 2.5
 
 def genPos(dim, length, density, percres, patS):
 	pos = int(length / patS)
-	mean = gaussMean(dim, pos)
+	mean = gaussMean(dim, 10)
+	#mean = gaussMean(dim, pos)
 	distr = []
 	patPos = []
 	true = 0
@@ -109,17 +88,17 @@ def genPos(dim, length, density, percres, patS):
 			distr[x].append([])
 			patPos[x].append([])
 			for z in range(0, pos):
-				g = gaussSum(mean, [x, y, z], dim, pos)
-				distr[x][y].append(g * density * 200000000000)
+				g = gaussSum(mean, [float(x) / (length / patS / 10), float(y) / (length / patS / 10), float(z) / (length / patS / 10)], dim, pos)
+				distr[x][y].append(g * density * 7000)
 				tmp = random.random()
 				#print(tmp)
-				if (tmp >= g * density * percres * 80 * patS*dim * (1/3)):
+				if (tmp >= g * density * percres * 4):
 					patPos[x][y].append(False)
 				else:
 					patPos[x][y].append(True)
 					true += 1
-
-				#print(x, y, z, distr[x][y][z], patPos[x][y][z])
+				#print()
+				#print(x, y, z, g)
 				#p = raw_input()
 	print(true)
 	return patPos, distr

@@ -124,7 +124,8 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, void * * 
 }
 
 vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd) {
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
+	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd) {
 
 	//++callsCP;
 	vector<vector<unsigned int> > res, returned;
@@ -158,7 +159,8 @@ vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * *
 
 //split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd) {
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
+	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd) {
 	//++callsParts;
 
 	vector<vector<unsigned int> > res, returned;

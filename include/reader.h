@@ -34,7 +34,7 @@ private:
 	void * * findInCache(vector<unsigned int> indices);
 	void * readInt(unsigned char * buffer, unsigned int &byte);
 	void readMask(unsigned char * buffer, unsigned int &byte, queue<bool> &cellMask);
-	void * readCell(unsigned char * buffer, unsigned int &byte, queue<bool> &cellMask);
+	void * * readCell(unsigned char * buffer, unsigned int &byte, queue<bool> &cellMask);
 	void * * readDim(unsigned char * buffer, unsigned int posDim, unsigned int &byte, int maskPos, unsigned int &pos, queue<bool> &cellMask);
 	void * * readFile2(ifstream &file, int pos);
 	void * * readFile(vector<unsigned int> indices);

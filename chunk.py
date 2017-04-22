@@ -13,6 +13,7 @@ class Mask:
 
 	def addZero(self):
 		self.a *= 2
+		self.valid += 1
 		self.check()
 
 	def addOne(self):
@@ -116,6 +117,7 @@ def fillMask(mask, row, index, dim, end = False):
 			else:
 				index[x] = 0
 
+		
 	if (not end):
 		mask.addOne()
 
@@ -173,27 +175,37 @@ with open(sys.argv[1], 'r') as csvF:
 		for x in range(0, i - split):
 			s *= dim[x][1]
 		index = [0]*len(dim)
-
+		prevIndex = 0
+		row = next(cF)
 		for x in range(0, s):
 			fileNameNum = ''
 			for p in pos:
 				fileNameNum += '_' + str(p)
 			fileName = sys.argv[1].split('.')[0] + fileNameNum + '.bin' 
 			#print(fileName)
-			with open(fileName, 'wb') as out:
-				ec = 0
-				e = Eighth(len(attr), split)
-				for row in cF:
-					m, index = fillMask(m, row, index, dim)
 
+			ec = 1
+			e = Eighth(len(attr), split)
+			e.addCell(row, len(dim), attr)
+
+			with open(fileName, 'wb') as out:
+				for row in cF:
+					#print(fileName, row)
+					m, index = fillMask(m, row, index, dim)
+					if (prevIndex > index[len(dim) - split]):
+						prevIndex = 0
+						break
+					prevIndex = index[len(dim) - split]
 					e.addCell(row, len(dim), attr)
 					ec += 1
 					if(ec % 8 == 0):
 						e.write(out)
 						e = Eighth(len(attr), split)
 						ec = 0
-					if (index[len(dim) - split:] == [0] * split):
-						break
+					
+					#print(index, len(dim))
+					#if (index[len(dim) - split:] == [0] * split):
+					#	break
 				e.writeEnd(out)
 
 				pos = movePos(pos, dim, split)

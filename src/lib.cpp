@@ -166,7 +166,7 @@ bool checkHeaders(vector<Dimension> dim, vector<Dimension> dimPatt, vector<Attri
 	unsigned int j = 0;
 	for (unsigned int i = 0; i < attrHeader.size(); ++i) {
 		if (patternAttrHeader[j].getName() == attrHeader[i].getName() && patternAttrHeader[j].getType() == attrHeader[i].getType()) {
-				j++;
+			j++;
 		}
 		if (j >= patternAttrHeader.size())
 			break;
@@ -184,7 +184,6 @@ bool checkHeaders(vector<Dimension> dim, vector<Dimension> dimPatt, vector<Attri
 	}
 	if (j != dimPatt.size())
 		return false;
-
 	return true;
 }
 
@@ -198,6 +197,9 @@ int compareType(void * first, void * second, string type) {
 
 bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<Attribute> attrHP) {
 	unsigned int j = 0;
+
+	if (data == NULL)
+		return false;
 
 	for (unsigned int i = 0; i < attrH.size(); ++i) {
 		if (j >= attrHP.size()) break;
