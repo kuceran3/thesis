@@ -2,9 +2,14 @@
 
 using namespace std;
 
-int getPartSize(Dimension dim) {
-	//return 1;
-	return (int)sqrt(dim.getSize());
+int getNumOfParts(int k, int d, int dLen) {
+	int parts = (int)pow((float)k, 1.0 / (d - 1)) + 1;
+	if (parts > dLen) return dLen;
+	else return parts;
+}
+
+int getPartSize(int dLen, int count) {
+	return (dLen / count);
 }
 
 bool checkRest(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
@@ -125,14 +130,12 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, void * * 
 
 vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
-	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd) {
+	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize) {
 
 	//++callsCP;
 	vector<vector<unsigned int> > res, returned;
 
 	//if (posDimP + 1 >= dimP.size()) {
-		int partSize = getPartSize(dimP[posDimP]);
-
 		for (unsigned int i = 0; i < dimP[posDimP].getSize() - partSize + 1; i += partSize) {
 			returned = checkPart(data, cache, &dataP[i], attrH, attrHP, dim, posDim, partSize, cacheInd);
 
@@ -160,18 +163,19 @@ vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * *
 //split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
-	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd) {
+	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
 	//++callsParts;
 
 	vector<vector<unsigned int> > res, returned;
-	int partSize = getPartSize(dimP[posDimP]);
+	int slide = partSize;
+	if (numP == 1) slide = 1;
 	for (unsigned int i = dimP[posDimP].getSize() - partSize; i < (dim[posDim].getSize() - partSize + 1); i += dimP[posDimP].getSize()) {
-		for (int j = 0; j < partSize; ++j)	{
+		for (int j = 0; j < slide; ++j)	{
 			if (posDim < cache->getDimInName()) {
 				cacheInd[posDim] = i - j;
-				returned = checkParts(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd);
+				returned = checkParts(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize);
 			} else {
-				returned = checkParts(&data[i - j], cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd);				
+				returned = checkParts(&data[i - j], cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize);				
 			}
 			for (unsigned int k = 0; k < returned.size(); ++k) {
 				returned[k][posDim] += (i - j);
@@ -186,7 +190,7 @@ vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * 
 
 vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
-	unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd) {
+	unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
 
 	//++callsFind;
 	vector<vector<unsigned int> > res, returned;
@@ -199,7 +203,7 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 		dimPositions.push_back(posDim);
 		if (posDimP + 1 >= dimP.size()) {
-			returned = findParts(data, cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd);
+			returned = findParts(data, cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize, numP);
 			for (unsigned int j = 0; j < returned.size(); ++j) {
 				//returned[j][posDim] += i;
 				res.push_back(returned[j]);	
@@ -209,9 +213,9 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 				for (unsigned int j = 0; j < dimP[0].getSize(); ++j) {
 					if (posDim < cache->getDimInName()) {
 						cacheInd[posDim] = i;
-						returned = find(NULL, cache, (void * *)dataP[j], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions, cacheInd);
+						returned = find(NULL, cache, (void * *)dataP[j], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions, cacheInd, partSize, numP);
 					} else {
-						returned = find((void * *)data[i], cache, (void * *)dataP[j], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions, cacheInd);
+						returned = find((void * *)data[i], cache, (void * *)dataP[j], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions, cacheInd, partSize, numP);
 					}
 					//if (returned.size() > 0) {
 					//}
@@ -226,9 +230,9 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 			if (posDim < cache->getDimInName()) {
 				cacheInd[posDim] = i;
-				returned = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, dimPositions, cacheInd);
+				returned = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, dimPositions, cacheInd, partSize, numP);
 			} else {
-				returned = find((void * *)data[i], cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, dimPositions, cacheInd);
+				returned = find((void * *)data[i], cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, dimPositions, cacheInd, partSize, numP);
 			}
 			for (unsigned int j = 0; j < returned.size(); ++j) {
 				returned[j][posDim] += i;
@@ -380,13 +384,13 @@ bool preverif(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 }
 
 vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int errors) {
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int errors, int partSize, int numP) {
 
 	vector<unsigned int> cacheInd;
 	for (unsigned int i = 0; i < cache->getDimInName(); ++i) {
 		cacheInd.push_back(0);
 	}
-	vector<vector<unsigned int> > res = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>(), cacheInd);
+	vector<vector<unsigned int> > res = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>(), cacheInd, partSize, numP);
 	//cout << "find done" << endl;
 	//Preverification
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
@@ -445,13 +449,16 @@ void run(const char * in, const char * p, const char * err) {
 	}
 
 	int errors = charToInt(err);
+	int numP = getNumOfParts(errors, dimPatt.size(), dimPatt[dimPatt.size() - 1].getSize());
+	int partSize = getPartSize(dimPatt[dimPatt.size() - 1].getSize(), numP);
+	
 	void * * dataPatt = readData(pattern, patternAttrHeader, dimPatt);
 
 	cout << "Finding..." << endl;
 	vector<vector<unsigned int> > res;
 
 	chrono::system_clock::time_point start = chrono::system_clock::now();
-	res = find(cache, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt, errors);
+	res = find(cache, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt, errors, partSize, numP);
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "took " << sec.count() << " seconds\n";
 
