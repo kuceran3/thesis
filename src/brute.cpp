@@ -1,6 +1,5 @@
 #include "brute.h"
 
-//hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich hodnot
 using namespace std;
 
 //Returns upper left position of solution
@@ -33,7 +32,6 @@ bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 			return findRest((void * *)data[indices[posInd]], dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, indices, posInd + 1);			
 		}
 	}
-	//return true;
 }
 
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
@@ -42,7 +40,6 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 	bool isRes;
-	//cout << "Dim: " << dim[posDim].getName() << endl;
 	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 		//find dimensions with the same name
 		if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
@@ -163,16 +160,9 @@ void run(const char * in, const char * p) {
 			for (unsigned int j = 0; j < res[i].size(); ++j) {
 				cout << res[i][j] << ", ";
 			}
-			//cout << " ... ";
-			//for (unsigned int j = 0; j < res[i].size(); ++j) {
-			//	cout << dim[j].getOneVal(res[i][j]) << ", ";
-			//}
 			cout << endl;
 		}
 	}
-	//printData(data, attrHeader, dim);
-	//printData(dataPatt, patternAttrHeader, dimPatt);
-
 	deleteData(data, attrHeader, dim);
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
 
@@ -185,9 +175,7 @@ int main(int argc, char* argv[]) {
 		cout << "Usage: " << argv[0] << " <INPUTFILE>" << " <PATTERN>" << endl;
 		return 0;
 	}
-	//const clock_t begin_time = clock();
 	run(argv[1], argv[2]);
-	//cout << float( clock () - begin_time ) /  CLOCKS_PER_SEC;
 	
 	return 0;
 }

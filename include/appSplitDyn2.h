@@ -17,7 +17,6 @@ vector<vector<unsigned int> > checkPart(void * * data, void * * dataP, vector<At
 vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions);
 //--------------------------------------------------------------------------------------------------------------------------
-//split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions);
 //finds upper left position of the subpattern and checks if the rest of the subpattern is the same by calling findRest, returns coordinates of "top left" corner
@@ -27,16 +26,17 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 //skips first dimension of the pattern and data and calls function find, recursion function, to found if subpatterns can be placed in the data
 //returns vector of solutions, where every item has less than (k) errors
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP);
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int errors);
 //--------------------------------------------------------------------------------------------------------------------------
-int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
+//dynamic check of the solutions found by find function
+int dynDimCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, int errors);
-bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
+bool dynCheck(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors);
 //--------------------------------------------------------------------------------------------------------------------------
 int charToInt(const char * n);
 //only function called in main, initialize, reads data, finds solution 
-void run(const char * in, const char * p);
+void run(const char * in, const char * p, const char * err);
 //--------------------------------------------------------------------------------------------------------------------------
 //calls run, control of input parameters
 int main(int argc, char* argv[]);

@@ -1,6 +1,5 @@
 #ifndef READERJKLNMHJKSDABNMFKWKQJSNFJFKD
 #define READERJKLNMHJKSDABNMFKWKQJSNFJFKD
-//#include "lib.h"
 #include "dimension.h"
 #include "attribute.h"
 #include <queue>
@@ -8,7 +7,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-
+//loads and works with binned (chunked) files 
 using namespace std;
 
 class Reader {
@@ -40,6 +39,5 @@ private:
 	void * * readFile(vector<unsigned int> indices);
 	void deleteOneLine(void * * line);
 	void deleteData(void * * data, unsigned int posDim);
-
 }; 
 #endif

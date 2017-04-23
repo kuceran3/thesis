@@ -1,10 +1,6 @@
 #include "appSplitDyn.h"
 
 using namespace std;
-static int calls = 0;
-static int callsCP = 0;
-static int callsParts = 0;
-static int callsFind = 0;
 
 int getPartSize(Dimension dim) {
 	return (int)sqrt(dim.getSize());
@@ -12,7 +8,6 @@ int getPartSize(Dimension dim) {
 
 bool checkRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, vector<unsigned int> indices) {
-	++calls;
 	if (posDim >= dim.size()) {
 		return compareItem(data, dataP, attrH, attrHP);
 	} else {
@@ -22,7 +17,6 @@ bool checkRest(void * * data, void * * dataP, vector<Attribute> attrH, \
 
 vector<vector<unsigned int> > checkFirst(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim) {
-	++calls;
 
 	vector<vector<unsigned int> > res, returned;
 	if (posDim >= dim.size()) {
@@ -43,7 +37,6 @@ vector<vector<unsigned int> > checkFirst(void * * data, void * * dataP, vector<A
 
 vector<vector<unsigned int> > checkPart(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize) {
-	++calls;
 
 	vector<vector<unsigned int> > res, returned;
 	bool isRes = true;
@@ -68,7 +61,6 @@ vector<vector<unsigned int> > checkPart(void * * data, void * * dataP, vector<At
 vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions) {
 
-	++callsCP;
 	vector<vector<unsigned int> > res, returned;
 
 	if (posDimP + 1 >= dimP.size()) {
@@ -77,9 +69,6 @@ vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<A
 		for (unsigned int i = 0; i < dimP[posDimP].getSize() - partSize + 1; i += partSize) {
 			returned = checkPart(data, &dataP[i], attrH, attrHP, dim, posDim, partSize);
 			for (unsigned int k = 0; k < returned.size(); ++k) {
-				//if (i > returned[k][dimPositions[posDimP]]) 
-				//	returned[k][dimPositions[posDimP]] = 0;
-				//else
 				returned[k][dimPositions[posDimP]] -= i;
 				res.push_back(returned[k]);	
 			}	
@@ -88,7 +77,6 @@ vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<A
 		for (unsigned int i = 0; i < dimP[posDimP].getSize(); ++i) {
 			returned = checkParts(data, (void * *)dataP[i], attrH, attrHP, dim, dimP, posDim, posDimP + 1, dimPositions);
 			for (unsigned int k = 0; k < returned.size(); ++k) {
-				//returned[k][dimPositions[posDimP]] -= (dim[posDimP].getSize() - 1 - i);
 				returned[k][dimPositions[posDimP]] -= i;
 				res.push_back(returned[k]);
 			}		
@@ -100,7 +88,6 @@ vector<vector<unsigned int> > checkParts(void * * data, void * * dataP, vector<A
 //split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> dimPositions) {
-	++callsParts;
 
 	vector<vector<unsigned int> > res, returned;
 	int partSize = getPartSize(dimP[posDimP]);
@@ -122,7 +109,6 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> dimPositions) {
 
-	++callsFind;
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 
@@ -131,7 +117,6 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 		if (posDimP + 1 >= dimP.size()) {
 			returned = findParts(data, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions);
 			for (unsigned int j = 0; j < returned.size(); ++j) {
-				//returned[j][posDim] += i;
 				res.push_back(returned[j]);	
 			}
 		} else {
@@ -225,17 +210,13 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int errors) {
 
 	vector<vector<unsigned int> > res = find(data, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>());
-	cout << "Calls: " << calls << endl;
-	cout << "CallsFind: " << callsFind << endl;
-	cout << "CallsParts: " << callsParts << endl;
-	cout << "CallsCP: " << callsCP << endl;
 	//Approximate check of the rest of the pattern
-	/*for (vector<vector<unsigned int> >::iterator it = res.begin(); it != res.end();) {
-		if (!dynCheck(data, dataP, attrH, attrHP, dim, dimP, *it, errors))
+	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
+		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);
-		else
-			++it;
-	}*/
+		}
+		--it;
+	}
 	return res;
 }
 

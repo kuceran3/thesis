@@ -7,14 +7,15 @@ using namespace std;
 
 //Returns upper left position of solution
 //checks if the rest of the pattern is in the data
-bool findRest(void * * data, void * * dataP, vector<Attribute > attrH, \
-	vector<Attribute > attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, vector<unsigned int> indices, int posInd);
+bool findRest(void * * data, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
+	unsigned int posDimP, vector<unsigned int> indices, int posInd);
 //finds upper left position of the pattern and checks if the rest is the same by calling findRest, returns coordinates of "top left" corner
-vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute > attrH, \
-	vector<Attribute > attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP);
+vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP);
 //initializes recursion parameters
-vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute > attrH, \
-	vector<Attribute > attrHP, vector<Dimension> dim, vector<Dimension> dimP);
+vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP);
 //--------------------------------------------------------------------------------------------------------------------------
 //only function called in main, initialize, reads data, finds solution 
 void run(const char * in, const char * p);

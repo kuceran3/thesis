@@ -2,7 +2,7 @@
 #define ATTRIBUTEJKDSLAIEUWIOQEHFJSKAUIOEW
 #include <string>
 #include <vector>
-
+//saves attributes header
 using namespace std;
 
 class Attribute {

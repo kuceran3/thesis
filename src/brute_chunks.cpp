@@ -33,7 +33,6 @@ bool findRest(void * * data, Reader * cache, void * * dataP, vector<Attribute> a
 			}
 			return true;
 		}
-		//return false;
 	} else {
 		if (posDim + 1 >= dim.size()) {
 			return compareItem((void * *)data[indices[posInd]], dataP, attrH, attrHP);
@@ -67,7 +66,6 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 			if (posDim + 1 >= dim.size()) {
 				if (compareItem((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
 					isRes = true;
-					//cout << "compareItem ok" << endl;
 					for (unsigned int j = 1; j < dimP[posDimP].getSize(); ++j) {
 						if (!compareItem((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
 							isRes = false;
@@ -107,7 +105,6 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 					if (isRes) {
 						returned[j].insert(returned[j].begin(), i);
 						res.push_back(returned[j]);	
-						//cout << res.size() << endl;
 					}
 				}
 			}
@@ -116,7 +113,6 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 				if (compareItem((void * *)data[i], dataP, attrH, attrHP)) {
 					one.push_back(i);
 					res.push_back(one);
-					//cout << res.size() << endl;
 					one.clear();
 				}
 			} else {
@@ -129,7 +125,6 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 				for (unsigned int j = 0; j < returned.size(); ++j) {
 					returned[j].insert(returned[j].begin(), i);
 					res.push_back(returned[j]);
-					//cout << res.size() << endl;
 				}
 			}
 		}

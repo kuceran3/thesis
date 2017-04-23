@@ -2,7 +2,6 @@
 #define BRUTE_CHUNKSDSJKALIWKSHEHJSKALDJIWOUEQIOJKLSDAL
 #include "lib.h"
 
-//hlavicka patternu je podmnozina hlavicky dat, ve tvaru nazev:dim123, kde 123 je pocet unikatnich hodnot
 using namespace std;
 
 //Returns upper left position of solution

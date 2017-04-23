@@ -4,14 +4,12 @@
 
 using namespace std;
 
+//Returns a size of parts that pattern will be split to
 int getNumOfParts(int k, int d, int dLen);
-//Returns sqrt of dimensions count as a size of parts that pattern will be split to
 int getPartSize(int dLen, int count);
 //--------------------------------------------------------------------------------------------------------------------------
+//framework for creating, comparing, ... of hashes
 void * * makeVoid(vector<void * *> column);
-//vector<bool> hashInt(int item);
-//vector<bool> hashString(string item);
-//vector<bool> hashType(void * item, string type);
 unsigned char hashInt(int item);
 unsigned char hashString(string item);
 unsigned char hashType(void * item, string type);
@@ -26,12 +24,13 @@ bool compareHash(vector<unsigned char> * hash, vector<unsigned char> * hashP);
 //--------------------------------------------------------------------------------------------------------------------------
 //functions checking partial solutions
 vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, vector<unsigned char> * hashP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize, vector<unsigned int> cacheInd, vector<vector <int> > * countsSlide, vector<vector<unsigned int> > &indices, bool * valid);
+	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize, vector<unsigned int> cacheInd, \
+	vector<vector <int> > * countsSlide, vector<vector<unsigned int> > &indices, bool * valid);
 vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * * hashP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
-	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP, vector<vector <int> > * countsSlide, vector<vector<unsigned int> > &indices, bool * valid);
+	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP, vector<vector <int> > * countsSlide, \
+	vector<vector<unsigned int> > &indices, bool * valid);
 //--------------------------------------------------------------------------------------------------------------------------
-//split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * hashP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP);
@@ -39,17 +38,17 @@ vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * 
 vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * hashP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP);
-
-//skips first dimension of the pattern and data and calls function find, recursion function, to found if subpatterns can be placed in the data
-//returns vector of solutions, where every item has less than (k) errors
+//finds upper left corners of candidate solutions
 vector<vector<unsigned int> > find(Reader * cache, void * * hashP, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int errors, int partSize, int numP);
 //--------------------------------------------------------------------------------------------------------------------------
+//dynamic check of the solutions found by find function
 int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, int errors);
 bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors);
 //--------------------------------------------------------------------------------------------------------------------------
+//preverification of the solutions found by find function
 void preverifCheck(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> indices, int posInd, vector<unsigned int> cacheInd, int errors, int count, int &res, int &done);
@@ -58,7 +57,7 @@ bool preverif(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 //--------------------------------------------------------------------------------------------------------------------------
 int charToInt(const char * n);
 //only function called in main, initialize, reads data, finds solution 
-void run(const char * in, const char * p);
+void run(const char * in, const char * p, const char * err);
 //--------------------------------------------------------------------------------------------------------------------------
 //calls run, control of input parameters
 int main(int argc, char* argv[]);

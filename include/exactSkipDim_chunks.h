@@ -12,7 +12,7 @@ bool findRest(void * * data, Reader * cache, void * * dataP, vector<Attribute> a
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> indices, int posInd, vector<unsigned int> cacheInd);
 //checks if the whole pattern is correct
-vector<vector<unsigned int> > checkRest(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
+vector<vector<unsigned int> > checkRest(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int pos, \
 	int posP, vector<vector<unsigned int> > subres, vector<unsigned int> cacheInd);
 //finds upper left position of the subpattern and checks if the rest of the subpattern is the same by calling findRest, returns coordinates of "top left" corner

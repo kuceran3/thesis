@@ -9,42 +9,9 @@ int getNumOfParts(int k, int d, int dLen) {
 }
 
 int getPartSize(int dLen, int count) {
-	//return (int)sqrt(dim.getSize());
-	//int count = getNumOfParts(k, d);
 	return (dLen / count);
 }
 
-/*vector<bool> hashInt(int item) {
-	vector<bool> res(8);
-	if (item % 2 >= 1) res[7] = true;
-	else res[7] = false;
-	if (item % 4 >= 2) res[6] = true;
-	else res[6] = false;
-	if (item % 8 >= 4) res[5] = true;
-	else res[5] = false;
-	if (item % 16 >= 8) res[4] = true;
-	else res[4] = false;
-	if (item % 32 >= 16) res[3] = true;
-	else res[3] = false;
-	if (item % 64 >= 32) res[2] = true;
-	else res[2] = false;
-	if (item % 128 >= 64) res[1] = true;
-	else res[1] = false;
-	if (item >= 128) res[0] = true;
-	else res[0] = false;
-	return res;
-}
-vector<bool> hashString(string item) {
-	return hashInt((int)item[0]);
-}
-vector<bool> hashType(void * item, string type) {
-	if(type.length() >= 3 && type.substr(0, 3) == "int") {
-		return hashInt(*(int *)item);
-	} else {
-		return hashString(*(string *)item);
-	}
-}
-*/
 unsigned char hashInt(int item) {
 	return (unsigned char)item;
 }
@@ -64,15 +31,9 @@ unsigned char hashType(void * item, string type) {
 vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attribute> attrH) {
 	vector<unsigned char> * res;
 	vector<vector <int> > counts(attrH.size(), vector<int>(8, 0));
-	//vector<bool> one;
 	unsigned char one;
 	void * * cell;
 	res = new vector<unsigned char>(attrH.size(), 0);
-	/*for (unsigned int i = 0; i < attrH.size(); ++i) {
-		//res -> push_back(0);
-		//counts[i][0] = counts[i][1] = counts[i][2] = counts[i][3] = 0;
-		//counts[i][4] = counts[i][5] = counts[i][6] = counts[i][7] = 0;
-	}*/
 
 	for (int i = start; i < end; ++i) {
 		if (line[i] != NULL) {
@@ -95,11 +56,6 @@ vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attri
 				else --counts[j][1];
 				if (one >= 128) ++counts[j][0];
 				else --counts[j][0];
-
-				/*for (unsigned int k = 0; k < one.size(); ++k) {
-					if (one[k]) ++counts[j][k];
-					else --counts[j][k];
-				}*/
 			}
 		}
 	}
@@ -122,8 +78,6 @@ vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attri
 
 vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attribute> attrH, vector<Attribute> attrHP, bool &valid, vector<vector <int> > &counts) {
 	vector<unsigned char> * res;
-	//vector<vector <int> > counts(attrHP.size(), vector<int>(8));
-	//vector<bool> one;
 	unsigned char one;
 	void * * cell;
 	res = new vector<unsigned char>(attrH.size(), 0);
@@ -137,7 +91,6 @@ vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attri
 			if (attrH[j].getName() != attrHP[l].getName()) {
 				continue;
 			}
-			//cout << *(int *)cell[j] << endl;
 			one = hashType(cell[j], attrH[j].getType());
 			if (one % 2 >= 1) ++counts[l][7];
 			else --counts[l][7];
@@ -178,8 +131,6 @@ vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attri
 
 vector<unsigned char> * hashlineSlide(void * * next, void * * prev, vector<Attribute> attrH, vector<Attribute> attrHP, bool &valid, vector<vector <int> > &counts) {
 	vector<unsigned char> * res;
-	//vector<vector <int> > counts(attrHP.size(), vector<int>(8));
-	//vector<bool> one;
 	unsigned char one;
 	res = new vector<unsigned char>(attrH.size(), 0);
 	if (next == NULL || prev == NULL) {
@@ -192,7 +143,6 @@ vector<unsigned char> * hashlineSlide(void * * next, void * * prev, vector<Attri
 		if (attrH[j].getName() != attrHP[l].getName()) {
 			continue;
 		}
-		//cout << *(int *)cell[j] << endl;
 		one = hashType(next, attrH[j].getType());
 		if (one % 2 >= 1) ++counts[l][7];
 		else --counts[l][7];
@@ -296,10 +246,7 @@ vector<vector<unsigned int> > getAllIndices(vector<Dimension> dim, unsigned int 
 }
 
 bool compareHash(vector<unsigned char> * hash, vector<unsigned char> * hashP) {
-	//cout << "Hash size in compare: " << hash -> size() << endl;
 	for (unsigned int i = 0; i < hash -> size(); ++i) {
-		//cout << (int)(*hash)[i] << " " << (int)(*hashP)[i] << endl;
-		//cout << 1;
 		if ((*hash)[i] != (*hashP)[i]) return false;
 	}
 	return true;
@@ -314,19 +261,16 @@ void * * makeVoid(vector<void * *> column) {
 }
 
 vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, vector<unsigned char> * hashP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize, vector<unsigned int> cacheInd, vector<vector <int> > * countsSlide, vector<vector<unsigned int> > &indices, bool * valid) {
-	//++calls;
+	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize, vector<unsigned int> cacheInd, \
+	vector<vector <int> > * countsSlide, vector<vector<unsigned int> > &indices, bool * valid) {
 
-	//vector<vector<unsigned int> > res, indices;
 	vector<vector<unsigned int> > res(0);
 	vector<void * *> col;
 	void * * next, * * prev;
 	vector<unsigned char> * hash;
 	vector<unsigned int> one(dim.size(), 0);
 
-	//bool valid = true;
 	if (posDim < cache->getDimInName()) {
-		//indices = getAllIndices(dim, posDim, posDim);
 		for (unsigned int i = 0; i < indices.size(); ++i) {
 			indices[i][0] = cacheInd[posDim];
 			if (!valid[i]) {
@@ -338,7 +282,6 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, vector<un
 					}
 					res.push_back(one);
 				}
-				//valid = true;
 				delete hash;
 			} else {
 				next = getItem(cache, indices[i]);
@@ -351,7 +294,6 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, vector<un
 					}
 					res.push_back(one);
 				}
-				//valid = true;
 				delete hash;
 			}
 		}
@@ -360,9 +302,7 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, vector<un
 			if (!valid[0]) {
 				hash = hashline(data, 0, partSize, attrH, attrHP, valid[0], countsSlide[0]);
 				if (valid[0] && compareHash(hash, hashP)) {
-					//res.push_back(vector<unsigned int>(dim.size(), 0));
 					delete hash;
-					//return res;
 					return vector<vector<unsigned int> >(1, vector<unsigned int>(dim.size(), 0));
 				}
 				delete hash;
@@ -370,15 +310,12 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, vector<un
 				hash = hashlineSlide((void * *)data[0], (void * *)data[partSize], attrH, attrHP, valid[0], countsSlide[0]);
 
 				if (valid[0] && compareHash(hash, hashP)) {
-					//res.push_back(vector<unsigned int>(dim.size(), 0));
 					delete hash;
-					//return res;
 					return vector<vector<unsigned int> >(1, vector<unsigned int>(dim.size(), 0));
 				}
 				delete hash;
 			}
 		} else {
-			//indices = getAllIndices(dim, posDim, posDim);
 			for (unsigned int i = 0; i < indices.size(); ++i) {
 				indices[i][0] = 0;
 				if (!valid[i]) {
@@ -390,7 +327,6 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, vector<un
 						}
 						res.push_back(one);
 					}
-					//valid[i] = true;
 					delete hash;
 				} else {
 					next = getItem(data, indices[i], posDim);
@@ -403,7 +339,6 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, vector<un
 						}
 						res.push_back(one);
 					}
-					//valid[i] = true;
 					delete hash;
 				}
 			}
@@ -419,37 +354,25 @@ vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * *
 
 	vector<vector<unsigned int> > res(0), returned(0);
 	for (int i = 0; i < numP; i++) {
-		//cout  << "Pattern slide: " << i << endl;
-
-	//for (int i = 0; i < numP; i++) {
-		/*cout <<  ((vector<unsigned char> *)hashP) -> size() << endl;
-		for (int j = 0; j < ((vector<unsigned char> *)hashP) -> size(); ++j) {
-			cout << (int)(*((vector<unsigned char> *)hashP))[j] << " ";
-		}
-		cout << endl;*/
 		returned.clear();
 		returned = checkPart(data, cache, (vector<unsigned char> *)hashP[i], attrH, attrHP, dim, posDim, partSize, cacheInd, countsSlide, indices, valid);
 
 		for (unsigned int k = 0; k < returned.size(); ++k) {
 			returned[k][dimPositions[posDimP]] -= (i * partSize);
-			//res.push_back(returned[k]);	
 		}	
 		res.insert(res.end(), returned.begin(), returned.end());	
 	}
 	return res;
 }
 
-//split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * hashP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
-	//++callsParts;
+
 	vector<vector<unsigned int> > res(0), returned(0);
 	vector<vector <int> > * countsSlide;
 	bool * valid;
 	vector<vector<unsigned int> > indices = getAllIndices(dim, posDim, posDim);
-	//int partSize = getPartSize(dimP[posDimP]);
-	//for (unsigned int i = 136; i < 137; i += dimP[posDimP].getSize()) {
 	int slide = partSize;
 	if (numP == 1) slide = 1;
 	countsSlide = new vector<vector<int> >[indices.size()];
@@ -461,9 +384,6 @@ vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * 
 			valid[j] = false;
 		}
 		for (int j = 0; j < slide; ++j)	{
-			//cout  << "Data slide: " << i - j << endl;
-			
-			//cout << "i" << i << " j" << j << endl;
 			returned.clear();
 			if (posDim < cache->getDimInName()) {
 				cacheInd[posDim] = i - j;
@@ -476,12 +396,8 @@ vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * 
 				if (returned[k][posDim] + partSize < returned[k][posDim]) {
 					returned[k][posDim] = 0;
 				}
-				//res.push_back(returned[k]);	
 			}
 			res.insert(res.end(), returned.begin(), returned.end());	
-			//returned.clear();
-
-			//break;
 		}
 	}
 	delete [] countsSlide;
@@ -493,7 +409,7 @@ vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * 
 vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * hashP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
-	//++callsFind;
+
 	vector<vector<unsigned int> > res(0), returned(0);
 	vector<unsigned int> one;
 
@@ -506,57 +422,22 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * hashP
 		if (posDimP + 1 >= dimP.size()) {
 
 			return findParts(data, cache, hashP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize, numP);
-			/*returned = findParts(data, cache, hashP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize, numP);
-			for (vector<vector<unsigned int> >::iterator it = returned.begin(); it != returned.end(); ++it) {
-				res.push_back(*it);	
-			}*/
-			//for (unsigned int j = 0; j < returned.size(); ++j) {
-				//res.push_back(returned[j]);	
-			//}
 		} else {
-			//cout << dimP[posDimP].getSize() - 1 << endl;
-			//int start = dimP[posDimP].getSize() - 1;
-			//int end = 320;
-			//if (posDim == 0) start = 63;//79;
-			//if (posDim == 0) end = 80;//79;
-			//if (posDim == 1) end = 96;//95;
-
-			//if (posDim == 1) start = 95;//95;
-			//for (int i = start; i < end; i += dimP[posDimP].getSize()) {
-			//for (unsigned int i = start; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
 			for (unsigned int i = dimP[posDimP].getSize() - 1; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
-				//cout << "find " << posDim << ":  " << i << endl;
-				//for (unsigned int j = dimP[0].getSize() - 1; j < dimP[0].getSize(); ++j) {
-				//cout  << "Posdim: " << posDim << "; data: " << i << endl;
 				for (unsigned int j = 0; j < dimP[posDimP].getSize(); ++j) {
 					returned.clear();
-					//cout  << "Posdim: " << posDim << "; data: " << i << "  Pattern: " << j << endl;
 					if (posDim < cache->getDimInName()) {
 						cacheInd[posDim] = i;
 						returned = find(NULL, cache, (void * *)hashP[j], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions, cacheInd, partSize, numP);
 					} else {
 						returned = find((void * *)data[i], cache, (void * *)hashP[j], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions, cacheInd, partSize, numP);
 					}
-					//if (returned.size() > 0) {
-					//}
 
 					for (unsigned int k = 0; k < returned.size(); ++k) {
 						returned[k][posDim] += (i - j);
-						/*if (posDim == 0 && i == 79) {
-							for (int m = 0; m < returned[k].size(); ++m) {
-								cout << returned[k][m] << " ";
-							}
-							cout << endl;
-						}*/
 						res.push_back(returned[k]);	
 					}
-					//res.insert(res.end(), returned.begin(), returned.end());	
 				}
-				/*if (posDim == 0) {
-					cout << c << endl;
-					cout << i << " " << res.size() << endl;	
-				}*/
-				//break;
 			}
 			return res;
 		}	
@@ -596,8 +477,6 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	}
 
 	indices = getIndices(dim, dimP, pos, res, 0, 0);
-
-
 	unsigned int posDimP, length;
 	for (unsigned int i = 0; i < indices.size(); ++i) {
 		indicesP.clear();
@@ -623,7 +502,7 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 
 // max error d*m^(d)
 bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors){
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors) {
 
 	vector<unsigned int> indices;
 	vector<int> err;
@@ -727,35 +606,13 @@ vector<vector<unsigned int> > find(Reader * cache, void * * hashP, void * * data
 		cacheInd.push_back(0);
 	}
 	vector<vector<unsigned int> > res = find(NULL, cache, hashP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>(), cacheInd, partSize, numP);
-
-	cout << "Found: " << res.size() << endl;
-	/*for (unsigned int i = 0; i < res.size(); ++i) {
-		for (unsigned int j = 0; j < res[i].size(); ++j) {
-			cout << res[i][j] << " ";
-		}
-		cout << endl;
-	}*/
-	//cout << "find done" << endl;
 	//Preverification
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
-		/*if ((*it)[0] != 64 || (*it)[1] != 80) {
-			--it;
-			continue;
-		}
-		cout << (it - res.begin()) << ": ";
-		for (unsigned int i = 0; i < it -> size(); ++i) {
-			cout << (*it)[i] << " ";
-		}
-		cout << endl;*/
 		if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);
 		}
 		--it;
 	}
-	cout << "Preverified: " << res.size() << endl;
-
-	//cout << "prever done" << endl;
-
 	//Approximate check of the rest of the pattern
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
@@ -763,7 +620,6 @@ vector<vector<unsigned int> > find(Reader * cache, void * * hashP, void * * data
 		}
 		--it;
 	}
-	//cout << "dyn done" << endl;
 
 	return res;
 }

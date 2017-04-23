@@ -155,7 +155,6 @@ void run(const char * in, const char * p) {
 
 	pattern.close();
 	file.close();
-	//closedir(dp);
 }
 
 int main(int argc, char* argv[]) {

@@ -69,7 +69,6 @@ vector<vector<unsigned int> > checkFirst(void * * data, Reader * cache, void * *
 
 vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize, vector<unsigned int> cacheInd) {
-	//++calls;
 
 	vector<vector<unsigned int> > res, returned;
 	bool isRes = true;
@@ -92,15 +91,9 @@ vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, void * * 
 			}
 		}
 	} else {
-		/*if (posDim == cache->getDimInName()) {
-			data = cache->read(cacheInd);
-			//start = cacheInd[posDim];
-		}*/
 		if (posDim + 1 >= dim.size()) {
-			//++compares1;
 			if (compareItem((void * *)data[0], (void * *)dataP[0], attrH, attrHP)) {
 				for (int j = 1; j < partSize; ++j) {	
-				//++compares2;
 					if (!compareItem((void * *)data[j], (void * *)dataP[j], attrH, attrHP)) {
 						return res;
 					}
@@ -132,31 +125,16 @@ vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * *
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize) {
 
-	//++callsCP;
 	vector<vector<unsigned int> > res, returned;
 
-	//if (posDimP + 1 >= dimP.size()) {
-		for (unsigned int i = 0; i < dimP[posDimP].getSize() - partSize + 1; i += partSize) {
-			returned = checkPart(data, cache, &dataP[i], attrH, attrHP, dim, posDim, partSize, cacheInd);
+	for (unsigned int i = 0; i < dimP[posDimP].getSize() - partSize + 1; i += partSize) {
+		returned = checkPart(data, cache, &dataP[i], attrH, attrHP, dim, posDim, partSize, cacheInd);
 
-			for (unsigned int k = 0; k < returned.size(); ++k) {
-				//if (i > returned[k][dimPositions[posDimP]]) 
-				//	returned[k][dimPositions[posDimP]] = 0;
-				//else
-				returned[k][dimPositions[posDimP]] -= i;
-				res.push_back(returned[k]);	
-			}	
-		}
-	/*} else {
-		for (unsigned int i = 0; i < dimP[posDimP].getSize(); ++i) {
-			returned = checkParts(data, (void * *)dataP[i], attrH, attrHP, dim, dimP, posDim, posDimP + 1, dimPositions);
-			for (unsigned int k = 0; k < returned.size(); ++k) {
-				//returned[k][dimPositions[posDimP]] -= (dim[posDimP].getSize() - 1 - i);
-				returned[k][dimPositions[posDimP]] -= i;
-				res.push_back(returned[k]);
-			}		
-		}
-	}*/
+		for (unsigned int k = 0; k < returned.size(); ++k) {
+			returned[k][dimPositions[posDimP]] -= i;
+			res.push_back(returned[k]);	
+		}	
+	}
 	return res;
 }
 
@@ -164,7 +142,6 @@ vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * *
 vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
-	//++callsParts;
 
 	vector<vector<unsigned int> > res, returned;
 	int slide = partSize;
@@ -192,7 +169,6 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
 
-	//++callsFind;
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 
@@ -205,7 +181,6 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 		if (posDimP + 1 >= dimP.size()) {
 			returned = findParts(data, cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize, numP);
 			for (unsigned int j = 0; j < returned.size(); ++j) {
-				//returned[j][posDim] += i;
 				res.push_back(returned[j]);	
 			}
 		} else {
@@ -217,8 +192,6 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 					} else {
 						returned = find((void * *)data[i], cache, (void * *)dataP[j], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, dimPositions, cacheInd, partSize, numP);
 					}
-					//if (returned.size() > 0) {
-					//}
 					for (unsigned int k = 0; k < returned.size(); ++k) {
 						returned[k][posDim] += (i - j);
 						res.push_back(returned[k]);	
@@ -261,8 +234,6 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	}
 
 	indices = getIndices(dim, dimP, pos, res, 0, 0);
-
-
 	unsigned int posDimP, length;
 	for (unsigned int i = 0; i < indices.size(); ++i) {
 		indicesP.clear();
@@ -288,7 +259,7 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 
 // max error d*m^(d)
 bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors){
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors) {
 
 	vector<unsigned int> indices;
 	vector<int> err;
@@ -391,7 +362,6 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 		cacheInd.push_back(0);
 	}
 	vector<vector<unsigned int> > res = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>(), cacheInd, partSize, numP);
-	//cout << "find done" << endl;
 	//Preverification
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
 		if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
@@ -399,8 +369,6 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 		}
 		--it;
 	}
-	//cout << "prever done" << endl;
-
 	//Approximate check of the rest of the pattern
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
@@ -408,8 +376,6 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 		}
 		--it;
 	}
-	//cout << "dyn done" << endl;
-
 	return res;
 }
 

@@ -27,8 +27,9 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 //skips first dimension of the pattern and data and calls function find, recursion function, to found if subpatterns can be placed in the data
 //returns vector of solutions, where every item has less than (k) errors
 vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP);
+	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int errors);
 //--------------------------------------------------------------------------------------------------------------------------
+//dynamic check of the solutions found by find function
 int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, int errors);
 bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \

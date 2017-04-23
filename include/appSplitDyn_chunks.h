@@ -4,22 +4,21 @@
 
 using namespace std;
 
-//Returns sqrt of dimensions count as a size of parts that pattern will be split to
+//Returns size that pattern will be split to
 int getNumOfParts(int k, int d, int dLen);
 int getPartSize(int dLen, int count);
 //--------------------------------------------------------------------------------------------------------------------------
 //functions checking partial solutions
-bool checkRest(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, vector<unsigned int> indices);
-vector<vector<unsigned int> > checkFirst(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim);
-vector<vector<unsigned int> > checkPart(void * * data, void * * dataP, vector<Attribute> attrH, \
-	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize);
+bool checkRest(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, vector<unsigned int> indices, vector<unsigned int> cacheInd);
+vector<vector<unsigned int> > checkFirst(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, vector<unsigned int> cacheInd);
+vector<vector<unsigned int> > checkPart(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
+	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize, vector<unsigned int> cacheInd);
 vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize);
 //--------------------------------------------------------------------------------------------------------------------------
-//split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP);
@@ -32,6 +31,7 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, int errors, int partSize, int numP);
 //--------------------------------------------------------------------------------------------------------------------------
+//dynamic check of the solutions found by find function
 int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, int errors);
 bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
