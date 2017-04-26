@@ -169,7 +169,6 @@ void run(const char * in, const char * p) {
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
 	
 	Reader * cache = new Reader(inpFile, dim, attrHeader);
-
 	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
 		cout << "Invalid pattern" << endl;
 		return;

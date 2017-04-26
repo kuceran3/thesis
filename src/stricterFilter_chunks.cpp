@@ -5,7 +5,8 @@ using namespace std;
 int getNumOfParts(int k, int d, int dLen) {
 	int parts = (int)pow((float)k, 1.0 / (d - 1)) + 1;
 	if (parts > dLen) return dLen;
-	else return parts;
+	while(dLen % parts != 0) --parts;
+	return parts;
 }
 
 int getPartSize(int dLen, int count) {

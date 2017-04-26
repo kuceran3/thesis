@@ -192,10 +192,12 @@ with open(sys.argv[1], 'r') as csvF:
 				for row in cF:
 					#print(fileName, row)
 					m, index = fillMask(m, row, index, dim)
-					if (prevIndex > index[len(dim) - split]):
+					if (prevIndex > index[len(dim) - split] and index[len(dim) - split:] != [0] * split):
 						prevIndex = 0
 						break
-					prevIndex = index[len(dim) - split]
+					if (index[len(dim) - split:] != [0] * split):
+						prevIndex = index[len(dim) - split]
+						
 					e.addCell(row, len(dim), attr)
 					ec += 1
 					if(ec % 8 == 0):

@@ -212,7 +212,7 @@ vector<vector<unsigned int> > find(void * * data, void * * dataP, vector<Attribu
 	vector<vector<unsigned int> > res = find(data, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>());
 	//Approximate check of the rest of the pattern
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
-		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
+		if (!dynCheck(data, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);
 		}
 		--it;

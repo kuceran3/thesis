@@ -23,7 +23,7 @@ void * * readData(ifstream &file, vector<Attribute > attrHeader, vector<Dimensio
 //Data printing
 string toString(void * data, string type);
 void printOneLine(void * * line, vector<Attribute > attrHeader);
-void printData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim, unsigned int posDim);
+void printData2(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim, unsigned int posDim);
 void printData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim);
 //--------------------------------------------------------------------------------------------------------------------------
 //Cleaning

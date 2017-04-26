@@ -14,12 +14,15 @@ exactAll: exactSkipDim exactSkipDim_chunks exactSkipDim2
 
 appSplitAll: appSplitDyn appSplitDyn2 appSplitDyn_chunks stricterFilter_chunks 
 
-hashAll: hash_chunks
+hashAll: hash_chunks hash_onechunks
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(IDIR)/%.h $(DEPS)
 	$(CXX) -c $(CFLAGS) $< -o $@
 
 hash_chunks: $(ODIR)/hash_chunks.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
+	$(CXX) -o $@ $^
+
+hash_onechunks: $(ODIR)/hash_chunks3.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
 	$(CXX) -o $@ $^
 
 brute: $(ODIR)/brute.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
@@ -71,3 +74,5 @@ cleanest: clean
 	rm -f appSplitDyn_chunks
 	rm -f appSplitDyn
 	rm -f stricterFilter_chunks
+	rm -f hash_chunks
+	rm -f hash_onechunks

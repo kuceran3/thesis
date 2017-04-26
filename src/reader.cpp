@@ -160,7 +160,7 @@ void * * Reader::readDim(unsigned char * buffer, unsigned int posDim, unsigned i
 				res[i] = NULL;
 			}
 		}
-	} else {
+	} else {	
 		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 			res[i] = (void *)readDim(buffer, posDim + 1, byte, pos, posInMask, cellMask);
 		}
@@ -174,7 +174,6 @@ void * * Reader::readFile2(ifstream &file, int pos) {
 		s *= dim[i].getSize();
 	}
 	s *= (3 * attr.size());
-
 	unsigned char * buffer = new unsigned char[s];
 	file.read((char *)buffer, s);
 

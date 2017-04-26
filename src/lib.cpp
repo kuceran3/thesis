@@ -98,6 +98,8 @@ string toString(void * data, string type) {
 }
 
 void printOneLine(void * * line, vector<Attribute> attrHeader) {
+	if (line == NULL)
+		return;
 	for (unsigned int i = 0; i < attrHeader.size(); ++i) {
 		cout << toString(line[i], attrHeader[i].getType()) << ", ";
 	}
