@@ -230,8 +230,8 @@ void run(const char * in, const char * p, const char * err) {
 	res = find(cache, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt, errors);
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "took " << sec.count() << " seconds\n";
-
-	if (res.size() == 0){
+    cout << res.size() << endl;
+	/*if (res.size() == 0){
 		cout << "No solutions found" << endl;
 	} else {
 		for (unsigned int i = 0; i < res.size(); ++i) {
@@ -240,7 +240,7 @@ void run(const char * in, const char * p, const char * err) {
 			}
 			cout << endl;
 		}
-	}
+	}*/
 	//deleteData(data, attrHeader, dim);
 	delete cache;
 	deleteData(dataPatt, patternAttrHeader, dimPatt);

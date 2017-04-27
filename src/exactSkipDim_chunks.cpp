@@ -216,8 +216,8 @@ void run(const char * in, const char * p) {
 
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "took " << sec.count() << " seconds\n";
-
-	if (res.size() == 0){
+    cout << res.size() << endl;
+	/*if (res.size() == 0){
 		cout << "no solutions found" << endl;
 	} else {
 		for (unsigned int i = 0; i < res.size(); ++i) {
@@ -226,7 +226,7 @@ void run(const char * in, const char * p) {
 			}
 			cout << endl;
 		}
-	}
+	}*/
 	
 	delete cache;
 	deleteData(dataPatt, patternAttrHeader, dimPatt);

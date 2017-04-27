@@ -92,7 +92,7 @@ def genPos(dim, length, density, percres, patS):
 				distr[x][y].append(g * density * 7000)
 				tmp = random.random()
 				#print(tmp)
-				if (tmp >= g * density * percres * 4):
+				if (tmp >= g * density * percres * 5):
 					patPos[x][y].append(False)
 				else:
 					patPos[x][y].append(True)

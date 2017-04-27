@@ -96,6 +96,7 @@ void Reader::initCache() {
 void * * Reader::read(vector<unsigned int> indices) {
 	void * * res = findInCache(indices);
 	if (res == NULL) {
+		//cout << "read " << indices[0] << " " << indices[1] << endl;
 		return readFile(indices);
 	}
 	return res;
@@ -132,7 +133,6 @@ void Reader::readMask(unsigned char * buffer, unsigned int &byte, queue<bool> &c
 
 void * * Reader::readCell(unsigned char * buffer, unsigned int &byte, queue<bool> &cellMask) {
 	void * * cell = new void * [attr.size()];
-
 	if (cellMask.size() == 0) {
 		readMask(buffer, byte, cellMask);
 	}
@@ -154,8 +154,6 @@ void * * Reader::readDim(unsigned char * buffer, unsigned int posDim, unsigned i
 		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 			if (fileMasks[pos][posInMask++]) {
 				res[i] = (void *)readCell(buffer, byte, cellMask);
-				for (unsigned int j = 0; j < attr.size(); ++j) {
-				}
 			} else {
 				res[i] = NULL;
 			}

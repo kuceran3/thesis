@@ -65,33 +65,68 @@ Brute:
 sizes:
 50% density, pattern 16x16x16, 3D,  235.7 MB -> 38.1 MB
 times:							seconds 		sol 		error
-brute_chunks - 					42.195	 		7 				0
-ExactSkipDim_chunks -			22.0131			7 				0
+brute_chunks - 					42.195	 		6 				0
+ExactSkipDim_chunks -			22.0131			6 				0
 
 approximate:
-appbrute_chunks					267.855			7 				0
-								265.971			7				4
+appbrute_chunks					267.855			6 				0
+								265.971			6				4
 								668.237							16
 								1857.26							64
 
-appSplitDyn_chunks				18.8743			7 				0
+appSplitDyn_chunks				18.8743			6 				0
 								154.847							4
 								113.36							16
 								98.4649							64
 
-StricterFilter_chunks			18.9291			7 				0
+StricterFilter_chunks			18.9291			6 				0
 								153.403							4
 								110.024							16
 								98.8414							64
 
-hash_chunks						28.2716			7 				0
+hash_chunks						28.2716			6 				0
 								269.145							4
 								236.046							16
 								333.046							64
 
-hash_once_chunks				24.8698			7 				0
+hash_once_chunks				24.8698			6 				0
 								213.794							4
 								224.018 						16
 								480.422 						64
 								
+hash_chunks_rolling
+
+sizes:
+50% density, pattern 64x64x64, 3D,  4.2 GB -> 655.9 MB
+times:							seconds 		sol 		error
+brute_chunks - 					42.195	 		2 				0
+ExactSkipDim_chunks -			22.0131			2 				0
+
+approximate:
+appbrute_chunks					267.855			2 				0
+								265.971			2				4
+								668.237							16
+								1857.26							64
+
+appSplitDyn_chunks				18.8743			2 				0
+								154.847							4
+								113.36							16
+								98.4649							64
+
+StricterFilter_chunks			18.9291			2 				0
+								153.403							4
+								110.024							16
+								98.8414							64
+
+hash_chunks						28.2716			2 				0
+								269.145							4
+								236.046							16
+								333.046							64
+
+hash_once_chunks				24.8698			2 				0
+								213.794							4
+								224.018 						16
+								480.422 						64
+								
+hash_chunks_rolling
 

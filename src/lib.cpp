@@ -31,7 +31,7 @@ vector<Attribute> readHeader(string row, vector<Dimension> &dim){
 
 int readDimNum(string row) {
 	int pos = 8; //dimName:_ 
-	cout << row << endl;
+	//cout << row << endl;
 	string num = row.substr(pos, row.length() - 1);
 	return stoi(num);
 }
@@ -128,6 +128,7 @@ void printData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &d
 	else 
 		printData(data, attrHeader, dim, 0);
 }
+
 //--------------------------------------------------------------------------------------------------------------------------
 //Cleaning
 void deleteType(void * data, string type) {
@@ -203,11 +204,15 @@ bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<
 	if (data == NULL)
 		return false;
 
+	//cout << data << " " << dataP << endl;
+
 	for (unsigned int i = 0; i < attrH.size(); ++i) {
+	//	cout << i << " " << j << endl;
 		if (j >= attrHP.size()) break;
 		if (attrH[i].getName() == attrHP[j].getName() && attrH[i].getType() == attrHP[j].getType()) {
 			//cout << *(int *)data << endl;
 			//cout << *(int *)dataP[j] << endl;
+	//		cout << data[i] << " " << dataP[j] << endl;
 			if (compareType(data[i], dataP[j], attrH[i].getType()) != 0) {
 				return false;
 			}

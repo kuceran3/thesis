@@ -10,6 +10,7 @@ bool findRest(void * * data, Reader * cache, void * * dataP, vector<Attribute> a
 	if (posDim == cache->getDimInName()) {
 		data = cache->read(cacheInd);
 	}
+	//cout << "find rest" << endl;
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 		if (posDim + 1 >= dim.size()) {
 			for (unsigned int j = 0; j < dimP[posDimP].getSize(); ++j) {
@@ -54,38 +55,55 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 	bool isRes;
-
+	//cout << "cache look" << endl;
 	if (posDim == cache->getDimInName()) {
 		data = cache->read(cacheInd);
 	}
-
+	//int start = 0;
+	//if (posDim == 0) start = 694;
+	//if (posDim == 1) start = 768;
+	//if (posDim == 2) start = 750;
+	//for (unsigned int i = start; i < dim[posDim].getSize(); ++i) {
 	for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
+		//cout << posDim << " " << i << endl;
 		//find dimensions with the same name
 		if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
+			//cout << "first if" << endl;
 			if (i + dimP[posDimP].getSize() > dim[posDim].getSize()) break;
 			if (posDim + 1 >= dim.size()) {
+				//cout << "compare" << endl;
+				//printData2(data, attrH, dim, posDim);
+
 				if (compareItem((void * *)data[i], (void * *)dataP[0], attrH, attrHP)) {
+				//	cout << "true" << endl;
+
 					isRes = true;
 					for (unsigned int j = 1; j < dimP[posDimP].getSize(); ++j) {
 						if (!compareItem((void * *)data[i + j], (void * *)dataP[j], attrH, attrHP)) {
+							//cout << "compared false" << endl;
 							isRes = false;
 							break;
 						}
 					}
+					//cout << "one: " << one.size() << " " << isRes << endl;
 					if (isRes) {
 						one.push_back(i);
 						res.push_back(one);
 						one.clear();
 					}
+					//cout << i << " size: " << dim[posDim].getSize() << " posdim: " << posDim << " posdimp: " << posDimP << endl;
 				}
+				//cout << "false" << endl;
+
 			} else {
+				//cout << "cache look" << endl;
 				if (posDim < cache->getDimInName()) {
 					cacheInd[posDim] = i;
 					returned = find(NULL, cache, (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, cacheInd);
 				} else {
 					returned = find((void * *)data[i], cache, (void * *)dataP[0], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, cacheInd);
 				}
-
+				//cout << "returned " << returned.size() << endl;
 				for (unsigned int j = 0; j < returned.size(); ++j) {
 					isRes = true;
 					for (unsigned int k = 1; k < dimP[posDimP].getSize(); ++k) {
@@ -109,6 +127,7 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 				}
 			}
 		} else {
+			//cout << "first else" << endl;
 			if (posDim + 1 >= dim.size()) {
 				if (compareItem((void * *)data[i], dataP, attrH, attrHP)) {
 					one.push_back(i);
@@ -116,18 +135,22 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 					one.clear();
 				}
 			} else {
+				//cout << "cache look" << endl;
 				if (posDim < cache->getDimInName()) {
 					cacheInd[posDim] = i;
 					returned = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, cacheInd);
 				} else {
 					returned = find((void * *)data[i], cache, dataP, attrH, attrHP, dim, dimP, posDim + 1, posDimP, cacheInd);
 				}
+				//cout << "returned " << returned.size() << endl;
+
 				for (unsigned int j = 0; j < returned.size(); ++j) {
 					returned[j].insert(returned[j].begin(), i);
 					res.push_back(returned[j]);
 				}
 			}
 		}
+		//cout << "for cycle i: " << i << endl;
 	}
 	return res;
 }
@@ -186,8 +209,8 @@ void run(const char * in, const char * p) {
 	res = find(cache, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt);
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "took " << sec.count() << " seconds\n";
-
-	if (res.size() == 0){
+    cout << res.size() << endl;
+	/*if (res.size() == 0){
 		cout << "No solutions found" << endl;
 	} else {
 		for (unsigned int i = 0; i < res.size(); ++i) {
@@ -196,7 +219,7 @@ void run(const char * in, const char * p) {
 			}
 			cout << endl;
 		}
-	}
+	}*/
 	//deleteData(data, attrHeader, dim);
 	delete cache;
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
