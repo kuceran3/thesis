@@ -1,66 +1,16 @@
-stricter filter:
+stricter filter & appSplitDyn & ExactSkipDim & brute
 3D100 pattern 6x6
-2.50211
+2.50211 & 2.5036 & 0.559046 & 0.680475
 3D100 pattern 25x25
-2.31971
+2.31971 & 2.26379 & 0.48838 & 0.44947
 3D250 pattern 7x7
-33.1393
+33.1393 & 33.2589 & 8.98931 & 11.3852
 3D250 pattern 40x40
-7.20907
+7.20907 & 7.38473 & 7.33157 & 8.18032
 3D500 pattern 12x12x12
-281.093
+281.093 & 286.122 & 72.5184 & 99.5073
 3D500 pattern 88x88
-197.836
-
-
-appSplitDyn:
-3D100 pattern 6x6
-2.5036
-3D100 pattern 25x25
-2.26379
-3D250 pattern 7x7
-33.2589
-3D250 pattern 40x40
-7.38473
-3D500 pattern 12x12x12
-286.122
-3D500 pattern 88x88
-202.509
-
-
-
-ExactSkipDim:
-3D100 pattern 6x6
-0.559046
-3D100 pattern 25x25
-0.48838
-3D250 pattern 7x7
-8.98931
-3D250 pattern 40x40
-7.33157
-3D500 pattern 12x12x12
-72.5184
-3D500 pattern 88x88
-52.5488
-
-
-
-Brute:
-3D100 pattern 6x6
-0.680475
-3D100 pattern 25x25
-0.44947
-3D250 pattern 7x7
-11.3852
-3D250 pattern 40x40
-8.18032
-3D500 pattern 12x12x12
-99.5073
-3D500 pattern 88x88
-69.5553
-
-
-
+197.836 & 202.509 & 52.5488 & 69.5553
 
 sizes:
 50% density, pattern 16x16x16, 3D,  235.7 MB -> 38.1 MB

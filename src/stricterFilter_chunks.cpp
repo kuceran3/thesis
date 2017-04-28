@@ -185,6 +185,9 @@ vector<vector<unsigned int> > find(void * * data, Reader * cache, void * * dataP
 	vector<vector<unsigned int> > res, returned;
 	vector<unsigned int> one;
 
+	//string a;
+	//cout << posDim << endl;
+	//cin >> a;
 	if (posDim == cache->getDimInName()) {
 		data = cache->read(cacheInd);
 	}
@@ -376,6 +379,12 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 	}
 	vector<vector<unsigned int> > res = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>(), cacheInd, partSize, numP);
 	cout << res.size() << endl;
+	for (unsigned int i = 0; i < res.size(); ++i) {
+		for (unsigned int j = 0; j < res[i].size(); ++j)	{
+			cout << res[i][j] << " " ;
+		}
+		cout << endl;
+	}
 	//Preverification
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
 		if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
@@ -383,6 +392,7 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 		}
 		--it;
 	}
+	cout << "prever done " << res.size() << endl;
 	//Approximate check of the rest of the pattern
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
@@ -390,6 +400,8 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 		}
 		--it;
 	}
+	cout << "dyn check done " << res.size() << endl;
+
 	return res;
 }
 
