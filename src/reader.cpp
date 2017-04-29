@@ -2,10 +2,11 @@
 
 using namespace std;
 
-Reader::Reader(string name, vector<Dimension> dims, vector<Attribute> attrs) {
+Reader::Reader(string name, vector<Dimension> dims, vector<Attribute> attrs, unsigned int size) {
 	dir = "./";
 	meta = dir + name;
-	cacheSize = 50;
+	cacheSize = 64;
+	if (size > cacheSize) cacheSize = size;
 	
 	int pos = name.find("_meta.csv");
 	fileTemp = dir + name.substr(0, pos);
@@ -96,7 +97,7 @@ void Reader::initCache() {
 void * * Reader::read(vector<unsigned int> indices) {
 	void * * res = findInCache(indices);
 	if (res == NULL) {
-		//cout << "read " << indices[0] << " " << indices[1] << endl;
+		//cout << "read " << indices[0] << endl;
 		return readFile(indices);
 	}
 	return res;
@@ -178,6 +179,7 @@ void * * Reader::readFile2(ifstream &file, int pos) {
 	queue<bool> cellMask;
 	unsigned int posInMask = 0, byte = 0;
 	void * * res = readDim(buffer, dimInName, byte, pos, posInMask, cellMask);
+	//cout << "Value: " << *(int *)((void * *)((void * *)res[128])[192])[0] << endl;
 	delete [] buffer;
 	return res;
 }

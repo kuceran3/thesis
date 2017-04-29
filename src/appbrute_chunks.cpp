@@ -210,12 +210,13 @@ void run(const char * in, const char * p, const char * err) {
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
 	
-	Reader * cache = new Reader(inpFile, dim, attrHeader);
 
 	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
 		cout << "Invalid pattern" << endl;
 		return;
 	}
+
+	Reader * cache = new Reader(inpFile, dim, attrHeader, dim[0].getSize());
 
 	int errors = charToInt(err);
 	//void * * data;

@@ -689,7 +689,8 @@ void run(const char * in, const char * p, const char * err) {
 	}
 	delete cache;
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
-
+	deleteHashP(hashP, dimPatt);
+	
 	pattern.close();
 	file.close();
 }

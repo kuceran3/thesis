@@ -1,5 +1,5 @@
 CXX     = g++
-CFLAGS  = -std=c++11 -Wall -pedantic -I./$(IDIR)
+CFLAGS  = -std=c++11 -Wall -pedantic -I./$(IDIR) -O3
 IDIR	= include
 ODIR	= obj
 SDIR	= src

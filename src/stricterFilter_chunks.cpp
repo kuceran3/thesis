@@ -241,7 +241,6 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<unsigned int> indicesP;
 	unsigned int pos2 = 0;
 	int sum = 0;
-
 	for (unsigned int i = 0; i < dim.size(); ++i) {
 		if (dimP[pos].getName() == dim[i].getName()) {
 			pos2 = i;
@@ -269,7 +268,6 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 			return -1;
 		}
 	}
-
 	return sum;
 }
 
@@ -293,7 +291,6 @@ bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	if (sum <= errors) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -377,30 +374,49 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 	for (unsigned int i = 0; i < cache->getDimInName(); ++i) {
 		cacheInd.push_back(0);
 	}
+	
+	chrono::system_clock::time_point start = chrono::system_clock::now();
 	vector<vector<unsigned int> > res = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>(), cacheInd, partSize, numP);
+	chrono::duration<double> sec = chrono::system_clock::now() - start;
 	cout << res.size() << endl;
-	for (unsigned int i = 0; i < res.size(); ++i) {
+    cout << "Find took " << sec.count() << " seconds\n";
+	//cout << "Found parts " << res.size() << endl;
+	/*for (unsigned int i = 0; i < res.size(); ++i) {
 		for (unsigned int j = 0; j < res[i].size(); ++j)	{
 			cout << res[i][j] << " " ;
 		}
 		cout << endl;
-	}
+	}*/
 	//Preverification
+	start = chrono::system_clock::now();
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
-		if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
+		/*if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);
-		}
+		}*/
 		--it;
 	}
-	cout << "prever done " << res.size() << endl;
+	cout << res.size() << endl;
+	sec = chrono::system_clock::now() - start;
+    cout << "Preverification took " << sec.count() << " seconds\n";
+	//cout << "Preverified " << res.size() << endl;
+	/*for (unsigned int i = 0; i < res.size(); ++i) {
+		for (unsigned int j = 0; j < res[i].size(); ++j)	{
+			cout << res[i][j] << " " ;
+		}
+		cout << endl;
+	}*/
 	//Approximate check of the rest of the pattern
-	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
+	start = chrono::system_clock::now();
+	for (vector<vector<unsigned int> >::iterator it = res.begin(); it != res.end();) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);
+		} else {
+			++it;
 		}
-		--it;
 	}
-	cout << "dyn check done " << res.size() << endl;
+	sec = chrono::system_clock::now() - start;
+    cout << "Dynamic check took " << sec.count() << " seconds\n";
+	//cout << "dyn check done " << res.size() << endl;
 
 	return res;
 }
@@ -432,13 +448,13 @@ void run(const char * in, const char * p, const char * err) {
 	
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
-
-	Reader * cache = new Reader(inpFile, dim, attrHeader);
 	
 	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
 		cout << "Invalid pattern" << endl;
 		return;
 	}
+
+	Reader * cache = new Reader(inpFile, dim, attrHeader, dimPatt[0].getSize());
 
 	int errors = charToInt(err);
 	int numP = getNumOfParts(errors, dimPatt.size(), dimPatt[dimPatt.size() - 1].getSize());
@@ -449,10 +465,10 @@ void run(const char * in, const char * p, const char * err) {
 	cout << "Finding..." << endl;
 	vector<vector<unsigned int> > res;
 
-	chrono::system_clock::time_point start = chrono::system_clock::now();
+	//chrono::system_clock::time_point start = chrono::system_clock::now();
 	res = find(cache, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt, errors, partSize, numP);
-	chrono::duration<double> sec = chrono::system_clock::now() - start;
-    cout << "took " << sec.count() << " seconds\n";
+	//chrono::duration<double> sec = chrono::system_clock::now() - start;
+    //cout << "took " << sec.count() << " seconds\n";
     cout << res.size() << endl;
 
 /*	if (res.size() == 0){

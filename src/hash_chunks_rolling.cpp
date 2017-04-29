@@ -564,9 +564,15 @@ vector<vector<unsigned int> *> find(Reader * cache, void * * hashP, void * * dat
 	for (unsigned int i = 0; i < cache->getDimInName(); ++i) {
 		cacheInd.push_back(0);
 	}
+
+	chrono::system_clock::time_point start = chrono::system_clock::now();
 	vector<vector<unsigned int> *> res = find(NULL, cache, hashP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>(), cacheInd, partSize, numP);
+	chrono::duration<double> sec = chrono::system_clock::now() - start;
+    cout << "Find took " << sec.count() << " seconds\n";
 	//Preverification
 	cout << res.size() << endl;
+	
+	start = chrono::system_clock::now();
 	for (vector<vector<unsigned int> *>::iterator it = res.begin(); it != res.end();) {
 		if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, **it, errors)) {
 			it = res.erase(it);
@@ -574,27 +580,19 @@ vector<vector<unsigned int> *> find(Reader * cache, void * * hashP, void * * dat
 			++it;
 		}
 	}
-	/*for (vector<vector<unsigned int> *>::iterator it = res.end() - 1; it != res.begin() - 1;) {
-		if ((**it)[0] == 64 && (**it)[1] == 80 && (**it)[2] == 128) cout << "First in" << endl;
-		if ((**it)[0] == 96 && (**it)[1] == 128 && (**it)[2] == 48) cout << "Second in" << endl;
-		if ((**it)[0] == 112 && (**it)[1] == 128 && (**it)[2] == 80) cout << "Third in" << endl;
-		if ((**it)[0] == 112&& (**it)[1] == 208 && (**it)[2] == 96) cout << "Fourth in" << endl;
-		if ((**it)[0] == 128 && (**it)[1] == 112 && (**it)[2] == 96) cout << "Fifth in" << endl;
-		if ((**it)[0] == 144 && (**it)[1] == 128 && (**it)[2] == 208) cout << "Sixth in" << endl;
-		if ((**it)[0] == 304 && (**it)[1] == 176 && (**it)[2] == 256) cout << "Seventh in" << endl;
-		if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, **it, errors)) {
-			it = res.erase(it);
-		}
-		--it;
-	}*/
+	sec = chrono::system_clock::now() - start;
+    cout << "Preverification took " << sec.count() << " seconds\n";
+
 	//Approximate check of the rest of the pattern
+	start = chrono::system_clock::now();
 	for (vector<vector<unsigned int> *>::iterator it = res.end() - 1; it != res.begin() - 1;) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, **it, errors)) {
 			it = res.erase(it);
 		}
 		--it;
 	}
-
+	sec = chrono::system_clock::now() - start;
+    cout << "Dynamic check took " << sec.count() << " seconds\n";
 	return res;
 }
 
@@ -625,13 +623,13 @@ void run(const char * in, const char * p, const char * err) {
 	
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
-
-	Reader * cache = new Reader(inpFile, dim, attrHeader);
 	
 	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
 		cout << "Invalid pattern" << endl;
 		return;
 	}
+
+	Reader * cache = new Reader(inpFile, dim, attrHeader, dim[0].getSize());
 
 	int errors = charToInt(err);
 	int numP = getNumOfParts(errors, dimPatt.size(), dimPatt[dimPatt.size() - 1].getSize());
@@ -645,10 +643,10 @@ void run(const char * in, const char * p, const char * err) {
 	cout << "Finding..." << endl;
 	vector<vector<unsigned int> *> res;
 
-	chrono::system_clock::time_point start = chrono::system_clock::now();
+	//chrono::system_clock::time_point start = chrono::system_clock::now();
 	res = find(cache, hashP, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt, errors, partSize, numP);
-	chrono::duration<double> sec = chrono::system_clock::now() - start;
-    cout << "took " << sec.count() << " seconds\n";
+	//chrono::duration<double> sec = chrono::system_clock::now() - start;
+    //cout << "took " << sec.count() << " seconds\n";
     cout << res.size() << endl;
 	/*if (res.size() == 0){
 		cout << "no solutions found" << endl;
@@ -661,6 +659,7 @@ void run(const char * in, const char * p, const char * err) {
 		}
 	}*/
 	delete cache;
+	deleteHashP(hashP, dimPatt, numP);
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
 
 	pattern.close();

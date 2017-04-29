@@ -23,7 +23,6 @@ class Mask:
 
 	def check(self):
 		if (self.valid >= 8):
-			#print(self.a)
 			self.fileName.write((self.a).to_bytes(1, byteorder='little'))
 			self.valid = 0
 			self.a = 0
@@ -33,7 +32,6 @@ class Mask:
 			return
 		for i in range(self.valid, 8):
 			self.a *= 2
-		#print(self.a)
 		self.fileName.write((self.a).to_bytes(1, byteorder='little'))
 		self.a = 0
 
@@ -51,12 +49,6 @@ class Eighth:
 		self.split = s
 
 	def addCell(self, row, l, attr):
-		#print("addCell eighth\n")
-		#print("vals: " + str(self.vals))
-		#print(row[l-1])
-		#for i in range(l - self.split, l):
-		#	self.vals += (int(row[i]).to_bytes(2, byteorder='little'))
-		#print(self.vals)
 		self.cells += 1
 		for i in range(len(row[l:])):
 			self.bitMask[i] *= 2
@@ -100,17 +92,9 @@ def movePos(pos, dim, split):
 	return pos
 
 def fillMask(mask, row, index, dim, end = False):
-	#print("fillMask\n")
-	#print(str(row))
-	#tmp = [0]*(len(dim))
-	#print("tmp: " + str(tmp) + " len: " + str(len(dim)))
-
 	while (index != list(map(int, row[:len(dim)]))):
 		mask.addZero()
-		#print(str(row))
-		#print("index: " + str(index) + " row: " + str(list(map(int, row[:len(dim)]))) + " " + str(len(dim)))
 		for x in range(len(dim) - 1, -1, -1):
-			#print("index[x]: " + str(index[x]) + " dim[x][1]: " + str(dim[x][1]))
 			index[x] += 1
 			if (index[x] < dim[x][1]):
 				break
@@ -130,7 +114,7 @@ def fillMask(mask, row, index, dim, end = False):
 
 	return mask, index
 
-def writeFile(lines, pos, m, index, dim, split):
+def writeFile(lines, pos, m, index, dim, split, attr):
 	fileNameNum = ''
 	for p in pos:
 		fileNameNum += '_' + str(p)
@@ -139,6 +123,12 @@ def writeFile(lines, pos, m, index, dim, split):
 	ec = 0
 	e = Eighth(len(attr), split)
 
+	print(fileName)
+	if (pos[0] == 128):
+		print(fileName)
+		print(lines[0])
+		print(lines[-1])
+		#asd = input()
 	#print(fileName)
 	with open(fileName, 'wb') as out:
 		for l in lines:
@@ -181,13 +171,15 @@ with open(sys.argv[1], 'r') as csvF:
 		for d in dim:
 			meta.write(d[0] + ":dim" + str(d[1]) + ',')
 		split = 0
-		size = 1
+		size = 0.5
 		for d in range(len(dim) -1, -1, -1):
 			size *= dim[d][1]
 			if (size > 500000):
 			#if (size > 15000):
 				break
 			split += 1
+		print(split)
+		print(size)
 
 		for a in range(0, j):
 			if (a < j - 1):
@@ -207,7 +199,7 @@ with open(sys.argv[1], 'r') as csvF:
 		for row in cF:
 			rowFile = list(map(int,list(row)[:len(dim) - split]))
 			if (pos != rowFile):
-				m, index = writeFile(lines, pos, m, index, dim, split)
+				m, index = writeFile(lines, pos, m, index, dim, split, attr)
 				pos = movePos(pos, dim, split)
 				lines = []
 
@@ -228,7 +220,7 @@ with open(sys.argv[1], 'r') as csvF:
 
 		rowFile = [0] * len(pos)
 		if (pos != rowFile):
-			m, index = writeFile(lines, pos, m, index, dim, split)
+			m, index = writeFile(lines, pos, m, index, dim, split, attr)
 			pos = movePos(pos, dim, split)
 			lines = []
 

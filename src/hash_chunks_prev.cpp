@@ -688,6 +688,7 @@ void run(const char * in, const char * p, const char * err) {
 		}
 	}
 	delete cache;
+	deleteHashP(hashP, dimPatt, numP);
 	deleteData(dataPatt, patternAttrHeader, dimPatt);
 
 	pattern.close();
