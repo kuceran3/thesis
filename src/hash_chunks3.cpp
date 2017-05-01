@@ -2,8 +2,13 @@
 //hashuje jen jednou
 using namespace std;
 
-vector<unsigned int> dataPosGlob = vector<unsigned int>(3, 0);
-vector<unsigned int> patPosGlob = vector<unsigned int>(3, 0);
+//vector<unsigned int> dataPosGlob = vector<unsigned int>(3, 0);
+//vector<unsigned int> patPosGlob = vector<unsigned int>(3, 0);
+int hashCountFin = 0;
+int hashCount = 0;
+//int create = 0;
+//int del = 0;
+//string cinStr;
 
 int getNumOfParts(int k, int d, int dLen) {
 	int parts = (int)pow((float)k, 1.0 / (d - 1)) + 1;
@@ -21,7 +26,7 @@ unsigned char hashInt(int item) {
 }
 
 unsigned char hashString(string item) {
-	return (unsigned char)item[0];
+	return (unsigned char)item [0];
 }
 
 unsigned char hashType(void * item, string type) {
@@ -81,6 +86,7 @@ vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attri
 }
 
 vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attribute> attrH, vector<Attribute> attrHP) {
+	++hashCount;
 	vector<vector <int> > counts(attrHP.size(), vector<int>(8, 0));
 	unsigned char one;
 	void * * cell;
@@ -130,7 +136,7 @@ vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attri
 		if (counts[i][7] > 0) part += 1;
 		(*res)[i] = part;
 	}
-
+	++hashCountFin;
 	return res;
 }
 
@@ -206,19 +212,20 @@ vector<unsigned char> * hashlineSlide(void * * next, void * * prev, vector<Attri
 void * * hashPatternLine(void * * line, vector<Attribute> attrHeader, vector<Dimension> dim, int partSize, unsigned int posDim, int numP) {
 	void * * res = new void * [numP];
 	int k = 0;
-	vector<unsigned char> * hash;
+	//vector<unsigned char> * hash;
 	for (unsigned int i = 0; i < dim[posDim].getSize() - partSize + 1; i += partSize) {
-		hash = hashline(line, i, i + partSize, attrHeader);
+		res[k++] = (void *)hashline(line, i, i + partSize, attrHeader);
+		/*hash = hashline(line, i, i + partSize, attrHeader);
 		if (hash == NULL)
 			res[k++] = NULL;
 		else
-			res[k++] = (void *)hash;
+			res[k++] = (void *)hash;*/
 	}
 	return res;
 }
 
 void * * hashPattern(void * * pattern, vector<Attribute> attrHeader, vector<Dimension> dim, unsigned int posDim, int partSize, int numP) {
-	void * * res = NULL;
+	void * * res;
 	if (posDim + 1 >= dim.size()) {
 		return hashPatternLine(pattern, attrHeader, dim, partSize, posDim, numP);
 	} else {
@@ -231,8 +238,9 @@ void * * hashPattern(void * * pattern, vector<Attribute> attrHeader, vector<Dime
 }
 
 void * * hashDataParts(void * * data, vector<Attribute> attrH, vector<Attribute> attrHP, vector<Dimension> dim, \
-		unsigned int posDim, int partSize, vector<vector<unsigned int> > indices) {
-	
+	unsigned int posDim, int partSize, vector<vector<unsigned int> > indices) {
+	//create++;
+	void * * voidArr;
 	vector<void * *> col;
 	vector<unsigned int> ind(dim.size(), 0);
 	void * * res = new void * [indices.size()];
@@ -242,25 +250,35 @@ void * * hashDataParts(void * * data, vector<Attribute> attrH, vector<Attribute>
 			ind[j] = indices[i][j - posDim];
 		}
 		col = getDim(data, posDim, partSize, ind, posDim);
-		res[i] = (void *)hashline(makeVoid(col), 0, partSize, attrH, attrHP);
+		voidArr = makeVoid(col);
+		res[i] = (void *)hashline(voidArr, 0, partSize, attrH, attrHP);
+		delete [] voidArr;
 	}
 	return res;
 }
 
 void * * hashDataLine(void * * data, vector<Attribute> attrH, vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, \
-		unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
+	unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
 	vector<vector<unsigned int> > indices = getAllIndices(dim, posDim, posDim);
-
+	//cout << "indices no delete " << posDim << " " << posDimP << " " << indices.size() << endl;
 	unsigned int slide = partSize;
 	//if (numP == 1) slide = 1;
 	int c = (dim[posDim].getSize()  / dimP[posDimP].getSize()) + 1;
 	void * * res = new void * [slide * c];
+	/*for (unsigned int i = 0; i < slide * c; ++i) {
+		res[i] = NULL;
+	}*/
 	c = 0;
 	for (unsigned int i = dimP[posDimP].getSize() - partSize; i < (dim[posDim].getSize() - partSize + 1); i += dimP[posDimP].getSize()) {
-			
-		if (i == 0) res[0] = (void *)hashDataParts(&(data[0]), attrH, attrHP, dim, posDim, partSize, indices);
-		else {
+		if (i == 0) {
+			//cout << "dataPart " << res[0] << endl;
+			res[0] = (void *)hashDataParts(&(data[0]), attrH, attrHP, dim, posDim, partSize, indices);
+			/*for (unsigned int j = 1; j < slide; ++j) {
+				res[j] = NULL;
+			}*/
+		} else {
 			for (unsigned int j = 0; j < slide; ++j) {
+				//if (res[c+j] != NULL) cout << "dataPart2 " << res[c+j] << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 				res[c + j] = (void *)hashDataParts(&(data[i - j]), attrH, attrHP, dim, posDim, partSize, indices);
 			}
 		}
@@ -270,14 +288,14 @@ void * * hashDataLine(void * * data, vector<Attribute> attrH, vector<Attribute> 
 }
 
 void * * hashData(void * * data, vector<Attribute> attrH, vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, \
-		unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
-	void * * res = NULL;
+	unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
+	void * * res;
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 		if (posDimP + 1 >= dimP.size()) {
 			return hashDataLine(data, attrH, attrHP, dim, dimP, posDim, posDimP, partSize, numP);
 		}
 		res = new void * [dim[posDim].getSize()];
-		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) res[i] = NULL;
+		//for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) res[i] = NULL;
 		for (unsigned int i = dimP[posDimP].getSize() - 1; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
 			res[i] = (void *)hashData((void * *)data[i], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, partSize, numP);
 		}
@@ -290,13 +308,55 @@ void * * hashData(void * * data, vector<Attribute> attrH, vector<Attribute> attr
 	return res;
 }
 
+void deleteHashDataParts(void * * data, unsigned int size) {
+	//del++;
+	for (unsigned int i = 0; i < size; ++i) {
+		delete (vector<unsigned char> *) data[i];
+	}
+	delete [] data;
+}
+
 void deleteHashDataLine(void * * data, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
 	vector<vector<unsigned int> > indices = getAllIndices(dim, posDim, posDim);
-	
+	//cout << "indices " << posDim << " " << posDimP << " " << indices.size() << endl;
 	unsigned int slide = partSize;
 	//if (numP == 1) slide = 1;
+	//int c = (dim[posDim].getSize()  / dimP[posDimP].getSize()) + 1;
+	//int q = slide * c;
 	int c = 0;
+	/*for (int i = 0; i < q; ++i) {
+		if (data[i] != NULL) {
+			deleteHashDataParts((void * *)data[i], indices.size());
+		}
+	}*/
+
 	for (unsigned int i = dimP[posDimP].getSize() - partSize; i < (dim[posDim].getSize() - partSize + 1); i += dimP[posDimP].getSize()) {
+		if (i == 0) {
+			deleteHashDataParts((void * *)data[0], indices.size());
+			//delete [] (void * *)data[0];
+		}
+		else {
+			for (unsigned int j = 0; j < slide; ++j) {
+				deleteHashDataParts((void * *)data[c+j], indices.size());
+				//delete [] (void * *)data[c+j];
+			}
+		}
+		c += slide;
+	}
+
+	delete [] data;
+
+
+/*
+	for (unsigned int i = 0; i < slide * c; ++i) {
+		if (data[i] != NULL) {
+			for (unsigned int k = 0; k < indices.size(); ++k) {
+				delete ((vector<unsigned char> *)((void * *)data[i])[k]);
+			} 
+			delete [] (void * *)data[i];
+		}
+	}*/
+	/*for (unsigned int i = dimP[posDimP].getSize() - partSize; i < (dim[posDim].getSize() - partSize + 1); i += dimP[posDimP].getSize()) {
 		if (i == 0) {
 			for (unsigned int k = 0; k < indices.size(); ++k) {
 				delete ((vector<unsigned char> *)((void * *)data[c])[k]);
@@ -311,21 +371,25 @@ void deleteHashDataLine(void * * data, vector<Dimension> dim, vector<Dimension> 
 			}
 		}
 		c += slide;
-	}
+	}*/
 }
 
 void deleteHashData(void * * data, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
 	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
 		if (posDimP + 1 >= dimP.size()) {
 			deleteHashDataLine(data, dim, dimP, posDim, posDimP, partSize, numP);
+			//delete [] data;
 			return;
 		}
+		//for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 		for (unsigned int i = dimP[posDimP].getSize() - 1; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
+			//if ((void * *)data[i] != NULL) deleteHashData((void * *)data[i], dim, dimP, posDim + 1, posDimP + 1, partSize, numP);
 			deleteHashData((void * *)data[i], dim, dimP, posDim + 1, posDimP + 1, partSize, numP);
 		}
+
 	} else {
 		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
-			deleteHashData((void * *)data[i],dim, dimP, posDim + 1, posDimP, partSize, numP);
+			deleteHashData((void * *)data[i], dim, dimP, posDim + 1, posDimP, partSize, numP);
 		}
 	}
 	delete [] data;
@@ -375,17 +439,19 @@ vector<vector<unsigned int> *> checkPart(void * * data, Reader * cache, vector<u
 	vector<Attribute> attrHP, vector<Dimension> dim, unsigned int posDim, int partSize, vector<unsigned int> cacheInd, \
 	vector<vector<unsigned int> > &indices) {
 
-	vector<vector<unsigned int> *> res(0);
+	vector<vector<unsigned int> *> res;
 	vector<void * *> col;
 	vector<unsigned char> * hash;
 	vector<unsigned int> *one = NULL;
+	void * * voidArr;
 	//vector<unsigned int> one(dim.size(), 0);
 
 	if (posDim < cache->getDimInName()) {
 		for (unsigned int i = 0; i < indices.size(); ++i) {
 			indices[i][0] = cacheInd[posDim];
 			col = getDim(cache, posDim, partSize, indices[i], posDim);
-			hash = hashline(makeVoid(col), 0, partSize, attrH, attrHP);
+			voidArr = makeVoid(col);
+			hash = hashline(voidArr, 0, partSize, attrH, attrHP);
 			if (compareHash(hash, hashP)) {
 				one = new vector<unsigned int>(dim.size());
 				for (unsigned int j = 0; j < indices[i].size(); ++j) {
@@ -393,6 +459,7 @@ vector<vector<unsigned int> *> checkPart(void * * data, Reader * cache, vector<u
 				}
 				res.push_back(one);
 			}
+			delete [] voidArr;
 			delete hash;
 		}
 	} else {
@@ -422,11 +489,12 @@ vector<vector<unsigned int> *> checkPart(void * * data, Reader * cache, vector<u
 vector<vector<unsigned int> *> checkParts(void * * data, Reader * cache, void * * hashP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP, vector<vector<unsigned int> > &indices) {
-
-	vector<vector<unsigned int> *> res(0), returned;
+				
+	vector<vector<unsigned int> *> res, returned;
 	for (int i = 0; i < numP; i++) {
-		patPosGlob[posDimP] = i;
-		returned.clear();
+		
+		//patPosGlob[posDimP] = i;
+		//returned.clear();
 		returned = checkPart(data, cache, (vector<unsigned char> *)hashP[i], attrH, attrHP, dim, posDim, partSize, cacheInd, indices);
 		for (unsigned int k = 0; k < returned.size(); ++k) {
 			(*returned[k])[dimPositions[posDimP]] -= (i * partSize);
@@ -440,7 +508,7 @@ vector<vector<unsigned int> *> findParts(void * * data, Reader * cache, void * *
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
 
-	vector<vector<unsigned int> *> res(0), returned;
+	vector<vector<unsigned int> *> res, returned;
 	vector<vector<unsigned int> > indices = getAllIndices(dim, posDim, posDim);
 	int slide = partSize;
 	//if (numP == 1) slide = 1;
@@ -488,8 +556,8 @@ vector<vector<unsigned int> *> find(void * * data, Reader * cache, void * * hash
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
 
-	vector<vector<unsigned int> *> res(0), returned;
-	vector<unsigned int> one;
+	vector<vector<unsigned int> *> res, returned;
+	//vector<unsigned int> one;
 
 	if (posDim == cache->getDimInName()) {
 		data = cache->read(cacheInd);
@@ -502,9 +570,9 @@ vector<vector<unsigned int> *> find(void * * data, Reader * cache, void * * hash
 			res = findParts(data, cache, hashP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize, numP);
 		} else {
 			for (unsigned int i = dimP[posDimP].getSize() - 1; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
-				dataPosGlob[posDim] = i;
+				//dataPosGlob[posDim] = i;
 				for (unsigned int j = 0; j < dimP[posDimP].getSize(); ++j) {
-					patPosGlob[posDim] = j;
+					//patPosGlob[posDim] = j;
 				
 					returned.clear();
 					if (posDim < cache->getDimInName()) {
@@ -540,7 +608,10 @@ vector<vector<unsigned int> *> find(void * * data, Reader * cache, void * * hash
 	}
 	if (posDim == cache->getDimInName()) {
 		deleteHashData(data, dim, dimP, posDim, posDimP, partSize, numP);
+		//delete [] data;
+		data = NULL;
 	}
+	//			cout << create << " " << del << endl;
 	return res;
 }
 
@@ -695,10 +766,12 @@ vector<vector<unsigned int> *> find(Reader * cache, void * * hashP, void * * dat
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "Find took " << sec.count() << " seconds\n";	
 	//Preverification
+	cout << "Hashed lines: " << hashCount << " finished hases: " << hashCountFin << endl;
 	cout << res.size() << endl;
 	start = chrono::system_clock::now();
 	for (vector<vector<unsigned int> *>::iterator it = res.begin(); it != res.end();) {
 		if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, **it, errors)) {
+			delete *it;
 			it = res.erase(it);
 		} else {
 			++it;
@@ -724,6 +797,7 @@ vector<vector<unsigned int> *> find(Reader * cache, void * * hashP, void * * dat
 	start = chrono::system_clock::now();
 	for (vector<vector<unsigned int> *>::iterator it = res.end() - 1; it != res.begin() - 1;) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, **it, errors)) {
+			delete *it;
 			it = res.erase(it);
 		}
 		--it;
@@ -795,6 +869,9 @@ void run(const char * in, const char * p, const char * err) {
 			cout << endl;
 		}
 	}*/
+	for (unsigned int i = 0; i < res.size(); ++i) {
+		delete res[i];
+	}
 	delete cache;
 	deleteHashP(hashP, dimPatt, numP);
 	deleteData(dataPatt, patternAttrHeader, dimPatt);

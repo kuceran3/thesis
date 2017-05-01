@@ -380,6 +380,7 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
 	cout << res.size() << endl;
     cout << "Find took " << sec.count() << " seconds\n";
+
 	//cout << "Found parts " << res.size() << endl;
 	/*for (unsigned int i = 0; i < res.size(); ++i) {
 		for (unsigned int j = 0; j < res[i].size(); ++j)	{

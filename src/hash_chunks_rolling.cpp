@@ -76,9 +76,10 @@ vector<unsigned char> * hashline(void * * line, int start, int end, vector<Attri
 void * * hashPatternLine(void * * line, vector<Attribute> attrHeader, vector<Dimension> dim, int partSize, unsigned int posDim, int numP) {
 	void * * res = new void * [numP];
 	int k = 0;
-	vector<unsigned char> * hash;
+	//vector<unsigned char> * hash;
 	for (unsigned int i = 0; i < dim[posDim].getSize() - partSize + 1; i += partSize) {
-		hash = hashline(line, i, i + partSize, attrHeader);
+		res[k++] = (void *)hashline(line, i, i + partSize, attrHeader);
+		//hash = hashline(line, i, i + partSize, attrHeader);
 		//if (hash == NULL)
 		//	res[k++] = NULL;
 		//else
@@ -86,7 +87,7 @@ void * * hashPatternLine(void * * line, vector<Attribute> attrHeader, vector<Dim
 		//	cout << (int)(*hash)[i] << " " ;
 		//}
 		//cout << endl;
-		res[k++] = (void *)hash;
+		//res[k++] = (void *)hash;
 	}
 	return res;
 }
@@ -110,13 +111,16 @@ void * * hashDataParts(void * * data, vector<Attribute> attrH, vector<Attribute>
 	vector<void * *> col;
 	vector<unsigned int> ind(dim.size(), 0);
 	void * * res = new void * [indices.size()];
+	void * * voidArr;
 	for (unsigned int i = 0; i < indices.size(); ++i) {
 		indices[i][0] = 0;
 		for (unsigned int j = posDim; j < dim.size(); ++j)	{
 			ind[j] = indices[i][j - posDim];
 		}
 		col = getDim(data, posDim, partSize, ind, posDim);
-		res[i] = (void *)hashline(makeVoid(col), 0, partSize, attrH, attrHP);
+		voidArr = makeVoid(col);
+		res[i] = (void *)hashline(voidArr, 0, partSize, attrH, attrHP);
+		delete [] voidArr;
 	}
 	return res;
 }
@@ -151,7 +155,7 @@ void * * hashData(void * * data, vector<Attribute> attrH, vector<Attribute> attr
 			return hashDataLine(data, attrH, attrHP, dim, dimP, posDim, posDimP, partSize, numP);
 		}
 		res = new void * [dim[posDim].getSize()];
-		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) res[i] = NULL;
+		//for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) res[i] = NULL;
 		for (unsigned int i = dimP[posDimP].getSize() - 1; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
 			res[i] = (void *)hashData((void * *)data[i], attrH, attrHP, dim, dimP, posDim + 1, posDimP + 1, partSize, numP);
 		}
@@ -164,6 +168,55 @@ void * * hashData(void * * data, vector<Attribute> attrH, vector<Attribute> attr
 	return res;
 }
 
+void deleteHashDataParts(void * * data, unsigned int size) {
+	//del++;
+	for (unsigned int i = 0; i < size; ++i) {
+		delete (vector<unsigned char> *) data[i];
+	}
+	delete [] data;
+}
+
+void deleteHashDataLine(void * * data, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
+	vector<vector<unsigned int> > indices = getAllIndices(dim, posDim, posDim);
+	unsigned int slide = partSize;
+	int c = 0;
+	for (unsigned int i = dimP[posDimP].getSize() - partSize; i < (dim[posDim].getSize() - partSize + 1); i += dimP[posDimP].getSize()) {
+		if (i == 0) {
+			deleteHashDataParts((void * *)data[0], indices.size());
+		}
+		else {
+			for (unsigned int j = 0; j < slide; ++j) {
+				deleteHashDataParts((void * *)data[c+j], indices.size());
+			}
+		}
+		c += slide;
+	}
+
+	delete [] data;
+}
+
+void deleteHashData(void * * data, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
+	if (posDimP < dimP.size() && dim[posDim].getName() == dimP[posDimP].getName()) {
+		if (posDimP + 1 >= dimP.size()) {
+			deleteHashDataLine(data, dim, dimP, posDim, posDimP, partSize, numP);
+			//delete [] data;
+			return;
+		}
+		//for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
+		for (unsigned int i = dimP[posDimP].getSize() - 1; i < dim[posDim].getSize(); i += dimP[posDimP].getSize()) {
+			//if ((void * *)data[i] != NULL) deleteHashData((void * *)data[i], dim, dimP, posDim + 1, posDimP + 1, partSize, numP);
+			deleteHashData((void * *)data[i], dim, dimP, posDim + 1, posDimP + 1, partSize, numP);
+		}
+
+	} else {
+		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
+			deleteHashData((void * *)data[i], dim, dimP, posDim + 1, posDimP, partSize, numP);
+		}
+	}
+	delete [] data;
+}
+
+/*
 void deleteHashDataLine(void * * data, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, int partSize, int numP) {
 	vector<vector<unsigned int> > indices = getAllIndices(dim, posDim, posDim);
 	
@@ -204,7 +257,7 @@ void deleteHashData(void * * data, vector<Dimension> dim, vector<Dimension> dimP
 	}
 	delete [] data;
 }
-
+*/
 vector<vector<unsigned int> > getAllIndices(vector<Dimension> dim, unsigned int pos, unsigned int posDim) {
 	vector<vector<unsigned int> > indices, ret;
 	if (posDim >= dim.size()) {
@@ -253,13 +306,15 @@ vector<vector<unsigned int> *> checkPart(void * * data, Reader * cache, vector<u
 	vector<void * *> col;
 	vector<unsigned char> * hash;
 	vector<unsigned int> *one = NULL;
+	void * * voidArr;
 	//vector<unsigned int> one(dim.size(), 0);
 
 	if (posDim < cache->getDimInName()) {
 		for (unsigned int i = 0; i < indices.size(); ++i) {
 			indices[i][0] = cacheInd[posDim];
 			col = getDim(cache, posDim, partSize, indices[i], posDim);
-			hash = hashline(makeVoid(col), 0, partSize, attrH, attrHP);
+			voidArr = makeVoid(col);
+			hash = hashline(voidArr, 0, partSize, attrH, attrHP);
 			if (compareHash(hash, hashP)) {
 				one = new vector<unsigned int>(dim.size());
 				for (unsigned int j = 0; j < indices[i].size(); ++j) {
@@ -267,6 +322,7 @@ vector<vector<unsigned int> *> checkPart(void * * data, Reader * cache, vector<u
 				}
 				res.push_back(one);
 			}
+			delete [] voidArr;
 			delete hash;
 		}
 	} else {
@@ -362,7 +418,7 @@ vector<vector<unsigned int> *> find(void * * data, Reader * cache, void * * hash
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, \
 	unsigned int posDimP, vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
 
-	vector<vector<unsigned int> *> res(0), returned;
+	vector<vector<unsigned int> *> res, returned;
 	vector<unsigned int> one;
 
 	if (posDim == cache->getDimInName()) {

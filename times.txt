@@ -1,3 +1,11 @@
+Compared: 31232000; First equals: 58715, Average length: 1.00189
+
+2*partSize * 1.00189 ~ 						2 (3) * partSize
+2 * (2*partSize - 1)  +  2 * partSize ~ (min 3) 6 * partSize  + pamet na Tabulku
+
+hashovana preverifikace by byla horsi, protoze tam to je linearni a tvorba hashe by to zpomalila,
+navic by to udelalo vetsi napor na dyncheck, ktery je asi nejpomalejsi
+
 stricter filter & appSplitDyn & ExactSkipDim & brute
 3D100 pattern 6x6
 2.50211 & 2.5036 & 0.559046 & 0.680475
@@ -90,6 +98,31 @@ hash_chunks_rolling
 	prever						4320.27
 	dyncheck					0.175714				
 
+
+horac@horac-Lenovo-IdeaPad-Y510P:~/Documents/anicka/thesis$ ./hash_onechunks input/3D256M50S_16P/out256_meta.csv input/p_16_3D.csv 0
+Num of parts: 1
+Part size: 16
+Finding...
+Find took 27.6832 seconds
+Hashed lines: 1952000 finished hases: 686848
+56638
+Preverification took 2.94072 seconds
+Dynamic check took 0.184241 seconds
+5
+
+horac@horac-Lenovo-IdeaPad-Y510P:~/Documents/anicka/thesis$ ./hash_chunks input/3D256M50S_16P/out256_meta.csv input/p_16_3D.csv 0
+Num of parts: 1
+Part size: 16
+Finding...
+Find took 51.3738 seconds
+Hashed lines: 31232000 finished hases: 10989568
+56638
+Preverification took 2.54579 seconds
+Dynamic check took 0.176441 seconds
+5
+
+
+
 sizes:
 50% density, pattern 64x64x64, 3D,  4.2 GB -> 655.9 MB
 times:							seconds 		sol 		error
@@ -120,10 +153,10 @@ StricterFilter_chunks							2 vzdy
 4	find						582.568
 	prever						3.8e-08
 	dyncheck					18.936						
-16	find						280.368	
+16	find						380.368	
 	prever						6.3e-08	
 	dyncheck					18.9282	
-64	find						287.13
+64	find						280.13
 	prever						3.5e-08
 	dyncheck					18.8789				
 
