@@ -20,7 +20,7 @@ stricter filter & appSplitDyn & ExactSkipDim & brute
 3D500 pattern 88x88
 197.836 & 202.509 & 52.5488 & 69.5553
 
-sizes:
+sizes: 256_1
 50% density, pattern 16x16x16, 3D,  235.7 MB -> 38.1 MB
 times:							seconds 		sol 		error
 brute_chunks - 					5.69835	 		5 				0
@@ -131,10 +131,10 @@ ExactSkipDim_chunks -			79.691			2 				0
 
 approximate:
 appbrute_chunks					
-0	find						
-4	find						
-16	find						
-64	find						
+0	find						3968.64
+4	find						3859.71
+16	find						3795.89
+64	find						8138.2
 
 appSplitDyn_chunks								2 vzdy
 0	find						981.951
@@ -175,18 +175,18 @@ hash_chunks
 	dyncheck					17.5152						
 
 hash_once_chunks
-0	find						899.616 		875917
-	prever						
-	dyncheck					
-4	find						
-	prever						
-	dyncheck											
-16	find						312.221 		1249466
-	prever						792.492
-	dyncheck					24.361	
-64	find						
-	prever						
-	dyncheck											
+0	find						948.873 		875917
+	prever						504.708
+	dyncheck					22.6761
+4	find						554.188 		1068738
+	prever						665.057
+	dyncheck					23.5118						
+16	find						318.724 		1249466
+	prever						903.434
+	dyncheck					23.3794	
+64	find						231.805 		1662892
+	prever						1345.62
+	dyncheck					25.9596						
 								
 hash_chunks_rolling
 0	find						907.762 		2
@@ -195,10 +195,10 @@ hash_chunks_rolling
 4	find						579.389 		2
 	prever						1.98123
 	dyncheck					18.5253						
-16	find						
-	prever
-	dyncheck						
-64	find						
-	prever						
-	dyncheck							
+16	find						309.473 		3653
+	prever 						287.497
+	dyncheck					22.1856	
+64	find						204.862 		929083
+	prever						628.677
+	dyncheck					24.897		
 
