@@ -638,10 +638,9 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 		indicesP.clear();
 		posDimP = 0;
 		for (unsigned int j = 0; j < indices[i].size(); ++j) {
-			if (j < dimP.size() && dim[j].getName() == dimP[posDimP].getName()){
+			if (dim[j].getName() == dimP[posDimP].getName()){
 				indicesP.push_back(indices[i][j] - res[j]);
-				posDimP++;
-				if (posDimP >= dimP.size()) break;
+				if (posDimP++ >= dimP.size()) break;
 			}
 		}
 		length = (indices[i][pos2] + dimP[pos].getSize() > dim[pos2].getSize()) ? dim[pos2].getSize() - indices[i][pos2] : dimP[pos].getSize();
@@ -660,8 +659,6 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors) {
 
-	vector<unsigned int> indices;
-	vector<int> err;
 	int errTmp;
 	int sum = 0;
 	for (unsigned int i = 0; i < dimP.size(); ++i) {
@@ -670,7 +667,6 @@ bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 		if (sum > errors || errTmp == -1) {
 			return false;
 		}
-		err.push_back(errTmp);
 	}
 	//check sum of errors in err, if lesser than number of errors allowed its ok
 	if (sum <= errors) {

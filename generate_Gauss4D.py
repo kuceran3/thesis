@@ -8,7 +8,7 @@ import math
 def loop_rec(length, size, dimNum, pat, pos, distr, outF):
 	for x in range(0, length):
 		print(x)
-		pos1 = int(x/size)
+		#pos1 = int(x/size)
 		pop1 = x % size
 		for y in range(0, length):
 			pos2 = int(y/size)
@@ -16,26 +16,29 @@ def loop_rec(length, size, dimNum, pat, pos, distr, outF):
 			for z in range(0, length):
 				pos3 = int(z/size)
 				pop3 = z % size
-				#try:
-				if(pos[pos1][pos2][pos3]):
-					outF.write(str(x) + "," + str(y) + "," + str(z) + ",")
-					outF.write(str(pat[pop1][pop2][pop3]) + '\n')
-				#except Exception:
-				#	print(pos1, pos2, pos3, len(pos), z, size)
-				#	asd = input()
-				else:
-					tmp = random.random()
-					if (tmp < distr[pos1][pos2][pos3]):
-						outF.write(str(x) + "," + str(y) + "," + str(z) + ",")
-						outF.write(str(random.randint(0,255)) + '\n')
+				for k in range(0, length):
+					pos4 = int(k/size)
+					pop4 = k % size
+					#try:
+					if(pos[x][pos2][pos3][pos4]):
+						outF.write(str(x) + "," + str(y) + "," + str(z) + "," + str(k) + ",")
+						outF.write(str(pat[pop2][pop3][pop4]) + '\n')
+					#except Exception:
+					#	print(pos1, pos2, pos3, len(pos), z, size)
+					#	asd = input()
+					else:
+						tmp = random.random()
+						if (tmp < distr[x][pos2][pos3][pos4]):
+							outF.write(str(x) + "," + str(y) + "," + str(z) + "," + str(k) + ",")
+							outF.write(str(random.randint(0,255)) + '\n')
 
 def readPattern(file, size, dim):
 	pat = []
 	file.readline()
-	for x in range(0, size ** dim):
+	for x in range(0, size ** 3):
 		pat.append(file.readline()[:-1].split(',')[-1])
 	res = []
-	for x in range(0, dim - 1):
+	for x in range(0, 3 - 1):
 		res = []
 		for y in range(0, len(pat), size):
 			res.append(pat[y : y + size])
@@ -81,28 +84,31 @@ def genPos(dim, length, density, percres, patS):
 	distr = []
 	patPos = []
 	true = 0
-	for x in range(0, pos):
+	for x in range(0, length):
 		distr.append([])
 		patPos.append([])
 		for y in range(0, pos):
 			distr[x].append([])
 			patPos[x].append([])
 			for z in range(0, pos):
-				g = gaussSum(mean, [float(x) / (length / patS / 10), float(y) / (length / patS / 10), float(z) / (length / patS / 10)], dim, pos)
-				if (density >= 1):
-					distr[x][y].append(1)
-				else:
-					distr[x][y].append(g * density * 500)
-				tmp = random.random()
-				#print(tmp)
-				if (tmp >= g * density * percres * 2):
-					patPos[x][y].append(False)
-				else:
-					patPos[x][y].append(True)
-					true += 1
-				#print()
-				#print(x, y, z, g)
-				#p = raw_input()
+				distr[x][y].append([])
+				patPos[x][y].append([])
+				for k in range(0, pos):
+					g = gaussSum(mean, [float(x) / (length / 10), float(y) / (length / patS / 10), float(z) / (length / patS / 10), float(k) / (length / patS / 10)], dim, pos)
+					if (density >= 1):
+						distr[x][y][z].append(1)
+					else:
+						distr[x][y][z].append(g * density * 500)
+					tmp = random.random()
+					#print(tmp)
+					if (tmp >= g * density * percres * 2):
+						patPos[x][y][z].append(False)
+					else:
+						patPos[x][y][z].append(True)
+						true += 1
+					#print()
+					#print(x, y, z, g)
+					#p = raw_input()
 	print(true)
 	return patPos, distr
 

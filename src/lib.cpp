@@ -285,7 +285,7 @@ vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length
 			}
 			return res;
 		} else {
-			return getDim(cache, dimInd, length, indices, cache->getDimInName());
+			return getDim(cache, dimInd, length, indices, posDim + 1);
 		}
 	} else {
 		vector<unsigned int> dataIndices;

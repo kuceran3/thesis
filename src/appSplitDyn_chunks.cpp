@@ -233,26 +233,21 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<unsigned int> indicesP;
 	unsigned int pos2 = 0;
 	int sum = 0;
-
 	for (unsigned int i = 0; i < dim.size(); ++i) {
 		if (dimP[pos].getName() == dim[i].getName()) {
 			pos2 = i;
 			break;
 		}
 	}
-
 	indices = getIndices(dim, dimP, pos, res, 0, 0);
-
-
 	unsigned int posDimP, length;
 	for (unsigned int i = 0; i < indices.size(); ++i) {
 		indicesP.clear();
 		posDimP = 0;
 		for (unsigned int j = 0; j < indices[i].size(); ++j) {
-			if (posDimP < dimP.size() && dim[j].getName() == dimP[posDimP].getName()){
+			if (dim[j].getName() == dimP[posDimP].getName()){
 				indicesP.push_back(indices[i][j] - res[j]);
-				posDimP++;
-				if (posDimP >= dimP.size()) break;
+				if (posDimP++ >= dimP.size()) break;
 			}
 		}
 		length = (indices[i][pos2] + dimP[pos].getSize() > dim[pos2].getSize()) ? dim[pos2].getSize() - indices[i][pos2] : dimP[pos].getSize();
@@ -263,7 +258,6 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 			return -1;
 		}
 	}
-
 	return sum;
 }
 
@@ -301,14 +295,24 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "Find took " << sec.count() << " seconds\n";
 	
-	cout << res.size() << endl;
-	
+	/*cout << res.size() << endl;
+	for (unsigned int i = 0; i < res.size(); ++i) {
+		for (unsigned int j = 0; j < res[i].size(); ++j) {
+			cout << res[i][j] << ", ";
+		}
+		cout << endl;
+	}*/
 	start = chrono::system_clock::now();
-	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
+	for (vector<vector<unsigned int> >::iterator it = res.begin(); it != res.end();) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);
+		} else {
+			++it;
 		}
-		--it;
+		//if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
+		//	it = res.erase(it);
+		//}
+		//--it;
 	}
 	sec = chrono::system_clock::now() - start;
     cout << "Dynamic check took " << sec.count() << " seconds\n";

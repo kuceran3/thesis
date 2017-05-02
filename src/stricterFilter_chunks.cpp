@@ -139,7 +139,6 @@ vector<vector<unsigned int> > checkParts(void * * data, Reader * cache, void * *
 	return res;
 }
 
-//split pattern into sqrt(pattern.size()) parts
 vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, unsigned int posDim, unsigned int posDimP, \
 	vector<unsigned int> dimPositions, vector<unsigned int> cacheInd, int partSize, int numP) {
@@ -247,17 +246,15 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 			break;
 		}
 	}
-
 	indices = getIndices(dim, dimP, pos, res, 0, 0);
 	unsigned int posDimP, length;
 	for (unsigned int i = 0; i < indices.size(); ++i) {
 		indicesP.clear();
 		posDimP = 0;
 		for (unsigned int j = 0; j < indices[i].size(); ++j) {
-			if (j < dimP.size() && dim[j].getName() == dimP[posDimP].getName()){
+			if (dim[j].getName() == dimP[posDimP].getName()){
 				indicesP.push_back(indices[i][j] - res[j]);
-				posDimP++;
-				if (posDimP >= dimP.size()) break;
+				if (posDimP++ >= dimP.size()) break;
 			}
 		}
 		length = (indices[i][pos2] + dimP[pos].getSize() > dim[pos2].getSize()) ? dim[pos2].getSize() - indices[i][pos2] : dimP[pos].getSize();
@@ -275,8 +272,6 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<Attribute> attrHP, vector<Dimension> dim, vector<Dimension> dimP, vector<unsigned int> res, int errors) {
 
-	vector<unsigned int> indices;
-	vector<int> err;
 	int errTmp;
 	int sum = 0;
 	for (unsigned int i = 0; i < dimP.size(); ++i) {
@@ -285,7 +280,6 @@ bool dynCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 		if (sum > errors || errTmp == -1) {
 			return false;
 		}
-		err.push_back(errTmp);
 	}
 	//check sum of errors in err, if lesser than number of errors allowed its ok
 	if (sum <= errors) {
@@ -382,30 +376,18 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
     cout << "Find took " << sec.count() << " seconds\n";
 
 	//cout << "Found parts " << res.size() << endl;
-	/*for (unsigned int i = 0; i < res.size(); ++i) {
-		for (unsigned int j = 0; j < res[i].size(); ++j)	{
-			cout << res[i][j] << " " ;
-		}
-		cout << endl;
-	}*/
 	//Preverification
 	start = chrono::system_clock::now();
 	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
-		/*if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
+		if (!preverif(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);
-		}*/
+		}
 		--it;
 	}
 	cout << res.size() << endl;
 	sec = chrono::system_clock::now() - start;
     cout << "Preverification took " << sec.count() << " seconds\n";
 	//cout << "Preverified " << res.size() << endl;
-	/*for (unsigned int i = 0; i < res.size(); ++i) {
-		for (unsigned int j = 0; j < res[i].size(); ++j)	{
-			cout << res[i][j] << " " ;
-		}
-		cout << endl;
-	}*/
 	//Approximate check of the rest of the pattern
 	start = chrono::system_clock::now();
 	for (vector<vector<unsigned int> >::iterator it = res.begin(); it != res.end();) {

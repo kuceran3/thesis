@@ -430,10 +430,9 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 		indicesP.clear();
 		posDimP = 0;
 		for (unsigned int j = 0; j < indices[i].size(); ++j) {
-			if (j < dimP.size() && dim[j].getName() == dimP[posDimP].getName()){
+			if (dim[j].getName() == dimP[posDimP].getName()){
 				indicesP.push_back(indices[i][j] - res[j]);
-				posDimP++;
-				if (posDimP >= dimP.size()) break;
+				if (posDimP++ >= dimP.size()) break;
 			}
 		}
 		length = (indices[i][pos2] + dimP[pos].getSize() > dim[pos2].getSize()) ? dim[pos2].getSize() - indices[i][pos2] : dimP[pos].getSize();
