@@ -1,0 +1,157 @@
+\chapter{Implementation}
+This chapter will discuss the implementation. It presents a variety of solutions ranging from brute force exact pattern matching, up to the more complex versions of approximate pattern matching.
+
+Primary languages were C++ and Python. For compilation of *.cpp programs user needs at least compiler of version 2011 (flag \texttt{-std=c++11}). All python scripts were run using version 3.0. A \textit{numpy} library is also needed. A \textit{Makefile} was created in order to simplify the C++ compilation.
+
+Libraries used in C++ were iostream, fstream, string, vector, math.h and chrono which are all included in the C++11 standard.
+
+When running the created C++ executables it can be done by command:
+
+$$./executable\_name\quad input\_data\quad input\_pattern.csv\quad errors$$  
+
+where input data have to be chunked and name of the meta file is expected, input pattern is a standard csv file with the specified dimensions and attributes, errors is a parameter used only in executables of approximate searches and defines maximum number of errors allowed for the result to still be valid.
+
+\section{Output Format}
+After successfully running the executables in the terminal window the program will write in the standard output stream. First it will write Finding, meaning that the part of the program that searches for solutions started and all initial settings and reads are done. When finished with find phase program will output the time it took to find the results and after this it will write coordinates of the found solutions. They will be written in the form of list of all possible dimension coordinates where the desired pattern can be found while not violating the constraint about maximum number of errors.
+
+Usual output would contain an array of found solutions, however as this work is concerned about the process of finding, the result serve mostly a confirmation role. If the algorithms were used in real system, it would be simple to modify the output to suit the system needs.
+
+\section{Input Data}
+A large part of the database search revolves around used data structures, so this section will focus the specifications of used formats and other properties.
+
+\subsection{Format}
+Data format (file extension) that can be successfully processed is of types CSV and BIN where CSV data must have a header in the format:
+\begin{itemize}
+\item 0:DIMX$_0$, 1:DIMX$_1$, ... , N:DIMX$_N$, ATTR1:TYPE, ATTR2:TYPE, ... , ATTRL:TYPE
+\end{itemize}
+In this format $(0, N)$ is an order of the dimension whilst $(X_0, X_1, ... , X_n)$ is a number of unique values that are in this dimension. $(ATTR1, ATTRL)$ specifies the name of the attribute and TYPE parameter contains the type of the values in the attribute, only one type per attribute is allowed. Currently the program is optimized for integer attributes, every other type would be processed as a string.
+
+When the user needs binary data, Python script named: \textit{chunk.py} can be used to create chunked and binary data from the original CSV file. Usage of this program is specified in the next section called Chunking.
+
+Following this specific header are usual CSV data. Be aware that the data can be sparse, which means there can be missing cells or attributes.
+
+\subsection{Generating Data}
+Data generating is taken care of by two Python scripts where both of them generate hyper-cubic data (this is a simplification for the analysis of the algorithms, although algorithms can be used for different lengths of dimensions and patterns). First of them named \textit{generate.py} and can be used with the command:
+
+$$ python\quad generate.py\quad dimensions\quad length\quad attributes\quad value\quad out$$
+
+Where dimensions is a number specifying how many dimensions should be generated, length is a size of one dimension, attributes specifies a number of attributes there will be whilst value notes maximum value allowed in the attribute. Parameter out means the name of output file to which the data should be generated. This script will generate data where no cell is missing or NULL value.
+When in need of sparse data, second script named \textit{generate\_Gauss.py} can generate them with the help of multidimensional Gaussian functions. Command to run this script is: 
+
+$$python\quad generate\_Gauss.py\quad dim\quad length\quad density\quad results\quad pSize\quad pFile\quad output$$ 
+
+Where dim and length have the same meaning as in the script above, density says the ration between generated and empty cells (value from interval <0,1> is expected), results means how many results should be generated in comparison to the size of data, value from interval <0,1> is expected as it is approximate chance for the pattern to be generated. Parameters pSize and pFile specify the size of the pattern in one dimension and the input file with the generated pattern (CSV file is expected). Output parameter means the name of a newly created file with generated data.
+
+The actual generating is based on three Gaussian distributions with the centers set in three different positions:
+\begin{itemize}
+\item All coordinates at the third of the current dimension size
+\item Coordinate in first dimension at the third of first dimension size and rest coordinates at half of the current dimension size
+\item First coordinate at position of two-thirds of the first dimension size, all other coordinates at position of five-sixths of current dimension size
+\end{itemize}
+
+\subsection{Filtering}
+Python script \textit{filterPattern.py} is ideal for creating patterns at specific positions of the data. When in need of a particular pattern that needs to be at the exact position in the data this program can be run using the following command in terminal:
+
+$$python\quad filterPattern.py\quad input\quad DIMS\quad LENGTHS\quad ATTR\quad output$$
+
+Meaning of the parameters are: input specifies the input file (expected CSV) from which the pattern should be generated, DIMS is a list of all dimensions that need to be included in the pattern where the value (0, length of the dimension) on each positions signifies start position of the pattern in every of the included dimensions. Parameter LENGTHS specifies another list, with the same length as the previous one, where each number (0, x) means the length of the pattern in this dimension from its start position, $x$ is smaller than the length of an associated dimension minus start position in the same dimension. Next there is parameter ATTR where value $0$ or $1$ is expected, this number says if the attributes should be kept or not ($0$ for NO, $1$ for YES). Lastly there is the \textit{output} parameter where a suffix is expected, this string will be added at the end of the original file name...
+
+\subsection{Chunking}
+All tested data are represented in binary format and chunked into files which represent a set number of cells based on the dimension sizes. Chunks are created by using the attached Python script \textit{chunk.py}. This script can be run by using the command:
+
+$$python\quad chunk.py\quad input$$
+
+where parameter input specifies input file that should be chunked. When successfully finished the script will create certain number of binary files based on the length and number of dimensions and also number of attributes.
+Attribute values are added into the relevant file, which is determined by the dimension values. Created files have their names same as the input file with the dimension numbers added to signify which data are stored in them.
+
+As was already specified SciDB has its own binary format and the chunking uses exactly the same format. This means there is always one special file with meta information about the chunked binary files. In meta file there can be found header of the original data as this file is not binary encoded. There is also a mask file that specifies if a cell is in the data or not by using one bit per each cell (0 means the cell is not in the data and vice versa). Other files created by the script \textit{chunk.py} are binary files that contain a sequence of cell values. For the sake of testing attributes were only of integer type, but implementation can also work with string values. All of the integer values were smaller than $2^{16}$ so they would fit into 2 bytes.
+
+\section{Exact pattern matching}
+Every other algorithm is a type of pattern matching. This section will present implemented exact solutions. Exact pattern match means there are no errors and the pattern is present in the data without changes. Two solutions were implemented as reference solutions. First of them is solution using naive brute force algorithm. Second is algorithm by Navarro which skips first dimensions and thus have smaller both patterns and data to compare.
+
+\subsection{Brute Force}
+As the name suggests this algorithm goes through every position in data and starts to compare the pattern from the ``top-left'' corner until it encounters error. This solution is very simple, on the other hand there is obviously no possibility not to find every position of the pattern.
+
+Just to clarify things, the algorithm iterates over every dimensions and in it over every values, thus the returned positions are sorted.
+
+\subsection{Baeza-Yates and Navarro modification}
+This algorithm was proposed by Baeza-Yates and Navarro \cite{mdApproxPM}. Its process is similar to the brute force algorithm, however one dimension which is present in both the pattern and the data is selected. While iterating through this dimension instead of taking steps of length 1, steps of length $m$ are taken.
+
+Not to miss any possible solution, every ``row'' of pattern is compared with the given part of the data. This process is better illustrated in the figure \ref{fig_skipDim}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{skipDim}
+\caption{Skip dim}
+\label{fig_skipDim}
+\end{figure}
+
+Considering that both pattern and data have all dimensions with the same sizes and the selected dimension is arbitrary, the first one is always used for easier implementation. This modification reuses parts of data instead of using every single cell.
+
+\section{Approximate pattern matching}
+Previous two solutions could us a simple identity function to recognize, whether the solution is valid or not. If an approximation is taken into account, the algorithm has to measure the difference between the pattern and the currently tested position. There exist several options to do that. In the next section all implemented variants are presented.
+
+In every solution an input value $k$ is added, which represents the maximal tolerated error.
+
+\subsection{Brute Force}
+First and again the simplest solutions to iterate over every part of the data and compare one coordination of the pattern of another until either whole pattern is checked or the $k$ number of errors are found.
+
+This method obviously always finds every valid solution so the False Negatives are 0. However it is linearly dependent on the selected error, so it is not suitable for large patterns with higher error range. On the other hand, the implementation is very simple again and it serves as a solid confirmation of the correctness of other solutions.
+
+\subsection{Fast Filter Searching}
+A less demanding solution was proposed again by Baeza-Yates and Navarro \cite{mdApproxPM}. Its idea is similar to the modification made in the exact algorithm, however in this case an iteration in all dimensions present in the pattern are influenced.
+
+The data are virtually divided into sections, which are the same size as the pattern. The iteration through positions in dimensions not present in pattern is the same as in brute force algorithm. However in the other dimensions, both the section of data and the pattern is divided into the same number of parts and the comparison is made only between the ``bottom-right'' corner of data section and all pattern parts. Not to miss any possible positions, the compared part of the data has to be moved always by one cell part size - 1 times. Again, for better illustration a figure \ref{fig_slide} is provided. In the picture each part of the pattern is compared with every blue part of the data.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{slide}
+\caption{Example of sliding window.}
+\label{fig_slide}
+\end{figure}
+
+In current implementation all dimensions are split into $m$ parts, except the last, which is split into $j$ parts, where:
+
+$$j = \lfloor k^{\frac{1}{d-1}} \rfloor + 1$$
+
+this value is recommended, so it was not tampered with. This relatively small parts are compared by basic identity function and the positive results are remembered. The whole process usually returns more results than it should, because only a small parts of the pattern are matched. So further verification is needed.
+
+In this case a dynamic programming method is utilized. To perform the dynamic programming check, multiple approaches are available. Completely implemented and tested was only Edit distance, with framework prepared in code for R, C and RC measures. Following methods also use this step, so the dynamic programming was reused.
+
+Usually the dynamic programming confirmation would be made right after finding each position. However considering that all implemented algorithm use chunked data and thus not every section of the pattern is necessarily in the memory, these stages are split and the whole data are searched through for the partial matches and after that the dynamic programming check is performed on all found positions.
+
+\subsection{Stricter Filter}
+A slightly modified version of previous method is called Stricter filter and was proposed in the same paper. The disadvantage of previous solution is, that if the first partial matching finds a large number of False Positives, the dynamic programming is then a bottleneck, because it is computationally expensive to perform.
+
+Therefore, before the last stage a preverification step is added. It has the same goal as the dynamic programming, however is much simpler and thus much faster. It should filter a large portion of results, which will not be necessary to go through by the dynamic programming.
+
+The idea is to check the found area cell by cell and remove it from solutions if more than $k$ are found. The preverification can end before iterating through all cell if:
+
+\begin{enumerate}
+\item $k+1$ errors are found, i.e. the position is not a solution.
+\item Less than $k - q$ cells remain to compare, where $q$ is the number of already found errors.
+\end{enumerate}
+
+\subsection{Hashed Stricter Filter }
+All of the previous approaches were either the simple obvious solutions or previously proposed by Baeza-Yates and Navarro. The last solution is built upon the Stricter Filter and modifies one significant feature. The problem with Stricter Filter solution is, that there has to be the partial identity for arbitrary error value.
+
+So instead of using the comparison of the actual sections of pattern with the data a hash function is implemented. Firstly, all parts of the pattern are hashed, so it is done only once. The same cannot be done with the whole data as only some parts should be hashed and the data are not loaded at the start as they are chunked in smaller files.
+
+Three similar solutions are presented:
+
+\begin{itemize}
+\item sim hash %TODO
+\item sim hash once %TODO
+\item rolling hash %TODO 
+\end{itemize}
+
+The rest of the process stays the same as in the Stricter Filter, so preverification and dynamic programming check is performed.
+
+The assumption is, that the added hashing may increase the computation speed, because a lot shorter values are compared instead of whole sections. However the part size will have high impact on the improvement, because the higher the ratio between part size and hash size the bigger the improvement. Another possible outcome is to find even more partial results for preverification, because the the hash function will probably make some collisions.
+
+The best case scenario thought is that the collisions will be for similar sections and thus possibly valid positions, which were disregarded by the Stricter Filter method. This is the reason for usage of Sim-Hash %TODO
+
+\section{Possible modifications}
+Some other modifications were considered and two of them were analysed, whether it could have a positive impact on already implemented solutions. First modification consist of changing the comparison between the section from the naive algorithm to KMP as the sliding part of the data may be considered as a longer array and the comparison could return only a position in the slide. However considering that the compared sizes are part size and 2 * part size - 1 long, and the non-repetitive type of data, the creation of the table T used in algorithm would add another space requirement and the speed increase would probably not occur, because mostly, the check ends after single value comparison. If these methods were used data, where a repetition of subsequences was expected and the part size was set to sufficient value, it may prove to be faster.
+
+Second modification was to use hashing even for preverification stage. As the pattern was already hashed it seemed as a viable option. However the data were not hashed, at least not all parts of them, and the hashing would take similar time as the actual preverification, so it was not used. If the data were for some reason hashed before, the idea could prove more plausible.

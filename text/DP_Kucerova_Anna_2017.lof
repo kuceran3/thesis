@@ -1,0 +1,26 @@
+\select@language {UKenglish}
+\select@language {UKenglish}
+\select@language {UKenglish}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Example of a sliding window \cite {windowAggr}. \relax }}{24}{figure.caption.7}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Initialization of SUM window \cite {windowAggr}.\relax }}{24}{figure.caption.8}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Processing of a new unit and updating sum-list \cite {windowAggr}.\relax }}{25}{figure.caption.9}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Example of AMR decomposition, different levels are represented by different colors\relax }}{28}{figure.caption.10}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Object that block decomposition will be used on\relax }}{30}{figure.caption.12}
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Region octree block decomposition of the picture above\relax }}{31}{figure.caption.13}
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Octree block decomposition of the picture in Figure 1\relax }}{31}{figure.caption.14}
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Sample Image\relax }}{33}{figure.caption.15}
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Quadtree of the Sample Image\relax }}{33}{figure.caption.15}
+\contentsline {figure}{\numberline {2.11}{\ignorespaces QMAT tree of the Sample Image\relax }}{33}{figure.caption.15}
+\contentsline {figure}{\numberline {2.12}{\ignorespaces Similarity join of 2 different arrays, first 2 dimensional, second 1 dimensional with condition array $\ell $. Result is in the 3 dimensional cube.\relax }}{35}{figure.caption.16}
+\contentsline {figure}{\numberline {2.13}{\ignorespaces Example of DataCube and selecting dimensions where y=2 and z=3\relax }}{36}{figure.caption.17}
+\contentsline {figure}{\numberline {2.14}{\ignorespaces Example of DataCube and selecting dimensions where x=2\relax }}{36}{figure.caption.18}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Skip dim\relax }}{41}{figure.caption.19}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Example of sliding window.\relax }}{42}{figure.caption.20}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}

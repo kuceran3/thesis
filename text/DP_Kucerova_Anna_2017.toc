@@ -1,0 +1,85 @@
+\select@language {UKenglish}
+\select@language {UKenglish}
+\select@language {UKenglish}
+\contentsline {subsection}{Citation of this thesis}{viii}{section*.1}
+\contentsline {chapter}{Introduction}{1}{chapter*.5}
+\contentsline {chapter}{\chapternumberline {1}Related work}{3}{chapter.1}
+\contentsline {chapter}{\chapternumberline {2}Analysis}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Problem specification}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Multidimensional array model}{7}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}Indexing}{7}{subsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.1.1}Spatial Indexing}{7}{subsubsection.2.2.1.1}
+\contentsline {subsubsection}{\numberline {2.2.1.2}Bitmap Indexing}{8}{subsubsection.2.2.1.2}
+\contentsline {subsubsection}{\numberline {2.2.1.3}Bucket Indexing}{8}{subsubsection.2.2.1.3}
+\contentsline {subsubsection}{\numberline {2.2.1.4}Grid Indexing}{8}{subsubsection.2.2.1.4}
+\contentsline {subsubsection}{\numberline {2.2.1.5}Inverted Indexing}{9}{subsubsection.2.2.1.5}
+\contentsline {subsection}{\numberline {2.2.2}Efficient representation of multidimensional data over hierarchical domains}{9}{subsection.2.2.2}
+\contentsline {subsection}{\numberline {2.2.3}Similarity hashing}{9}{subsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.3.1}Locality Sensitive Hashing}{10}{subsubsection.2.2.3.1}
+\contentsline {subsection}{\numberline {2.2.4}Learning to Hash}{11}{subsection.2.2.4}
+\contentsline {subsubsection}{\numberline {2.2.4.1}Randomized Hashing}{11}{subsubsection.2.2.4.1}
+\contentsline {subsubsection}{\numberline {2.2.4.2}Data-Dependent and Data-Independent Hashing}{11}{subsubsection.2.2.4.2}
+\contentsline {subsubsection}{\numberline {2.2.4.3}Supervision and Hashes}{12}{subsubsection.2.2.4.3}
+\contentsline {subsubsection}{\numberline {2.2.4.4}Linear and Nonlinear Hashes}{12}{subsubsection.2.2.4.4}
+\contentsline {subsubsection}{\numberline {2.2.4.5}Weighted Hashing}{12}{subsubsection.2.2.4.5}
+\contentsline {section}{\numberline {2.3}Similarity measures}{13}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Similarity measures on arrays}{14}{subsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.1.1}KS}{14}{subsubsection.2.3.1.1}
+\contentsline {subsubsection}{\numberline {2.3.1.2}R,C}{14}{subsubsection.2.3.1.2}
+\contentsline {subsubsection}{\numberline {2.3.1.3}L}{15}{subsubsection.2.3.1.3}
+\contentsline {subsubsection}{\numberline {2.3.1.4}All}{15}{subsubsection.2.3.1.4}
+\contentsline {subsection}{\numberline {2.3.2}Numeric methods}{15}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.3}Edit-Based methods}{16}{subsection.2.3.3}
+\contentsline {subsubsection}{\numberline {2.3.3.1}Hamming distance}{16}{subsubsection.2.3.3.1}
+\contentsline {subsubsection}{\numberline {2.3.3.2}Edit distance}{16}{subsubsection.2.3.3.2}
+\contentsline {subsection}{\numberline {2.3.4}Token-Based methods}{16}{subsection.2.3.4}
+\contentsline {subsection}{\numberline {2.3.5}Hybrid methods}{16}{subsection.2.3.5}
+\contentsline {subsubsection}{\numberline {2.3.5.1}Monge-Elkan}{17}{subsubsection.2.3.5.1}
+\contentsline {subsubsection}{\numberline {2.3.5.2}Extended Jaccard Similarity}{17}{subsubsection.2.3.5.2}
+\contentsline {subsubsection}{\numberline {2.3.5.3}Tf-idf}{17}{subsubsection.2.3.5.3}
+\contentsline {subsubsection}{\numberline {2.3.5.4}Vector space model}{17}{subsubsection.2.3.5.4}
+\contentsline {subsection}{\numberline {2.3.6}Domain-Dependent}{17}{subsection.2.3.6}
+\contentsline {subsubsection}{\numberline {2.3.6.1}Time and space comparison}{18}{subsubsection.2.3.6.1}
+\contentsline {subsubsection}{\numberline {2.3.6.2}Binary vectors}{19}{subsubsection.2.3.6.2}
+\contentsline {section}{\numberline {2.4}SciDB}{19}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Binary file format}{21}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Sparse Data}{23}{subsection.2.4.2}
+\contentsline {subsection}{\numberline {2.4.3}ArrayLoop}{23}{subsection.2.4.3}
+\contentsline {subsection}{\numberline {2.4.4}Efficient window aggregate method on array database system}{23}{subsection.2.4.4}
+\contentsline {section}{\numberline {2.5}Multidimensional Approximate Pattern Matching}{25}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Multidimensional Searching Algorithms}{26}{subsection.2.5.1}
+\contentsline {section}{\numberline {2.6}Machine Learning Based Methods}{26}{section.2.6}
+\contentsline {subsection}{\numberline {2.6.1}KNN}{27}{subsection.2.6.1}
+\contentsline {subsection}{\numberline {2.6.2}Kernel based methods}{27}{subsection.2.6.2}
+\contentsline {section}{\numberline {2.7}Adaptive Mesh Refinement}{27}{section.2.7}
+\contentsline {section}{\numberline {2.8}Medial Axis Transformation}{29}{section.2.8}
+\contentsline {subsection}{\numberline {2.8.1}Types of MAT}{31}{subsection.2.8.1}
+\contentsline {subsubsection}{\numberline {2.8.1.1}SPAN}{32}{subsubsection.2.8.1.1}
+\contentsline {subsubsection}{\numberline {2.8.1.2}GrayMat}{32}{subsubsection.2.8.1.2}
+\contentsline {subsubsection}{\numberline {2.8.1.3}GradMat}{32}{subsubsection.2.8.1.3}
+\contentsline {subsubsection}{\numberline {2.8.1.4}MMMAT}{32}{subsubsection.2.8.1.4}
+\contentsline {subsubsection}{\numberline {2.8.1.5}QMAT}{32}{subsubsection.2.8.1.5}
+\contentsline {section}{\numberline {2.9}Knuth--Morris--Pratt Algorithm}{34}{section.2.9}
+\contentsline {section}{\numberline {2.10}Similarity join}{34}{section.2.10}
+\contentsline {section}{\numberline {2.11}Computing marginals using MapReduce}{34}{section.2.11}
+\contentsline {chapter}{\chapternumberline {3}Implementation}{37}{chapter.3}
+\contentsline {section}{\numberline {3.1}Output Format}{37}{section.3.1}
+\contentsline {section}{\numberline {3.2}Input Data}{38}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Format}{38}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Generating Data}{38}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.2.3}Filtering}{39}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {3.2.4}Chunking}{40}{subsection.3.2.4}
+\contentsline {section}{\numberline {3.3}Exact pattern matching}{40}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Brute Force}{40}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Baeza-Yates and Navarro modification}{41}{subsection.3.3.2}
+\contentsline {section}{\numberline {3.4}Approximate pattern matching}{41}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Brute Force}{41}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Fast Filter Searching}{42}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Stricter Filter}{43}{subsection.3.4.3}
+\contentsline {subsection}{\numberline {3.4.4}Hashed Stricter Filter }{43}{subsection.3.4.4}
+\contentsline {section}{\numberline {3.5}Possible modifications}{44}{section.3.5}
+\contentsline {chapter}{\chapternumberline {4}Results}{47}{chapter.4}
+\contentsline {chapter}{Conclusion}{49}{chapter*.22}
+\contentsline {chapter}{Bibliography}{51}{section*.24}
+\contentsline {appendix}{\chapternumberline {A}Acronyms}{57}{appendix.A}
+\contentsline {appendix}{\chapternumberline {B}Contents of enclosed USB}{59}{appendix.B}

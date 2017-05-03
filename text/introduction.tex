@@ -1,0 +1,39 @@
+
+\chapter{Introduction}
+Pattern matching is widely needed because of its usage in the most of the modern databases. Whenever user needs to find specific data matching his requirements it can be seen as if the query was a pattern that needs to be matched in the data. Imagine an example query: astronomer wants to find all stars in specific part of the night sky with luminosity higher than \textit{x}, or meteorologist needs to check coordinates of all possible tornadoes on Earth where tornado can be specified by different humidity, wind change, temperature. \cite{detectRivers}
+
+This search can be divided into two categories depending on the presence of errors. If no mismatches are allowed it can be called \textit{exact pattern matching} when otherwise it is called \textit{approximate pattern matching}. Approximate version of pattern matching can have numerous advantages like quicker return of possible results. 
+
+Majority of the research in this field was done primarily on one and two dimensional data where algorithms that can process higher dimensionality are usually generalization of low dimensional algorithms or use methods that can reduce dimensionality of both data and patterns. Also this methods are deterministic which means that for specific entry the program will perform always the same steps and will return the same result.
+
+Modern scientific databases (e.g. SciDB) contains ever increasing number of data because they store informations for example from satellites. These data are sparse and thus need to be preprocessed or specially worked with. Main difference between common and scientific database is that the scientific one can never discard any data even when wrong.
+
+Using machine learning methods is becoming more and more popular in recent days especially for processing large numbers of data. Which is why this work is more focused on this methods rather than more common methods of pattern matching like filtering and methods introduced by G. Navarro and R. Baeza-Yates. Amongst most popular machine learning methods belongs: neural networks, evolution algorithms, KNN, clustering.
+
+Next chapter called Related Work is dedicated to presenting similar papers, thesis and work done in the field of pattern matching. The section after is focused on analysis and explaining of all important terms used in this work. Third section deals with the implementation details and mentions how to use (compile and run) created programs. Second to last chapter specifies and explains the results while the last chapter briefly summarizes what was accomplished and defines the future work.
+\setsecnumdepth{all}
+\chapter{Related work}
+Theme of this thesis is inspired by the work of Baeza-Yates and Navarro in the field of pattern matching algorithms. In their papers, they extend different types of approximate pattern matching, such as in the way of reducing dimensionality by creating filters, or by creating new similarity measures for strings. When mentioning filters, authors of the first string filter Bird and Baker, and their successors J. K{\" a}rkk{\" a}inen and Ukkonen can not be forgotten.
+
+Between most important papers and work done in this field belong R. Baeza-Yates with his work on similarity of two-dimensional strings written in 1998 which is focused on computing edit distance between two images while using new similarity measures. Another fundamental paper by R. Baeza-Yates and G. Navarro is concerned with fast two-dimensional approximate pattern matching (also from 1998) where authors construct search algorithm for approximate pattern matching based on filtering of one dimensional multi patterns.
+
+Baeza-Yates also worked with C. Perleberg on the paper published in 1992 dealing with the question of fast and practical approximate pattern matching which they solved by matching strings with their mismatches based on arithmetical operations. Errors here are based on partitioning the pattern. In the next paper written in 1999 by Baeza-Yates and Navarro named Fast multi-dimensional approximate string matching they are extending two dimensional algorithm into \textit{n} dimensions by creating sub-linear time searching algorithm. This solution turned out to be better than using the dynamic programming.
+
+Lot of progress was made in this field by J. K{\" a}rkk{\" a}inen and E. Ukkonen with their concentration on filters to quickly discard a large amount of data. In their work from 1994 they concentrate on two and higher dimensional pattern matching in optimal expected time where they try placing a static grid of test points into the text and then eliminate as many potential occurrences of incorrect patterns as possible.
+
+Among other scientists dealing with the question of efficient two dimensional pattern matching belong K. Krithivasan and R. Sitalakshmi who were focused mainly on solving two dimensional pattern matching in the presence of errors as published in their paper from 1987.
+
+Also, there must be mentioned work done in the field of sequence alignment and general work with DNA sequences which is very similar to the task of pattern matching. Of all the scientists involved there can be named P. Sellers with his paper written in 1980 and named: The theory and computation of evolutionary distances: pattern recognition, where he is focused on finding pattern similarities between two sequences with the computation time being a product of the sequences length.
+
+Lastly in the book Jewels of Stringology: Text Algorithms published in 2003 with authors M Crochemore, W Rytter there are presented various basic algorithms that solves the question of pattern matching but only when considering strings.
+
+All of the papers and work mentioned above are focused mainly on string pattern matching and maximally two dimensional spaces, where when creating a solution for higher dimensional space it is usually generalized version for one or two dimensional space.
+
+This work is using the metric spaces with their distance measurement capabilities. In this area of expertise there exists a lot of work done by e.g.: Chavez, Marroquin, Baeza-Yates, Jacox, Samet.
+
+There is also a usage of high dimensional data which need to be indexed. This was helped with by the research of papers by: Bayer, Skopal, Guttman, Bohm, Braunmuller.
+
+Goal of this work is to provide satisfactory results for user queries, which was inspired by work of Byna, Wehner, Chavez, Marroquin.
+
+
+
