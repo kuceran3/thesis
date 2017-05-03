@@ -54,7 +54,7 @@ StricterFilter_chunks
 	dyncheck					2.0685
 64	find						13.8718			203
 	prever						6.3e-08
-	dyncheck					10.8608			
+	dyncheck					1.8608			
 
 hash_chunks						
 0	find						51.3738 		56638
@@ -81,7 +81,7 @@ hash_once_chunks
 	prever						8.81776	
 	dyncheck					0.178946
 64	find						9.23871 		305891
-	prever						27.26
+	prever						13.1568
 	dyncheck					0.180162				
 								
 hash_chunks_rolling

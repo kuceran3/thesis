@@ -22,7 +22,7 @@ $(ODIR)/%.o: $(SDIR)/%.cpp $(IDIR)/%.h $(DEPS)
 hash_chunks: $(ODIR)/hash_chunks.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
 	$(CXX) -o $@ $^
 
-hash_onechunks: $(ODIR)/hash_chunks3.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
+hash_onechunks: $(ODIR)/hash_chunks_once.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
 	$(CXX) -o $@ $^
 
 hash_chunks_rolling: $(ODIR)/hash_chunks_rolling.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 

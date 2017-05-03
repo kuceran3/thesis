@@ -1,0 +1,235 @@
+sizes: 256_1
+50% density, pattern 16x16x16, 3D,  235.7 MB -> 38.1 MB
+times:							seconds 		sol 		error
+brute_chunks - 					5.69835	 		5 				0
+ExactSkipDim_chunks -			5.19847			5 				0
+
+approximate:
+appbrute_chunks					62.6976			5 				0
+								65.9625			5				4
+								143.887							16
+								372.348							64
+
+appSplitDyn_chunks				
+0	find						39.7566 		5
+	dyncheck					0.467872
+4	find						21.7993 		5
+	dyncheck					0.429102							
+16	find						20.1827			5
+	dyncheck					0.875461
+64	find						16.6402 		203
+	dyncheck					1.35281						
+
+StricterFilter_chunks			
+0	find						32.0781 		5
+	prever						3.241e-06
+	dyncheck					0.499143
+4	find						27.5619 		5
+	prever						5.3e-08
+	dyncheck					1.64251						
+16	find						19.1157			5
+	prever						5.9e-08	
+	dyncheck					2.0685
+64	find						13.8718			203
+	prever						6.3e-08
+	dyncheck					10.8608			
+
+hash_chunks						
+0	find						51.3738 		56638
+	prever						2.54579
+	dyncheck					0.176441 		5
+4	find						36.6696 		87468
+	prever						3.68778
+	dyncheck					0.18025						
+16	find						26.2532 		146372
+	prever						5.83729	
+	dyncheck					0.180028	
+64	find						21.2315 		305891
+	prever						13.1568
+	dyncheck					0.202564				
+
+hash_once_chunks				
+0	find						27.6832 		56638
+	prever						2.94072
+	dyncheck					0.184241 		5
+4	find						18.8836 		87468
+	prever						4.52902
+	dyncheck					0.180869						
+16	find						12.4882 		146372
+	prever						8.81776	
+	dyncheck					0.178946
+64	find						9.23871 		305891
+	prever						27.26
+	dyncheck					0.180162				
+								
+hash_chunks_rolling
+0	find						26.3921 		169
+	prever						1.18727
+	dyncheck					0.199457 		5
+4	find						18.2954 		46663
+	prever						2.63494
+	dyncheck					0.180422						
+16	find						12.0187 		784168	
+	prever						148.088
+	dyncheck					0.249398	
+64	find						11.2257 		3378349
+	prever						4320.27
+	dyncheck					0.175714				
+
+256_6:
+235.7 -> 42.2
+times:							seconds 		sol 		error
+brute_chunks - 					6.5003	 		1 				0
+ExactSkipDim_chunks -			4.64078			1 				0
+
+approximate:
+appbrute_chunks					
+0	find						58.2711
+4	find						59.8218
+16	find						137.863
+64	find						361.428
+
+appSplitDyn_chunks								1 
+0	find						30.3232
+	dyncheck					0.103754
+4	find						21.0389
+	dyncheck					0.104599							
+16	find						15.5111
+	dyncheck					0.104635
+64	find						12.7756 		197
+	dyncheck					1.22052					
+
+StricterFilter_chunks							1 
+0	find						29.7964
+	prever						2.559e-06
+	dyncheck					0.102836
+4	find						21.6378
+	prever						2.28e-06
+	dyncheck					0.10331						
+16	find						15.4087
+	prever						0.0182273
+	dyncheck					0.10301
+64	find						13.5795  		197
+	prever						1.58158
+	dyncheck					0.134901			
+
+hash_chunks						
+0	find						50.882			56926
+	prever						2.5244
+	dyncheck					0.0347465
+4	find						35.0455 		84940
+	prever						3.24838
+	dyncheck					0.0348398						
+16	find						25.0334 		144652
+	prever						5.23119
+	dyncheck					0.0349379
+64	find						19.4888 		313687
+	prever						12.4855
+	dyncheck					0.0366742						
+
+hash_once_chunks
+0	find						27.6168 		56926
+	prever						2.94301
+	dyncheck					0.0346743
+4	find						18.2123 		84940
+	prever						4.17592
+	dyncheck					0.034923						
+16	find						11.419  		144652
+	prever						8.08747
+	dyncheck					0.0350661
+64	find						8.87639 		313687
+	prever						28.4652
+	dyncheck					0.0392737						
+								
+hash_chunks_rolling
+0	find						27.5243 		177
+	prever						1.06963
+	dyncheck					0.0350625
+4	find						17.3452 		46434
+	prever						2.55619
+	dyncheck					0.0348983					
+16	find						12.1047 		783730
+	prever 						138.384
+	dyncheck					0.0393798	
+64	find						-
+	prever						-
+	dyncheck					-		
+
+256_7:
+235.8 -> 42.2
+times:							seconds 		sol 		error
+brute_chunks - 					6.90549	 		42 				0
+ExactSkipDim_chunks -			6.16892			1 				0
+
+approximate:
+appbrute_chunks					
+0	find						63.0026
+4	find						62.3756
+16	find						145.018
+64	find						382.141
+
+appSplitDyn_chunks								42
+0	find						32.0714
+	dyncheck					2.57754
+4	find						21.8738
+	dyncheck					2.5402							
+16	find						15.9111
+	dyncheck					2.49403
+64	find						13.5717 		255
+	dyncheck					2.72442					
+
+StricterFilter_chunks							42 
+0	find						31.8241
+	prever						2.606e-06
+	dyncheck					3.06998
+4	find						22.0519
+	prever						2.496e-06
+	dyncheck					2.95028						
+16	find						16.446
+	prever						4.454e-06
+	dyncheck					3.19437
+64	find						13.5373  		255
+	prever						1.62682
+	dyncheck					2.7347			
+
+hash_chunks						
+0	find						54.8633			58033
+	prever						2.70401
+	dyncheck					1.49625
+4	find						35.8438 		88856
+	prever						3.58794
+	dyncheck					1.48597						
+16	find						25.0349 		147643
+	prever						5.53956
+	dyncheck					1.53205
+64	find						28.505  		58033
+	prever						3.14271
+	dyncheck					1.50762						
+
+hash_once_chunks
+0	find						28.505  		58033
+	prever						3.14271
+	dyncheck					1.50762
+4	find						17.8081 		88856
+	prever						4.46849
+	dyncheck					1.46702						
+16	find						11.684  		147643
+	prever						8.6765
+	dyncheck					1.59549
+64	find						9.02785 		305817
+	prever						27.2655
+	dyncheck					1.48228						
+								
+hash_chunks_rolling
+0	find						27.9548 		194
+	prever						1.22174
+	dyncheck					1.52158
+4	find						17.5872 		46688
+	prever						2.69849
+	dyncheck					1.54222					
+16	find						11.9655 		786144
+	prever 						136.516
+	dyncheck					1.51747	
+64	find						-
+	prever						-
+	dyncheck					-		
