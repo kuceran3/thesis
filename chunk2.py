@@ -23,7 +23,6 @@ class Mask:
 
 	def check(self):
 		if (self.valid >= 8):
-			#print(self.a)
 			self.fileName.write((self.a).to_bytes(1, byteorder='little'))
 			self.valid = 0
 			self.a = 0
@@ -33,7 +32,6 @@ class Mask:
 			return
 		for i in range(self.valid, 8):
 			self.a *= 2
-		#print(self.a)
 		self.fileName.write((self.a).to_bytes(1, byteorder='little'))
 		self.a = 0
 
@@ -51,12 +49,6 @@ class Eighth:
 		self.split = s
 
 	def addCell(self, row, l, attr):
-		#print("addCell eighth\n")
-		#print("vals: " + str(self.vals))
-		#print(row[l-1])
-		#for i in range(l - self.split, l):
-		#	self.vals += (int(row[i]).to_bytes(2, byteorder='little'))
-		#print(self.vals)
 		self.cells += 1
 		for i in range(len(row[l:])):
 			self.bitMask[i] *= 2
@@ -100,17 +92,9 @@ def movePos(pos, dim, split):
 	return pos
 
 def fillMask(mask, row, index, dim, end = False):
-	#print("fillMask\n")
-	#print(str(row))
-	#tmp = [0]*(len(dim))
-	#print("tmp: " + str(tmp) + " len: " + str(len(dim)))
-
 	while (index != list(map(int, row[:len(dim)]))):
 		mask.addZero()
-		#print(str(row))
-		#print("index: " + str(index) + " row: " + str(list(map(int, row[:len(dim)]))) + " " + str(len(dim)))
 		for x in range(len(dim) - 1, -1, -1):
-			#print("index[x]: " + str(index[x]) + " dim[x][1]: " + str(dim[x][1]))
 			index[x] += 1
 			if (index[x] < dim[x][1]):
 				break
@@ -129,6 +113,37 @@ def fillMask(mask, row, index, dim, end = False):
 				index[x] = 0	
 
 	return mask, index
+
+def writeFile(lines, pos, m, index, dim, split, attr):
+	fileNameNum = ''
+	for p in pos:
+		fileNameNum += '_' + str(p)
+	fileName = sys.argv[1].split('.')[0] + fileNameNum + '.bin' 
+	
+	ec = 0
+	e = Eighth(len(attr), split)
+
+	print(fileName)
+	if (pos[0] == 128):
+		print(fileName)
+		print(lines[0])
+		print(lines[-1])
+		#asd = input()
+	#print(fileName)
+	with open(fileName, 'wb') as out:
+		for l in lines:
+			m, index = fillMask(m, l, index, dim)
+			e.addCell(l, len(dim), attr)
+			ec += 1
+			if(ec % 8 == 0):
+				e.write(out)
+				e = Eighth(len(attr), split)
+				ec = 0
+						
+		e.writeEnd(out)
+
+	return m, index
+
 
 if (len(sys.argv) < 2):
 	print("Usage: python chunk.py <INPUT_FILE>")
@@ -156,13 +171,15 @@ with open(sys.argv[1], 'r') as csvF:
 		for d in dim:
 			meta.write(d[0] + ":dim" + str(d[1]) + ',')
 		split = 0
-		size = 1
+		size = 0.5
 		for d in range(len(dim) -1, -1, -1):
 			size *= dim[d][1]
 			if (size > 500000):
-			#if (size > 3000):
+			#if (size > 15000):
 				break
 			split += 1
+		print(split)
+		print(size)
 
 		for a in range(0, j):
 			if (a < j - 1):
@@ -178,61 +195,36 @@ with open(sys.argv[1], 'r') as csvF:
 		index = [0]*len(dim)
 		
 		prevIndex = 0
-		row = None
-		while(True):
-			fileNameNum = ''
-			for p in pos:
-				fileNameNum += '_' + str(p)
-			fileName = sys.argv[1].split('.')[0] + fileNameNum + '.bin' 
-			#print(fileName)
-
-			ec = 0
-			e = Eighth(len(attr), split)
-		#	e.addCell(row, len(dim), attr)
-
-			with open(fileName, 'wb') as out:
-				while(True):
-					if (row == None):
-						try:
-							row = next(cF)
-						except Exception:
-							row = None
-							break
-						m, index = fillMask(m, row, index, dim)
-
-					#print(fileName, row)
-					
-					if (prevIndex > index[len(dim) - split] and index[len(dim) - split:] != [0] * split):
-						
-						prevIndex = 0
-						break
-					if (index[len(dim) - split:] != [0] * split):
-						prevIndex = index[len(dim) - split]
-						
-					e.addCell(row, len(dim), attr)
-					ec += 1
-					if(ec % 8 == 0):
-						e.write(out)
-						e = Eighth(len(attr), split)
-						ec = 0
-					
-					row = None
-					#print(index, len(dim))
-					#if (index[len(dim) - split:] == [0] * split):
-					#	break
-				e.writeEnd(out)
-
+		lines = []
+		for row in cF:
+			rowFile = list(map(int,list(row)[:len(dim) - split]))
+			if (pos != rowFile):
+				m, index = writeFile(lines, pos, m, index, dim, split, attr)
 				pos = movePos(pos, dim, split)
+				lines = []
 
-			if (row == None):
-				rowFile = [0] * len(pos)
-			else:
-				rowFile = list(map(int,list(row)[:len(dim) - split]))
-			#print(pos, rowFile)
-			#asd = input()
+				while (pos != rowFile):
+					fileNameNum = ''
+					for p in pos:
+						fileNameNum += '_' + str(p)
+					fileName = sys.argv[1].split('.')[0] + fileNameNum + '.bin' 
+					with open(fileName, 'wb') as out:
+						out.write((0).to_bytes(1, byteorder='little'))
+					pos = movePos(pos, dim, split)
+			
+			lines.append(row)
+
+
+		m, index = fillMask(m, [0] * (len(dim)), index, dim, True)
+		m.writeEnd()
+
+		rowFile = [0] * len(pos)
+		if (pos != rowFile):
+			m, index = writeFile(lines, pos, m, index, dim, split, attr)
+			pos = movePos(pos, dim, split)
+			lines = []
+
 			while (pos != rowFile):
-				#print("empty file")
-
 				fileNameNum = ''
 				for p in pos:
 					fileNameNum += '_' + str(p)
@@ -240,48 +232,4 @@ with open(sys.argv[1], 'r') as csvF:
 				with open(fileName, 'wb') as out:
 					out.write((0).to_bytes(1, byteorder='little'))
 				pos = movePos(pos, dim, split)
-			if (row == None):
-				break
-						
-			
-		#prevIndex = 0
-		#row = next(cF)
-		#m, index = fillMask(m, row, index, dim)
-		#for x in range(0, s):
-		#	fileNameNum = ''
-		#	for p in pos:
-		#		fileNameNum += '_' + str(p)
-		#	fileName = sys.argv[1].split('.')[0] + fileNameNum + '.bin' 
-		#	#print(fileName)
-
-		#	ec = 1
-		#	e = Eighth(len(attr), split)
-		#	e.addCell(row, len(dim), attr)
-
-		#	with open(fileName, 'wb') as out:
-		#		for row in cF:
-		#			#print(fileName, row)
-		#			m, index = fillMask(m, row, index, dim)
-		#			if (prevIndex > index[len(dim) - split] and index[len(dim) - split:] != [0] * split):
-		#				prevIndex = 0
-		#				break
-		#			if (index[len(dim) - split:] != [0] * split):
-		#				prevIndex = index[len(dim) - split]
-		#				
-		#			e.addCell(row, len(dim), attr)
-		#			ec += 1
-		#			if(ec % 8 == 0):
-		#				e.write(out)
-		#				e = Eighth(len(attr), split)
-		#				ec = 0
-					
-					#print(index, len(dim))
-					#if (index[len(dim) - split:] == [0] * split):
-					#	break
-		#		e.writeEnd(out)
-
-		#		pos = movePos(pos, dim, split)
 		
-
-		m, index = fillMask(m, [0] * (len(dim)), index, dim, True)
-		m.writeEnd()

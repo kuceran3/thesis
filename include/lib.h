@@ -31,16 +31,19 @@ void deleteType(void * data, string type);
 void deleteOneLine(void * * line, vector<Attribute > attrHeader);
 void deleteData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim, unsigned int posDim);
 void deleteData(void * * data, vector<Attribute > attrHeader, vector<Dimension> &dim);
+void deleteOneHash(void * * hashP, int numP);
+void deleteHashP(void * * hashP, vector<Dimension> dimP, unsigned int posDimP, int numP);
+void deleteHashP(void * * hashP, vector<Dimension> dimP, int numP);
 //--------------------------------------------------------------------------------------------------------------------------
 bool checkHeaders(vector<Dimension> dim, vector<Dimension> dimPatt, vector<Attribute> attrHeader, vector<Attribute> patternAttrHeader);
 int compareType(void * first, void * second, string type);
 bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<Attribute> attrHP);
 //--------------------------------------------------------------------------------------------------------------------------
 //Framework for computing distances
-void * * getItem(void * * data, vector<unsigned int> indices, unsigned int posDim);
-void * * getItem(Reader * cache, vector<unsigned int> indices);
-vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim);
-vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim);
+void * * getItem(void * * data, vector<unsigned int> &indices, unsigned int posDim);
+void * * getItem(Reader * cache, vector<unsigned int> &indices);
+vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> &indices, unsigned int posDim);
+vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length, vector<unsigned int> &indices, unsigned int posDim);
 vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension> dimP, unsigned int pos, vector<unsigned int> res, unsigned int posDim, unsigned int posDimP);
 //--------------------------------------------------------------------------------------------------------------------------
 //Edit distance

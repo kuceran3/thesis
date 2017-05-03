@@ -210,12 +210,13 @@ void run(const char * in, const char * p, const char * err) {
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
 	
-	Reader * cache = new Reader(inpFile, dim, attrHeader);
 
 	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
 		cout << "Invalid pattern" << endl;
 		return;
 	}
+
+	Reader * cache = new Reader(inpFile, dim, attrHeader, dim[0].getSize());
 
 	int errors = charToInt(err);
 	//void * * data;
@@ -230,8 +231,8 @@ void run(const char * in, const char * p, const char * err) {
 	res = find(cache, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt, errors);
 	chrono::duration<double> sec = chrono::system_clock::now() - start;
     cout << "took " << sec.count() << " seconds\n";
-
-	if (res.size() == 0){
+    cout << res.size() << endl;
+	/*if (res.size() == 0){
 		cout << "No solutions found" << endl;
 	} else {
 		for (unsigned int i = 0; i < res.size(); ++i) {
@@ -240,7 +241,7 @@ void run(const char * in, const char * p, const char * err) {
 			}
 			cout << endl;
 		}
-	}
+	}*/
 	//deleteData(data, attrHeader, dim);
 	delete cache;
 	deleteData(dataPatt, patternAttrHeader, dimPatt);

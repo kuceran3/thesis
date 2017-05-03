@@ -17,6 +17,7 @@ def loop_rec(length, dimNum, pos, printDim, attNum, attMax, outF):
 			for x in range(0, attNum):
 				#print(random.randint(0, attMax), sep='', end='')
 				outF.write(str(random.randint(0, attMax)))
+				#outF.write(str(1))
 				if(x + 1 < attNum):
 				#	print(",", sep='', end='')
 					outF.write(",")

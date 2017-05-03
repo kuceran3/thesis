@@ -141,21 +141,33 @@ vector<vector<unsigned int> > findParts(void * * data, Reader * cache, void * * 
 
 	vector<vector<unsigned int> > res, returned;
 	int slide = partSize;
-	if (numP == 1) slide = 1;
+	//if (numP == 1) slide = 1;
 	for (unsigned int i = dimP[posDimP].getSize() - partSize; i < (dim[posDim].getSize() - partSize + 1); i += dimP[posDimP].getSize()) {
-		for (int j = 0; j < slide; ++j)	{
+		if (i == 0) {
 			if (posDim < cache->getDimInName()) {
-				cacheInd[posDim] = i - j;
+				cacheInd[posDim] = 0;
 				returned = checkParts(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize);
 			} else {
-				returned = checkParts(&data[i - j], cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize);				
+				returned = checkParts(&data[0], cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize);				
 			}
 			for (unsigned int k = 0; k < returned.size(); ++k) {
-				returned[k][posDim] += (i - j);
-				if (returned[k][posDim] + partSize < returned[k][posDim])
-					returned[k][posDim] = 0;
 				res.push_back(returned[k]);	
 			}	
+		} else {
+			for (int j = 0; j < slide; ++j)	{
+				if (posDim < cache->getDimInName()) {
+					cacheInd[posDim] = i - j;
+					returned = checkParts(NULL, cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize);
+				} else {
+					returned = checkParts(&data[i - j], cache, dataP, attrH, attrHP, dim, dimP, posDim, posDimP, dimPositions, cacheInd, partSize);				
+				}
+				for (unsigned int k = 0; k < returned.size(); ++k) {
+					returned[k][posDim] += (i - j);
+					if (returned[k][posDim] + partSize < returned[k][posDim])
+						returned[k][posDim] = 0;
+					res.push_back(returned[k]);	
+				}	
+			}
 		}
 	}
 	return res;
@@ -221,26 +233,21 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 	vector<unsigned int> indicesP;
 	unsigned int pos2 = 0;
 	int sum = 0;
-
 	for (unsigned int i = 0; i < dim.size(); ++i) {
 		if (dimP[pos].getName() == dim[i].getName()) {
 			pos2 = i;
 			break;
 		}
 	}
-
 	indices = getIndices(dim, dimP, pos, res, 0, 0);
-
-
 	unsigned int posDimP, length;
 	for (unsigned int i = 0; i < indices.size(); ++i) {
 		indicesP.clear();
 		posDimP = 0;
 		for (unsigned int j = 0; j < indices[i].size(); ++j) {
-			if (posDimP < dimP.size() && dim[j].getName() == dimP[posDimP].getName()){
+			if (dim[j].getName() == dimP[posDimP].getName()){
 				indicesP.push_back(indices[i][j] - res[j]);
-				posDimP++;
-				if (posDimP >= dimP.size()) break;
+				if (posDimP++ >= dimP.size()) break;
 			}
 		}
 		length = (indices[i][pos2] + dimP[pos].getSize() > dim[pos2].getSize()) ? dim[pos2].getSize() - indices[i][pos2] : dimP[pos].getSize();
@@ -251,7 +258,6 @@ int dynDimCheck(Reader * cache, void * * dataP, vector<Attribute> attrH, \
 			return -1;
 		}
 	}
-
 	return sum;
 }
 
@@ -283,14 +289,33 @@ vector<vector<unsigned int> > find(Reader * cache, void * * dataP, vector<Attrib
 	for (unsigned int i = 0; i < cache->getDimInName(); ++i) {
 		cacheInd.push_back(0);
 	}
+	
+	chrono::system_clock::time_point start = chrono::system_clock::now();
 	vector<vector<unsigned int> > res = find(NULL, cache, dataP, attrH, attrHP, dim, dimP, 0, 0, vector<unsigned int>(), cacheInd, partSize, numP);
-	cout << "find done" << endl;
-	for (vector<vector<unsigned int> >::iterator it = res.end() - 1; it != res.begin() - 1;) {
+	chrono::duration<double> sec = chrono::system_clock::now() - start;
+    cout << "Find took " << sec.count() << " seconds\n";
+	
+	/*cout << res.size() << endl;
+	for (unsigned int i = 0; i < res.size(); ++i) {
+		for (unsigned int j = 0; j < res[i].size(); ++j) {
+			cout << res[i][j] << ", ";
+		}
+		cout << endl;
+	}*/
+	start = chrono::system_clock::now();
+	for (vector<vector<unsigned int> >::iterator it = res.begin(); it != res.end();) {
 		if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
 			it = res.erase(it);
+		} else {
+			++it;
 		}
-		--it;
+		//if (!dynCheck(cache, dataP, attrH, attrHP, dim, dimP, *it, errors)) {
+		//	it = res.erase(it);
+		//}
+		//--it;
 	}
+	sec = chrono::system_clock::now() - start;
+    cout << "Dynamic check took " << sec.count() << " seconds\n";
 	return res;
 }
 
@@ -322,12 +347,12 @@ void run(const char * in, const char * p, const char * err) {
 	getline(pattern, valuePatt, '\n');
 	patternAttrHeader = readHeader(valuePatt, dimPatt);
 
-	Reader * cache = new Reader(inpFile, dim, attrHeader);
-	
 	if (!checkHeaders(dim, dimPatt, attrHeader, patternAttrHeader)) {
 		cout << "Invalid pattern" << endl;
 		return;
 	}
+
+	Reader * cache = new Reader(inpFile, dim, attrHeader, dim[0].getSize());
 
 	int errors = charToInt(err);
 	int numP = getNumOfParts(errors, dimPatt.size(), dimPatt[dimPatt.size() - 1].getSize());
@@ -338,12 +363,12 @@ void run(const char * in, const char * p, const char * err) {
 	cout << "Finding..." << endl;
 	vector<vector<unsigned int> > res;
 
-	chrono::system_clock::time_point start = chrono::system_clock::now();
+	//chrono::system_clock::time_point start = chrono::system_clock::now();
 	res = find(cache, dataPatt, attrHeader, patternAttrHeader, dim, dimPatt, errors, partSize, numP);
-	chrono::duration<double> sec = chrono::system_clock::now() - start;
-    cout << "took " << sec.count() << " seconds\n";
-
-	if (res.size() == 0){
+	//chrono::duration<double> sec = chrono::system_clock::now() - start;
+    //cout << "took " << sec.count() << " seconds\n";
+    cout << res.size() << endl;
+	/*if (res.size() == 0){
 		cout << "no solutions found" << endl;
 	} else {
 		for (unsigned int i = 0; i < res.size(); ++i) {
@@ -352,7 +377,7 @@ void run(const char * in, const char * p, const char * err) {
 			}
 			cout << endl;
 		}
-	}
+	}*/
 	
 	delete cache;
 	deleteData(dataPatt, patternAttrHeader, dimPatt);

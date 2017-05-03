@@ -21,7 +21,7 @@ class Reader {
 	queue<int> files;
 
 public:
-	Reader(string name, vector<Dimension> dims, vector<Attribute> attrs);
+	Reader(string name, vector<Dimension> dims, vector<Attribute> attrs, unsigned int size);
 	~Reader();
 	void * * read(vector<unsigned int> indices);
 	unsigned int getDimInName();

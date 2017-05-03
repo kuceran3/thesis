@@ -1,5 +1,5 @@
 CXX     = g++
-CFLAGS  = -std=c++11 -Wall -pedantic -I./$(IDIR)
+CFLAGS  = -std=c++11 -Wall -pedantic -I./$(IDIR) -O3
 IDIR	= include
 ODIR	= obj
 SDIR	= src
@@ -14,7 +14,7 @@ exactAll: exactSkipDim exactSkipDim_chunks exactSkipDim2
 
 appSplitAll: appSplitDyn appSplitDyn2 appSplitDyn_chunks stricterFilter_chunks 
 
-hashAll: hash_chunks hash_onechunks
+hashAll: hash_chunks hash_onechunks hash_chunks_rolling
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(IDIR)/%.h $(DEPS)
 	$(CXX) -c $(CFLAGS) $< -o $@
@@ -23,6 +23,9 @@ hash_chunks: $(ODIR)/hash_chunks.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODI
 	$(CXX) -o $@ $^
 
 hash_onechunks: $(ODIR)/hash_chunks3.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
+	$(CXX) -o $@ $^
+
+hash_chunks_rolling: $(ODIR)/hash_chunks_rolling.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
 	$(CXX) -o $@ $^
 
 brute: $(ODIR)/brute.o $(ODIR)/dimension.o $(ODIR)/attribute.o $(ODIR)/reader.o $(ODIR)/lib.o 
@@ -76,3 +79,4 @@ cleanest: clean
 	rm -f stricterFilter_chunks
 	rm -f hash_chunks
 	rm -f hash_onechunks
+	rm -f hash_chunks_rolling

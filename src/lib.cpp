@@ -31,7 +31,7 @@ vector<Attribute> readHeader(string row, vector<Dimension> &dim){
 
 int readDimNum(string row) {
 	int pos = 8; //dimName:_ 
-	cout << row << endl;
+	//cout << row << endl;
 	string num = row.substr(pos, row.length() - 1);
 	return stoi(num);
 }
@@ -128,6 +128,7 @@ void printData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &d
 	else 
 		printData(data, attrHeader, dim, 0);
 }
+
 //--------------------------------------------------------------------------------------------------------------------------
 //Cleaning
 void deleteType(void * data, string type) {
@@ -161,6 +162,30 @@ void deleteData(void * * data, vector<Attribute> attrHeader, vector<Dimension> &
 	else 
 		deleteData(data, attrHeader, dim, 0);
 	delete [] data;
+}
+
+void deleteOneHash(void * * hashP, int numP) {
+	for (int i = 0; i < numP; ++i) {
+		delete (vector<unsigned char> *)hashP[i];
+	}
+	//delete [] hashP;
+}
+
+void deleteHashP(void * * hashP, vector<Dimension> dimP, unsigned int posDimP, int numP) {
+	if (posDimP + 1 >= dimP.size()) {
+		deleteOneHash((void * *)hashP, numP);
+	} else {
+		for (unsigned int i = 0; i < dimP[posDimP].getSize(); ++i) {
+			deleteHashP((void * *)hashP[i], dimP, posDimP + 1, numP);
+			delete [] (void * *)hashP[i];
+		}
+	}
+	//delete [] (void * *)hashP[i];
+}
+
+void deleteHashP(void * * hashP, vector<Dimension> dimP, int numP) {
+	deleteHashP(hashP, dimP, 0, numP);
+	delete [] hashP;
 }
 //--------------------------------------------------------------------------------------------------------------------------
 //Checks header
@@ -199,15 +224,11 @@ int compareType(void * first, void * second, string type) {
 
 bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<Attribute> attrHP) {
 	unsigned int j = 0;
-
-	if (data == NULL)
-		return false;
+	if (data == NULL) return false;
 
 	for (unsigned int i = 0; i < attrH.size(); ++i) {
 		if (j >= attrHP.size()) break;
 		if (attrH[i].getName() == attrHP[j].getName() && attrH[i].getType() == attrHP[j].getType()) {
-			//cout << *(int *)data << endl;
-			//cout << *(int *)dataP[j] << endl;
 			if (compareType(data[i], dataP[j], attrH[i].getType()) != 0) {
 				return false;
 			}
@@ -220,15 +241,15 @@ bool compareItem(void * * data, void * * dataP, vector<Attribute> attrH, vector<
 }
 //--------------------------------------------------------------------------------------------------------------------------
 //Framework for computing distances
-void * * getItem(void * * data, vector<unsigned int> indices, unsigned int posDim) {
+void * * getItem(void * * data, vector<unsigned int> &indices, unsigned int posDim) {
 	if (posDim >= indices.size()) {
 		return data;
 	} else {
-		return getItem((void * *)data[indices[posDim]], indices, posDim + 1);
+		return getItem((void * *)(data[indices[posDim]]), indices, posDim + 1);
 	}
 }
 
-void * * getItem(Reader * cache, vector<unsigned int> indices) {
+void * * getItem(Reader * cache, vector<unsigned int> &indices) {
 	void * * data = NULL;		
 	vector<unsigned int> dataIndices;
 	for (unsigned int i = 0; i < cache->getDimInName(); ++i) {
@@ -238,31 +259,33 @@ void * * getItem(Reader * cache, vector<unsigned int> indices) {
 	return getItem((void * *)data[indices[cache->getDimInName()]], indices, cache->getDimInName() + 1);
 }
 
-vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim) {
-	vector<void * *> res;
+vector<void * *> getDim(void * * data, unsigned int dimInd, unsigned int length, vector<unsigned int> &indices, unsigned int posDim) {
+	vector<void * *> res(0);
 
 	if (posDim == dimInd) {
 		for (unsigned int i = indices[posDim]; i < indices[posDim] + length; ++i) {
 			res.push_back(getItem((void * *)data[i], indices, posDim + 1));
 		}
 	} else {
-		res = getDim((void * *)data[indices[posDim]], dimInd, length, indices, posDim + 1);
+		return getDim((void * *)(data[indices[posDim]]), dimInd, length, indices, posDim + 1);
 	}
-
 	return res;
 }
 
-vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length, vector<unsigned int> indices, unsigned int posDim) {
-	vector<void * *> res;
+vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length, vector<unsigned int> &indices, unsigned int posDim) {
+	vector<void * *> res(0);
+	void * * d;
 
 	if (posDim < cache->getDimInName()) {
 		if (posDim == dimInd) {
 			for (unsigned int i = 0; i < length; ++i) {
-				res.push_back(getItem(cache, indices));
+				d = getItem(cache, indices);
+				res.push_back(d);
 				indices[posDim] += 1;
 			}
+			return res;
 		} else {
-			res = getDim(cache, dimInd, length, indices, cache->getDimInName());
+			return getDim(cache, dimInd, length, indices, posDim + 1);
 		}
 	} else {
 		vector<unsigned int> dataIndices;
@@ -278,11 +301,11 @@ vector<void * *> getDim(Reader * cache, unsigned int dimInd, unsigned int length
 			for (unsigned int i = indices[posDim]; i < indices[posDim] + length; ++i) {
 				res.push_back(getItem((void * *)data[i], indices, posDim + 1));
 			}
+			return res;
 		} else {
-			res = getDim((void * *)data[indices[posDim]], dimInd, length, indices, posDim + 1);
+			return getDim((void * *)data[indices[posDim]], dimInd, length, indices, posDim + 1);
 		}
 	}
-	
 	return res;
 }
 
@@ -298,7 +321,6 @@ vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension
 
 	if (posDimP == pos) {
 		indices = getIndices(dim, dimP, pos, res, posDim + 1, posDimP + 1);
-		//cout << indices.size() << " " << res[posDim] <<  endl;
 		for (unsigned int i = 0; i < indices.size(); ++i) {
 			indices[i].insert(indices[i].begin(), res[posDim]);
 		}
@@ -320,7 +342,6 @@ vector<vector<unsigned int> > getIndices(vector<Dimension> dim, vector<Dimension
 			}
 		}
 	} 
-	
 	return indices;
 }
 //--------------------------------------------------------------------------------------------------------------------------
@@ -358,8 +379,8 @@ int editDistance(vector<void * *> col, vector<void * *> colP, vector<Attribute> 
 
 	res = table[l1 - 1][l2 - 1];
 	for (int i = 0; i < l1; ++i) {
-		delete table[i];
+		delete [] table[i];
 	}
-	delete table;
+	delete [] table;
 	return res;
 }

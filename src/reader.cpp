@@ -2,10 +2,11 @@
 
 using namespace std;
 
-Reader::Reader(string name, vector<Dimension> dims, vector<Attribute> attrs) {
+Reader::Reader(string name, vector<Dimension> dims, vector<Attribute> attrs, unsigned int size) {
 	dir = "./";
 	meta = dir + name;
-	cacheSize = 50;
+	cacheSize = 64;
+	if (size > cacheSize) cacheSize = size;
 	
 	int pos = name.find("_meta.csv");
 	fileTemp = dir + name.substr(0, pos);
@@ -96,6 +97,7 @@ void Reader::initCache() {
 void * * Reader::read(vector<unsigned int> indices) {
 	void * * res = findInCache(indices);
 	if (res == NULL) {
+		//cout << "read " << indices[0] << endl;
 		return readFile(indices);
 	}
 	return res;
@@ -132,7 +134,6 @@ void Reader::readMask(unsigned char * buffer, unsigned int &byte, queue<bool> &c
 
 void * * Reader::readCell(unsigned char * buffer, unsigned int &byte, queue<bool> &cellMask) {
 	void * * cell = new void * [attr.size()];
-
 	if (cellMask.size() == 0) {
 		readMask(buffer, byte, cellMask);
 	}
@@ -154,8 +155,6 @@ void * * Reader::readDim(unsigned char * buffer, unsigned int posDim, unsigned i
 		for (unsigned int i = 0; i < dim[posDim].getSize(); ++i) {
 			if (fileMasks[pos][posInMask++]) {
 				res[i] = (void *)readCell(buffer, byte, cellMask);
-				for (unsigned int j = 0; j < attr.size(); ++j) {
-				}
 			} else {
 				res[i] = NULL;
 			}
@@ -180,6 +179,7 @@ void * * Reader::readFile2(ifstream &file, int pos) {
 	queue<bool> cellMask;
 	unsigned int posInMask = 0, byte = 0;
 	void * * res = readDim(buffer, dimInName, byte, pos, posInMask, cellMask);
+	//cout << "Value: " << *(int *)((void * *)((void * *)res[128])[192])[0] << endl;
 	delete [] buffer;
 	return res;
 }
