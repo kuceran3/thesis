@@ -139,17 +139,17 @@ So instead of using the comparison of the actual sections of pattern with the da
 
 Three similar solutions are presented and each of them will be individually presented in its own paragraph:
 
-First implemented hash is called SimHash and is created by hashing attributes needed to compare (size of the part) and then combining them into one hash where each position contains 1 if there is more 1s than 0s in the hashes. 
+First implemented variant uses SimHash which is created by hashing attributes needed to compare (attributes present in the pattern) and then combining the partial hashes into one hash where each bit position contains 1 if there is more 1s than 0s in the same bit position of all partial hashes. The hash used for the partial hashing is simple identity as the testing data use only integer values with the highest value of 255, so it is  basically an eight bit number. The actual hashing of data is performed every time a comparison is required between pattern and data.
 
-Second hash varies only a slightly from the first one. The data in this algorithm are hashed only once while in the first they are hashed every time they are accessed.
+Second implementation varies only a slightly from the first one. The data are hashed using SimHash as well, but only once as they are read from the chunked file, and only the parts to be compared. This reduces the number of hash computations, however it requires another matrix to keep the hashes in memory.
 
-Third hash is variation of the least significant bit hash, but the position of the LSB is moved one up after every step. This hash is constructed by using this formula: $h(x_i) = A_i AND 2^i$. Main drawback of usage of this hash is that only 1 bit is taken from every attribute value which means for small compared parts (smaller than 8) its distinguishing abilities are degraded as it does not have full byte of valid values.
+Third solution uses a variation of the least significant bit hash, but the position of the LSB is moved after every step. This hash is constructed by using this formula: $h(x_i) = A_i\ \land_{bit}\ 2^i$. Main drawback of usage of this hash is that only one bit is taken from every attribute value which means for small compared parts (smaller than eight) it will create higher number of collisions. On the other hand, for longer parts, the hash will actually be longer and thus may create less collisions with the drawback of longer comparison (but still not as long as without using any hash).
 
 The rest of the process stays the same as in the Stricter Filter, so preverification and dynamic programming check is performed.
 
 The assumption is, that the added hashing may increase the computation speed, because a lot shorter values are compared instead of whole sections. However the part size will have high impact on the improvement, because the higher the ratio between part size and hash size the bigger the improvement. Another possible outcome is to find even more partial results for preverification, because the the hash function will probably make some collisions.
 
-The best case scenario thought is that the collisions will be for similar sections and thus possibly valid positions, which were disregarded by the Stricter Filter method. This is the reason for usage of SimHash, while the use of the third hash is supported by the idea that when the data are created randomly there is a little chance for the orders of numbers to be repeated.  
+The best case scenario thought is that the collisions will be for similar sections and thus possibly valid positions, which were disregarded by the Stricter Filter method. This is the reason for usage of SimHash, while the use of the other hash function is supported by the idea that when the data are created randomly there is a little chance for the orders of numbers to be repeated and thus creating less collisions.
 
 
 \section{Possible modifications}

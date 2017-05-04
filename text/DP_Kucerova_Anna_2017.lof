@@ -21,6 +21,11 @@
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Skip dim\relax }}{41}{figure.caption.19}
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Example of sliding window.\relax }}{42}{figure.caption.20}
 \addvspace {10pt}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Computation time for all implemented algorithms.\relax }}{48}{figure.caption.21}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Comparison on varying density of data\relax }}{49}{figure.caption.22}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Comparison on varying number of dimensions.\relax }}{50}{figure.caption.23}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Comparison using varying frequency of pattern occurrence.\relax }}{51}{figure.caption.24}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Test on 4GB data file.\relax }}{51}{figure.caption.25}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}

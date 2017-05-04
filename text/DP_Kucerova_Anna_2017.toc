@@ -77,9 +77,18 @@
 \contentsline {subsection}{\numberline {3.4.2}Fast Filter Searching}{42}{subsection.3.4.2}
 \contentsline {subsection}{\numberline {3.4.3}Stricter Filter}{43}{subsection.3.4.3}
 \contentsline {subsection}{\numberline {3.4.4}Hashed Stricter Filter }{43}{subsection.3.4.4}
-\contentsline {section}{\numberline {3.5}Possible modifications}{44}{section.3.5}
+\contentsline {section}{\numberline {3.5}Possible modifications}{45}{section.3.5}
 \contentsline {chapter}{\chapternumberline {4}Results}{47}{chapter.4}
-\contentsline {chapter}{Conclusion}{49}{chapter*.22}
-\contentsline {chapter}{Bibliography}{51}{section*.24}
-\contentsline {appendix}{\chapternumberline {A}Acronyms}{57}{appendix.A}
-\contentsline {appendix}{\chapternumberline {B}Contents of enclosed USB}{59}{appendix.B}
+\contentsline {section}{\numberline {4.1}Time complexity}{47}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Dependency on data density}{48}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Dependency on dimensionality}{49}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Dependency on frequency of pattern occurrence}{50}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Dependency on input file size}{50}{subsection.4.1.4}
+\contentsline {subsection}{\numberline {4.1.5}Dependency on error rate}{50}{subsection.4.1.5}
+\contentsline {section}{\numberline {4.2}Memory usage}{52}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Binary chunking}{52}{subsection.4.2.1}
+\contentsline {section}{\numberline {4.3}Real datasets}{52}{section.4.3}
+\contentsline {chapter}{Conclusion}{53}{chapter*.27}
+\contentsline {chapter}{Bibliography}{55}{section*.29}
+\contentsline {appendix}{\chapternumberline {A}Acronyms}{61}{appendix.A}
+\contentsline {appendix}{\chapternumberline {B}Contents of enclosed USB}{63}{appendix.B}
