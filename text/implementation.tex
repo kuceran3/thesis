@@ -137,19 +137,20 @@ All of the previous approaches were either the simple obvious solutions or previ
 
 So instead of using the comparison of the actual sections of pattern with the data a hash function is implemented. Firstly, all parts of the pattern are hashed, so it is done only once. The same cannot be done with the whole data as only some parts should be hashed and the data are not loaded at the start as they are chunked in smaller files.
 
-Three similar solutions are presented:
+Three similar solutions are presented and each of them will be individually presented in its own paragraph:
 
-\begin{itemize}
-\item sim hash %TODO
-\item sim hash once %TODO
-\item rolling hash %TODO 
-\end{itemize}
+First implemented hash is called SimHash and is created by hashing attributes needed to compare (size of the part) and then combining them into one hash where each position contains 1 if there is more 1s than 0s in the hashes. 
+
+Second hash varies only a slightly from the first one. The data in this algorithm are hashed only once while in the first they are hashed every time they are accessed.
+
+Third hash is variation of the least significant bit hash, but the position of the LSB is moved one up after every step. This hash is constructed by using this formula: $h(x_i) = A_i AND 2^i$. Main drawback of usage of this hash is that only 1 bit is taken from every attribute value which means for small compared parts (smaller than 8) its distinguishing abilities are degraded as it does not have full byte of valid values.
 
 The rest of the process stays the same as in the Stricter Filter, so preverification and dynamic programming check is performed.
 
 The assumption is, that the added hashing may increase the computation speed, because a lot shorter values are compared instead of whole sections. However the part size will have high impact on the improvement, because the higher the ratio between part size and hash size the bigger the improvement. Another possible outcome is to find even more partial results for preverification, because the the hash function will probably make some collisions.
 
-The best case scenario thought is that the collisions will be for similar sections and thus possibly valid positions, which were disregarded by the Stricter Filter method. This is the reason for usage of Sim-Hash %TODO
+The best case scenario thought is that the collisions will be for similar sections and thus possibly valid positions, which were disregarded by the Stricter Filter method. This is the reason for usage of SimHash, while the use of the third hash is supported by the idea that when the data are created randomly there is a little chance for the orders of numbers to be repeated.  
+
 
 \section{Possible modifications}
 Some other modifications were considered and two of them were analysed, whether it could have a positive impact on already implemented solutions. First modification consist of changing the comparison between the section from the naive algorithm to KMP as the sliding part of the data may be considered as a longer array and the comparison could return only a position in the slide. However considering that the compared sizes are part size and 2 * part size - 1 long, and the non-repetitive type of data, the creation of the table T used in algorithm would add another space requirement and the speed increase would probably not occur, because mostly, the check ends after single value comparison. If these methods were used data, where a repetition of subsequences was expected and the part size was set to sufficient value, it may prove to be faster.
