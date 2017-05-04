@@ -1,0 +1,53 @@
+o tom machine learningu trochu min
+v introduction nedavat jmena, davat bacha kde pisu navaro a baeza, spis jen napady, nevyhazovat jmena ale aby bylo vedet o cem to je
+
+
+multidimensional array data structure a indexing treba 
+kmp dat k pattern matchingu na stringach
+
+at se nejmenujou kapitoly stejne jako clanky
+
+ten learning to hash se similarity hashem spojit nebo napsat jak se k sobe poji
+
+v problem specu dat priklady
+
+ze specifikace dat odkazy do textu kde se to dal rozviji
+
+!!
+na konci introduction rozepsat do detailu co je cil kazdy kapitoly, odstavec skoro o kazdym
+!!
+
+v similarity measures proc jsme tak preskocili do vektoru najednou, na zacatek dopsat proc zase tohle
+vsude dopisovat co se tam bude dit
+
+obhajit si domain-dependent sekci simil measures
+neco jako ze jsou measures pro vsechny tyhle kategorie a ja se zamerila na tohle
+
+presunout measures na polich az za measures na stringach
+
+binarni format presunout do apendixu, mozna ze ty posledni measures taky
+scidb trochu rozsekcovat je to moc velkej blok textu
+
+v introduction by meli byt cile prace
+ze to umi pracovat s binarnim formatem (plusy) napsat i do abstraktu a uvodu a zaveru
+
+multidim. appr. pat. match. znova pripomenout o co tam jde, moc hodne textu trochu rozsekat
+
+prvni dve stranky ze sablony proste smazat
+odstranit ze sablony ten cesky abstrakt
+
+jen nejaky tabulky a jen nejaky grafy
+nejdulezitejsi testy vzdycky tabulkou
+
+treba neco o kernelovych metodach na polich
+
+amr zaradit pod quadstromy a napsat jak se to k nim poji
+mat je spis indexovaci metoda a mozna zkratit
+
+
+mapreduce dat taky pod neco
+
+marginals taky zanorit do neco
+pridat treba k agregacnim problemum od soroushe
+
+patek 13:00
