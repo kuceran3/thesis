@@ -240,9 +240,9 @@ This methods can be used for numeric attributes where it can be treated as a vec
 \item Euclidean Distance: $d_E (\bar{x},\bar{y})=\sqrt[2]{\sum_{k=1}^N (x_k-y_k)^2} $
 \item Squared Euclidean Distance: $d_E (\bar{x},\bar{y})=\sum_{k=1}^N (x_k-y_k)^2 $
 \item Manhattan Distance: $d_M (\bar{x},\bar{y})=\sum_{k=1}^N 
-{\abs{(x_k-y_k)}}$
+{\lvert x_k-y_k \rvert}$
 \item Minkowski Distance: $d_{M,\lambda} (\bar{x},\bar{y})=(\sum_{k=1}^N (x_k-y_k)^\lambda)^{\frac{1}{\lambda}} $
-\item Chebyshev Distance: $d_{M,\inf} (\bar{x},\bar{y})=max_{k=1,...,N}(\abs{x_k-y_k}) $
+\item Chebyshev Distance: $d_{M,\inf} (\bar{x},\bar{y})=max_{k=1,...,N}(\lvert x_k-y_k \rvert) $
 \item Earth Mover's Distance: $d_{EMD}(P,Q)=\frac{\sum_{i=1}^m\sum_{j=1}^n f_{ij}d_{ij}}{\sum_{i=1}^m\sum_{j=1}^n f_{ij}}$, where $P$ has $m$ clusters with $P={(p_1, w_{p1}), (p_2, w_{p2}),...,(p_m, w_{pm})}$ where $p_i$ is the cluster representative and $w_{pi}$ is the weight of the cluster. Similarly signature $Q={(q_1, w_{q1}), (q_2, w_{q2}),...,(q_n, w_{qn})}$ has $n$ clusters. $D=[d_{ij}]$ is the distance between clusters $p_i$ and $q_j$. $F=[f_{ij}]$ is the flow that minimizes the overall cost.
 \end{itemize}
 
@@ -260,10 +260,10 @@ The most commonly used methods are Overlap coefficient, Jaccard coefficient and 
 Hybrid methods are usually combination of some of previously mentioned methods.
 \subsubsection{Monge-Elkan}
 Monge and Elkan proposed this simple but effective method for measuring the similarity between two strings containing multiple tokens with the use of internal similarity function capable of measuring the similarity between two tokens a and b. 
-Imagine two texts A and B with their respective number of tokens $\abs{A}$ and $\abs{B}$. 
+Imagine two texts A and B with their respective number of tokens $\lvert A \rvert$ and $\lvert B\rvert$. 
 The algorithm measures the average similarity of the values between pairs of more similar tokens within texts A and B. 
 The formula is: 
-$ME(A,B)=\frac{1}{\abs{A}} \sum_{i=1}^{\abs{A}} max (sim(A_i, B_j))_{i=1}^{\abs{B}}$, where $sim(a, b)$ is internal similarity function.
+$ME(A,B)=\frac{1}{\lvert A \rvert} \sum_{i=1}^{\lvert A \rvert} max (sim(A_i, B_j))_{i=1}^{\lvert B\rvert}$, where $sim(a, b)$ is internal similarity function.
 \subsubsection{Extended Jaccard Similarity}
 If strings contain multiple words then choose words as tokens and use internal similarity function to calculate similarity between sets of tokens as the ratio of the number of shared attributes (AND operator) and the number possessed by OR operator.
 \subsubsection{Tf-idf}
