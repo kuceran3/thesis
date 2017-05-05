@@ -46,6 +46,11 @@ However there can be seen that solutions using hashes can reach better times tha
 Solution using variant of LSB hash can be very successful for low errors allowed but rapidly worsens with growing error rate. This is why there is such a peak for error 16 and also its time is not used in the last graph for better scaling. In the last graph the brute solution is also omitted.
 
 \begin{figure}
+\begin{minipage}{\linewidth}
+\centering
+\subfloat{\label{dens:leg}\includegraphics[scale=0.2]{img/densLeg}}
+\end{minipage}\par\medskip
+
 \begin{minipage}{.5\linewidth}
 \centering
 \subfloat{\label{dens:a}\includegraphics[width=\textwidth]{img/dens0}\caption*{Error = 0}}
@@ -76,6 +81,11 @@ Second important thing to see in these graphs is that for low error rate and low
 The higher the number of dimensions in chunks the better the reusage rate of hashing algorithms thus better scaling.
 
 \begin{figure}
+\begin{minipage}{\linewidth}
+\centering
+\subfloat{\label{dim:leg}\includegraphics[scale=0.2]{img/dimLeg}}
+\end{minipage}\par\medskip
+
 \begin{minipage}{.5\linewidth}
 \centering
 \subfloat{\label{dim:a}\includegraphics[width=\textwidth]{img/dim0}\caption*{Error = 0}}
@@ -106,6 +116,11 @@ As there is not much else to see in this figure it is possible to notice the gen
 Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. When using HR solution, its even more dependent on the part size because the hash length is relies on it, so the quality of HR lies mainly in lower error rates.
 
 \begin{figure}
+\begin{minipage}{\linewidth}
+\centering
+\subfloat{\label{pat:leg}\includegraphics[scale=0.2]{img/patLeg}}
+\end{minipage}\par\medskip
+
 \begin{minipage}{.5\linewidth}
 \centering
 \subfloat{\label{pat:a}\includegraphics[width=\textwidth]{img/pat0}\caption*{Error = 0}}
@@ -136,6 +151,11 @@ As the file contains approximately 18 times more positions to check the time is 
 The difference in the pattern size proved to have only a slight effect on the final reached times.
 
 \begin{figure}
+\begin{minipage}{\linewidth}
+\centering
+\subfloat{\label{size:leg}\includegraphics[scale=0.2]{img/sizeLeg}}
+\end{minipage}\par\medskip
+
 \begin{minipage}{.5\linewidth}
 \centering
 \subfloat{\label{size:a}\includegraphics[width=\textwidth]{img/size0}\caption*{Error = 0}}

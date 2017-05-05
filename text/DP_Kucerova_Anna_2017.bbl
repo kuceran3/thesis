@@ -12,6 +12,11 @@ Jiang, L.; Kawashima, H.; et al. Efficient Window Aggregate Method on Array
   Database System. \emph{Journal of Information Processing}, volume~24, no.~6,
   2016: pp. 867--877.
 
+\bibitem{saad1990sparskit}
+Saad, Y. SPARSKIT: A basic tool kit for sparse matrix computations. 1990,
+  [Online; accessed 29-04-17].
+\urlprefix\biburl{https://ntrs.nasa.gov/search.jsp?R=19910023551}
+
 \bibitem{samet}
 Samet, H. \emph{Foundations of multidimensional and metric data structures}.
   Morgan Kaufmann, 2006.
