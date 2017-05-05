@@ -87,7 +87,7 @@
 \contentsline {subsection}{\numberline {4.1.5}Dependency on error rate}{52}{subsection.4.1.5}
 \contentsline {section}{\numberline {4.2}Memory usage}{53}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Binary chunking}{53}{subsection.4.2.1}
-\contentsline {section}{\numberline {4.3}Real datasets}{53}{section.4.3}
+\contentsline {section}{\numberline {4.3}Real datasets}{54}{section.4.3}
 \contentsline {chapter}{Conclusion}{55}{chapter*.25}
 \contentsline {chapter}{Bibliography}{57}{section*.27}
 \contentsline {appendix}{\chapternumberline {A}Acronyms}{63}{appendix.A}

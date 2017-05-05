@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.4.2)  5 MAY 2017 19:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.4.2)  5 MAY 2017 22:10
 entering extended mode
 **./DP_Kucerova_Anna_2017.tex
 (DP_Kucerova_Anna_2017.tex
@@ -1464,52 +1464,55 @@ File: img/size64.png Graphic file (type png)
 Package pdftex.def Info: img/size64.png used on input line 174.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
  [52 <./img/sizeLeg.png> <./img/size0.png> <./img/size4.png> <./img/size16.png>
- <./img/size64.png>]) [53] (conclusion.tex [54] [55
+ <./img/size64.png>])
+Underfull \vbox (badness 5008) has occurred while \output is active []
 
-])
-(DP_Kucerova_Anna_2017.bbl [56]
+ [53]
+(conclusion.tex [54] [55
+
+]) (DP_Kucerova_Anna_2017.bbl [56]
 bibitemlist
 [57
 
 ] [58]
-Underfull \hbox (badness 1824) in paragraph at lines 153--157
+Underfull \hbox (badness 1824) in paragraph at lines 158--162
 []\OT1/lmr/m/n/10.95 Goshtasby, A. A. \OT1/lmr/m/it/10.95 Sim-il-ar-ity and Dis
 -sim-il-ar-ity Meas-ures\OT1/lmr/m/n/10.95 . Lon-don:
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 159--161
+Underfull \hbox (badness 10000) in paragraph at lines 164--166
 \OT1/lmr/m/n/10.95 ture. Avail-able from: []$\OT1/lmtt/m/n/10.95 https : / / hp
 i\OML/lmm/m/it/10.95 :\OT1/lmtt/m/n/10.95 de / fileadmin / user _ upload /
  []
 
 
-Underfull \hbox (badness 6893) in paragraph at lines 163--166
+Underfull \hbox (badness 6893) in paragraph at lines 168--171
 []\OT1/lmr/m/n/10.95 Dekhtyar, A. Dis-tance/Similarity Meas-ures. 2009, course 
 CSC
  []
 
 
-Underfull \hbox (badness 6725) in paragraph at lines 163--166
+Underfull \hbox (badness 6725) in paragraph at lines 168--171
 \OT1/lmr/m/n/10.95 466, Cali-for-nia Poly-tech-nic State Uni-ver-sity Lec-ture.
  Avail-able
  []
 
 
-Underfull \hbox (badness 5091) in paragraph at lines 163--166
+Underfull \hbox (badness 5091) in paragraph at lines 168--171
 \OT1/lmr/m/n/10.95 from: []$\OT1/lmtt/m/n/10.95 http : / / users\OML/lmm/m/it/1
 0.95 :\OT1/lmtt/m/n/10.95 csc\OML/lmm/m/it/10.95 :\OT1/lmtt/m/n/10.95 calpoly\O
 ML/lmm/m/it/10.95 :\OT1/lmtt/m/n/10.95 edu / []dekhtyar / 466 -[] Spring2012 /
  []
 
 [59]
-Underfull \hbox (badness 1092) in paragraph at lines 206--209
+Underfull \hbox (badness 1092) in paragraph at lines 211--214
 []\OT1/lmr/m/n/10.95 Fredriksson, K.; Ukkonen, E. A ro-ta-tion in-vari-ant fil-
 ter for two-
  []
 
 [60] [61]
-Underfull \hbox (badness 1565) in paragraph at lines 323--325
+Underfull \hbox (badness 1565) in paragraph at lines 328--330
 []\OT1/lmr/m/n/10.95 Victor, S. Gen-er-ate pseudo-random num-bers. 1990--, [On-
 line; ac-
  []
@@ -1542,10 +1545,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 99.
  ) 
 Here is how much of TeX's memory you used:
- 26004 strings out of 493333
- 443691 string characters out of 3139195
- 554089 words of memory out of 3000000
- 28847 multiletter control sequences out of 15000+200000
+ 26006 strings out of 493333
+ 443730 string characters out of 3139195
+ 554128 words of memory out of 3000000
+ 28848 multiletter control sequences out of 15000+200000
  64221 words of font info for 43 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  68i,13n,94p,1217b,580s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1568,9 +1571,9 @@ iKTeX 2.9/fonts/type1/public/lm/lmssbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts
 /type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/
 lmsy6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy8.pfb><C:/Prog
 ram Files/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb>
-Output written on DP_Kucerova_Anna_2017.pdf (81 pages, 1943665 bytes).
+Output written on DP_Kucerova_Anna_2017.pdf (81 pages, 1936921 bytes).
 PDF statistics:
- 983 PDF objects out of 1000 (max. 8388607)
- 265 named destinations out of 1000 (max. 500000)
+ 985 PDF objects out of 1000 (max. 8388607)
+ 266 named destinations out of 1000 (max. 500000)
  432 words of extra memory for PDF output out of 10000 (max. 10000000)
 

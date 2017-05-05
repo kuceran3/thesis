@@ -2,7 +2,7 @@
 This chapter will focus on presenting and discussing the results of selected implementations. First part will discuss measured times and its dependency on size and density of the file, number of dimensions and number of pattern matches. For this task, 8 testing files were generated using the Gaussian generating script. Second part will focus on explaining memory usage and also demonstrates the quality of chunking algorithm.
 
 \section{Time complexity}
-Time measuring was done with the help of boost library, which belongs in the C++ standard since 2011. In the first graph \ref{fig_compT} there can be seen times of all implemented algorithms achieved for the input file with standard parameters and standard pattern of size $16\times16\times16$. This standard file was compared with all other files and its parameters were:
+Time measuring was done with the help of boost library, which belongs in the C++ standard since 2011. In the first figure \ref{fig_compT} there can be seen times of all implemented algorithms achieved for the input file with standard parameters and standard pattern of size $16\times16\times16$. This standard file was compared with all other files and its parameters were:
 \begin{itemize}
 \item size -- 256 MB
 \item density -- 50 \%
@@ -39,7 +39,7 @@ Another important thing to notice in the graph is that using the preverification
 \subsection{Dependency on data density}
 Measuring in this section was done using 3 different files. One of them is the standard file specified in the first section, other 2 files were different only in the density of generated data and its values were $100 \%$ and $2 \%$.
 
-In the graph \ref{fig_densRes}, green color represents dense data, orange $50 \%$ density and blue $2 \%$ density. It is clearly visible that lesser the maximum error allowed the higher the dependency on the data density. Times achieved when allowing up to 4 errors is multiple times worse for the least dense data. This happens because when the density is low there is a lot of positions to check even when there are no data in them. 
+In the figure \ref{fig_densRes}, green color represents dense data, orange $50 \%$ density and blue $2 \%$ density. It is clearly visible that lesser the maximum error allowed the higher the dependency on the data density. Times achieved when allowing up to 4 errors is multiple times worse for the least dense data. This happens because when the density is low there is a lot of positions to check even when there are no data in them. 
 
 However there can be seen that solutions using hashes can reach better times than other algorithms especially in the data with low density. Reason for this is that non-hash algorithms can take a while to reach a position with no data, but when using second and third implementation the overall comparison is quicker because the value of the hash is NULL if some of its value is not in the data. Which means that a lot more positions can be skipped directly.
 
@@ -74,7 +74,7 @@ Solution using variant of LSB hash can be very successful for low errors allowed
 \end{figure}
 
 \subsection{Dependency on dimensionality}
-Three different files were used based on the number of dimensions which were: 2, 3 and 4. In the graph \ref{fig_dimRes} the green color belongs to the 2D file, orange is for the standard 3 dimensional file and blue shows 4 dimensions. It is clear that the bigger the number of dimensions the higher times. This happens because for more dimensions the algorithm gets into higher recursion levels than otherwise.
+Three different files were used based on the number of dimensions which were: 2, 3 and 4. In the figure \ref{fig_dimRes} the green color belongs to the 2D file, orange is for the standard 3 dimensional file and blue shows 4 dimensions. It is clear that the bigger the number of dimensions the higher times. This happens because for more dimensions the algorithm gets into higher recursion levels than otherwise.
 
 Second important thing to see in these graphs is that for low error rate and lower dimensionality hash algorithms are way worse than other non-brute solutions. This is caused by a high number of collisions and thus more expensive preverification. Because of the low data dimensionality there is only last dimension of data in the memory that will be hashed which means there is no reusage of already created hashes.
 
@@ -144,7 +144,7 @@ Stricter Filter algorithm is always slightly better than FFS because preverifica
 \end{figure}
 
 \subsection{Dependency on input file size}
-In the last graph figure \ref{fig_sizeRes} there can be seen comparison of standard (orange) file and file of the size 4 GB but measured twice, first with the pattern of size $64\times64\times64$ and second with the standard pattern (size $16\times16\times16$), the large pattern was selected so the ratio of pattern size and file size is more similar. Also this graphs are displayed with logarithmic scale due to the large difference in time. 
+In the last figure \ref{fig_sizeRes} there can be seen comparison of standard (orange) file and file of the size 4 GB but measured twice, first with the pattern of size $64\times64\times64$ and second with the standard pattern (size $16\times16\times16$), the large pattern was selected so the ratio of pattern size and file size is more similar. Also this graphs are displayed with logarithmic scale due to the large difference in time. 
 
 As the file contains approximately 18 times more positions to check the time is about 20 times longer for the bigger file. This is probably due to the increased need of handling the cache and also may be affected by the number of found partial solutions because the file contains just pseudo randomly generated data.
 
@@ -189,14 +189,12 @@ In the solutions using hashing the find parts behave the same as for previous so
 Even though the $j$ number is optimized for the FFS and SF algorithms the usage of hashing changes some dependencies and thus the change of the calculation of $j$ could offer better scaling.
 
 \section{Memory usage}
-Implemented solutions uses a cache like memory system with the size of $max(64, m)$ where $m$ is the size of the pattern. This means that when the requested file is not in the memory it will be loaded into cache and if the cache is full the oldest data are discarded. 
+Implemented solutions uses a cache like memory system with the size of $C~=~max(64, m)$ where $m$ is the size of the pattern. This means that when the requested file is not in the memory it will be loaded into cache and if the cache is full the oldest data are discarded. 
 
-When taking brute solution as a base line that uses only cache and pattern memory, FFS and SF algorithms do not use any added memory except for dynamic check that needs only extra space for creating of matrix of size $m\times m$ for the alignment purposes. HS algorithm needs extra space only for the one data hash at a time and hashed all parts of the pattern so the increase is negligible. On the other hand, both HS1 and HR need to remember all hashes for the currently used data chunk, but because it is stored in the same structure as the data the complexity is increased to maximum of $\lceil 2\times N\rceil$ where $N$ is the maximum number of cells stored in the cache. However the number of hashes is lower than the number of cells.
+When taking brute solution as a base line that uses only cache and pattern memory, FFS and SF algorithms do not use any added memory except for dynamic check that needs only extra space for creating of matrix of size $m\times m$ for the alignment purposes. HS algorithm needs extra space only for the one data hash at a time and hashed all parts of the pattern so the increase is negligible. On the other hand, both HS1 and HR need to remember all hashes for the currently used data chunk, but because it is stored in the same structure as the data the complexity is increased to a theoretical maximum of $2\times C \times N$ where $N$ is the maximum number of cells stored in one chunk file. However the number of hashes is lower than the number of cells, because in this stage, as was explained in the implementation, only a part of the data are actually compared with the pattern.
 
 \subsection{Binary chunking}
-The table \ref{tab_chunk} shows how using the binary format affects the size of the used data files. There can be seen that usage of the chunking lowers the size of the file significantly. This is because all the data values fits into 2 bytes and there is no need to store information about the dimensions as it is in the name of the file. 
-
-Low density data files can not be chunked as effectively because each dimensions contains more values thus the created mask file needs to be much longer.
+Performed data chunking creates one meta file, which contains the header presented in the implementation and an information needed to recognize the bin files containing the actual data, which are also created by chunking. Last, and usually the largest, file is a mask file. The size of this file is the main reason for low density data files to be less effectively chunked. As the mask always contains a bit for each cell, its size for the file with 2 \% density is more than 70 \% of the total size of chunked data. On the other hand, in the dense file the mask only takes up about 10 \% of the total size. 
 
 \begin{table}
 \centering
