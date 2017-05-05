@@ -101,10 +101,9 @@ The higher the number of dimensions in chunks the better the reusage rate of has
 \subsection{Dependency on frequency of pattern occurrence}
 Difference between input files were this time in the number of pattern occurrences. Standard file had the occurrence rate set to $0.1 \%$ while the other two had $1 \%$ and $0.01 \%$. In the figure \ref{fig_patRes} there can be seen only a slight difference in the times of comparing algorithms. This difference is caused only by the preverification step and dynamic checks as they need to control more possible solutions thus lasting longer.
 
-On the other hand, there is nicely illustrated the difference between individual algorithms. 
+As there is not much else to see in this figure it is possible to notice the general differences between the used algorithms. Brute algorithm is by expectation the worst solution, then both Navaro and Baeza-Yates are very similar because the find part does not find any false positive so the preverification is not necessary to perform. Then from the implemented solutions the first algorithm using hashing does the same number of comparisons, however the hashing function is more time consuming, on the other hand if the hashes are performed only once it significantly improves the find time while also increasing the preverification time as there are more possible solutions to check, but in the end the overall time is still a little lower unless the part size is too small for hashing to be worth it.
 
-Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. Also HS1 is always quicker than HS because there are no repeated hash constructions. Quality of HR is mainly in lower error rates.
-%kdyz tam neni zobrazeny nic jinyho muzes se zminit, ze je dobre viditelne porovnani mezi jednolivejma algoritmama - a proc
+Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. When using HR solution, its even more dependent on the part size because the hash length is relies on it, so the quality of HR lies mainly in lower error rates.
 
 \begin{figure}
 \begin{minipage}{.5\linewidth}
@@ -130,12 +129,11 @@ Stricter Filter algorithm is always slightly better than FFS because preverifica
 \end{figure}
 
 \subsection{Dependency on input file size}
-In the last graph figure \ref{fig_sizeRes} there can be seen comparison of standard (orange) file and file of the size 4 GB but measured twice, first with the pattern of size $64\times64\times64$ and second with the standard pattern (size $16\times16\times16$).
-% a proc patern 64 a 16? - 16 protoze standard a 64 aby to bylo podobnejsi pomerem
-% taky ze tam je logaritmicky meritko, aby to bylo lip videt
+In the last graph figure \ref{fig_sizeRes} there can be seen comparison of standard (orange) file and file of the size 4 GB but measured twice, first with the pattern of size $64\times64\times64$ and second with the standard pattern (size $16\times16\times16$), the large pattern was selected so the ratio of pattern size and file size is more similar. Also this graphs are displayed with logarithmic scale due to the large difference in time. 
 
-The difference in the pattern size proved to have only a slight effect on the final reached times. It is no surprise that the times are different. %co to je za zblept? to je snad jasny ze to bude vetsi, ale jestli to je spravne vetsi
+As the file contains approximately 18 times more positions to check the time is about 20 times longer for the bigger file. This is probably due to the increased need of handling the cache and also may be affected by the number of found partial solutions because the file contains just pseudo randomly generated data.
 
+The difference in the pattern size proved to have only a slight effect on the final reached times.
 
 \begin{figure}
 \begin{minipage}{.5\linewidth}
@@ -162,21 +160,21 @@ The difference in the pattern size proved to have only a slight effect on the fi
 
 
 \subsection{Dependency on error rate}
-In all the figures mentioned in previous sections, there can be seen that the higher the error rate the higher the times. This is caused by the course of action of all algorithms used, i.e. they all need to control more data before the maximum number of errors is found. % to plati jen u app brutu...ostatni hledaji identitu a pak se to jen preverifikuje...spis napis treba pocty tech prednalezenejch reseni...ze hash tim trpi ale co to ma zas za vyhody
+In all the figures mentioned in previous sections, there can be seen that concerning approximate brute force solution the higher the error rate the higher the times. This is caused by the course of action of the algorithm used, i.e. it needs to check more data before the maximum number of errors is found.
 
-This is much more obvious when looking only at the hash algorithms, which with the increasing error rate have multiple times higher collision rate and that makes them much worse than Stricter Filter and Fast Filter for high number of errors. However, when approached with low error rate and low density of data they prove to be better solution than Navaro and Baeza-Yates algorithms.
-%z jakyho duvodu? (part size - hlavne u rolling hashe) - moznost zmenit pocitani j aby to bralo v uvahu hashovani a nepouzivalo moc maly part sizy
+Both of the Navaro and Baeza-Yates algorithms act very similarly in a way that their run time decreases the bigger the error rate. This is caused by decreased find time as it needs to compare smaller parts. The drawback of this algorithms in this part could be in finding more solutions but this is not the case.
+
+In the solutions using hashing the find parts behave the same as for previous solutions in term of increasing the speed however the number of returned possible solutions to preverify is considerably higher, so the overall speed of find parts increases while the preverification decreases with the higher error rate. In the HR algorithm the number of collisions is so high that the preverification cost gradually outweighs every other part.
+
+Even though the $j$ number is optimized for the FFS and SF algorithms the usage of hashing changes some dependencies and thus the change of the calculation of $j$ could offer better scaling.
 
 \section{Memory usage}
 Implemented solutions uses a cache like memory system with the size of $max(64, m)$ where $m$ is the size of the pattern. This means that when the requested file is not in the memory it will be loaded into cache and if the cache is full the oldest data are discarded. 
 
-When taking brute solution as a base line that uses only cache and pattern memory, FFS and SF algorithms do not use any added memory except for dynamic check that needs only extra space for creating of matrix of size $m\times m$ for the alignment purposes. Algorithms using hashes need extra space for the hashed pattern but the rest of its memory usage is the same as in the SF algorithm because the memory needed in each dimension is $\lceil 2\times n\rceil$ and thus the memory usage is very similar. % tohle nedava moc smysl...proste tam napis ze to zabere radove stejne, a jen ani ne 2krat tolik, protoze se ty hashe ulozi do podobny struktury jako normalni data, jen diky tomu ze to jsou hashe tak je to mensi
-%navic vlastne ten prvni hash alg pouziva extra pamet jen na pattern, to tam taky napis
+When taking brute solution as a base line that uses only cache and pattern memory, FFS and SF algorithms do not use any added memory except for dynamic check that needs only extra space for creating of matrix of size $m\times m$ for the alignment purposes. HS algorithm needs extra space only for the one data hash at a time and hashed all parts of the pattern so the increase is negligible. On the other hand, both HS1 and HR need to remember all hashes for the currently used data chunk, but because it is stored in the same structure as the data the complexity is increased to maximum of $\lceil 2\times N\rceil$ where $N$ is the maximum number of cells stored in the cache. However the number of hashes is lower than the number of cells.
 
 \subsection{Binary chunking}
-In the table \ref{tab_chunk} there can be seen how using the binary format affects the size of the used data files. There can be seen that usage of the chunking lowers the size of the file about at least $60 \%$. This is because all the data values fits into 2 bytes and there is no need to store information about the dimensions as it is in the name of the file. 
-%there can be seen zni divne a obzvlast 2krat za sebou
-%60% je nesmysl..to ze mas zrovna cisla na 60% neznamena ze je to 60% --proste to snizuje o hodne, ale ze to dosta zavisi na densite...kdybys mela dostatecne malou density (promile treba) tak to bude i horsi
+The table \ref{tab_chunk} shows how using the binary format affects the size of the used data files. There can be seen that usage of the chunking lowers the size of the file significantly. This is because all the data values fits into 2 bytes and there is no need to store information about the dimensions as it is in the name of the file. 
 
 Low density data files can not be chunked as effectively because each dimensions contains more values thus the created mask file needs to be much longer.
 
@@ -200,7 +198,4 @@ New Size (\%) & 16.61 & 17.9 & 38.62  \\
 \end{table}
 
 \section{Real datasets}
-Every algorithm was successfully tested on datasets provided on \url{archive.ics.uci.edu/ml/datasets} but the times are not given as the size of the chosen datasets did not allow proper measuring due to its small size. % delsi, vic okecat...proc to neslo zmerit? nepsal bych tam uplne doslova every algorithm ale neco jako, Solutions were tested using some datasets ..... . Most of those are relatively small compared to the testing data, so the measuring bla bla...
-
-\section{Discussion}
-
+Solutions were tested using some datasets provided on \url{archive.ics.uci.edu/ml/datasets}. Most of those are relatively small compared to the testing data, so the measured times were not taken in account. However there is a need of preprocessing of the data, as they are missing proper headers. The chunking can be done by the provided script. After these operations the datasets can be used the same way as testing data.

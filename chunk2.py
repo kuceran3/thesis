@@ -124,12 +124,6 @@ def writeFile(lines, pos, m, index, dim, split, attr):
 	e = Eighth(len(attr), split)
 
 	print(fileName)
-	if (pos[0] == 128):
-		print(fileName)
-		print(lines[0])
-		print(lines[-1])
-		#asd = input()
-	#print(fileName)
 	with open(fileName, 'wb') as out:
 		for l in lines:
 			m, index = fillMask(m, l, index, dim)
@@ -170,10 +164,14 @@ with open(sys.argv[1], 'r') as csvF:
 				j += 1
 		for d in dim:
 			meta.write(d[0] + ":dim" + str(d[1]) + ',')
+
+		#print(dim)
+		#print(attr)
 		split = 0
-		size = 0.5
+		size = 1
 		for d in range(len(dim) -1, -1, -1):
 			size *= dim[d][1]
+			#if (size > 10):
 			if (size > 500000):
 			#if (size > 15000):
 				break
@@ -188,14 +186,25 @@ with open(sys.argv[1], 'r') as csvF:
 				meta.write(str(attr[a][0]) + ":" + str(attr[a][1]) + '\n')
 		meta.write("dimName: " + str(len(dim) - split))
 		
-		s = 1
+		#s = 1
 		pos = [0] * (len(dim) - split)
-		for x in range(0, i - split):
-			s *= dim[x][1]
+		#for x in range(0, i - split):
+		#	s *= dim[x][1]
 		index = [0]*len(dim)
 		
 		prevIndex = 0
 		lines = []
+		if (split >= len(dim)):
+			#print('one chunk')
+			for row in cF:
+				print(row)
+				lines.append(row)
+
+			m, index = writeFile(lines, [], m, index, dim, split, attr)
+			m, index = fillMask(m, [0] * (len(dim)), index, dim, True)
+			m.writeEnd()
+			exit()
+
 		for row in cF:
 			rowFile = list(map(int,list(row)[:len(dim) - split]))
 			if (pos != rowFile):
