@@ -30,7 +30,7 @@ scidb trochu rozsekcovat je to moc velkej blok textu
 
 v introduction by meli byt cile prace
 ze to umi pracovat s binarnim formatem (plusy) napsat i do abstraktu a uvodu a zaveru
-
+37
 multidim. appr. pat. match. znova pripomenout o co tam jde, moc hodne textu trochu rozsekat
 
 treba neco o kernelovych metodach na polich
@@ -43,8 +43,56 @@ mapreduce dat taky pod neco
 marginals taky zanorit do neco
 pridat treba k agregacnim problemum od soroushe
 
-je to na drive
+v intro 1 a 2d jsou pole, ve vice dimenzich ze to jsou vektory treba
 
+odcitovat nebo popsat ty Coordinate veci, treba tam k nim udelat sekci jeste v analyze
 
+nejdriv multidimensionalni pole a pak teprve o Scidb, po SciDB usecase ze SciDB
 
-patek 13:00
+v implementaci:
+konkretnejsi, rozepsat 
+o generovani napsat nejaky pravdepodobnosti, nakreslit obrazky treba (asi jak vypadaj ty gausovky), jeste to vic rozepsat
+u algoritmu rozepsat vic do detailu, pridat slozitosti 
+
+zmenit popisek obrazku 3.1
+output presunout za input, nebo na konec
+dat priklad input dat, 
+u chunkovani priklady, obrazky, 
+neni potreba v kazdym odstavci rikat ze je na to pythoni script, misto toho dat na zacatek implementace seznam vsech toolu a ze jsou v pythonu
+nebude v tech castech ani jednou slovo python
+nepsat ze to umi jen s intama a vsechno ostatni jsou stringy, misto toho napsat ze to umi s floatama (protoze ty to pretypuje na int a bude v pohode)
+popisy parametru nejsou podstatny
+popsat implementacni challenge - ze lokalita je zajistena chunkama a tak
+odvodit jednoduchou pametovou slozitost typu, v jednu chvili jedno vlakne nepotrebuje vic nez blabla*chunku mista
+
+obrazky k hashed stricter filteru treba jak vypadaj ty kernely, je to moc velky blok textu, udelat treba odstavce
+ta assumption jak to zavisi na cem, kolik bude hashu a blablabla
+
+vsechno vysvetlovat hodne na prikladech, v prvni sekci vysvetlit vsechno teoreticky s priklady jak to je a v druhy konkretne implementaci
+
+klidne v ty teoreticky sekci to vzit jako navaruv clanek a prevysvetlit to svyma slovama, bude to delsi, ale to neva a s prikladama
+
+to s hashovanou preverifikaci vic vysvetlit, lepe vysvetlit proc to neni vyhodny, kdybych to ja zahashovala jednou predem, tak mam super index ktery by to hodne urychlil
+proc teda nemit jeden malej index u toho pole, lip to rozvist, duvod ze jsme se otlik nezamerovali na indexy ale spis na matchovani
+
+misto exact a approximate bude jedna kapitola, python vedle, pak sekce dalsi napady a blabal
+
+misto v grafu odkaz psat ve figure odkaz
+
+pridat legendy ke grafum
+
+4GB je malo sloupcu, ty patterny do toho nemichat, chtelo by to 1GB file mezi tim
+
+projet chybu od 0 do 128, pro ten standard file
+
+v ty velikosti dat slo o to aby to zevnitr melo 256 MB, protoze to ze tam nemam dimenze muze byt i u vstupniho filu, takze to je spatne a je potreba to bud predelat, 
+nebo si to obhajit nejak, ten dense neskaluje s dimenzionalitou stejne jako ty chunky
+o tech 2 bytech v binarnim formatu nepsat, tenhle format musi byt stejny vsude
+vysvetlit proc je ta maska tak velka, rozepsat
+
+u tech realnych datasetu, nepsat jako duvod ze jsou moc maly
+
+to dynamicky programovani z toho vytahnout
+
+pak o kazdy kapitole rict, ze to je muj prinos a nikdo to jeste neudelal
+
