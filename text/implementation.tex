@@ -5,12 +5,6 @@ Primary languages were C++ and Python. For compilation of *.cpp programs user ne
 
 Libraries used in C++ were iostream, fstream, string, vector, math.h and chrono which are all included in the C++11 standard.
 
-When running the created C++ executables it can be done by command:
-
-$$./executable\_name\quad input\_data\quad input\_pattern.csv\quad errors$$  
-
-where input data have to be chunked and name of the meta file is expected, input pattern is a standard csv file with the specified dimensions and attributes, errors is a parameter used only in executables of approximate searches and defines maximum number of errors allowed for the result to still be valid.
-
 \section{Output Format}
 After successfully running the executables in the terminal window the program will write in the standard output stream. First it will write Finding, meaning that the part of the program that searches for solutions started and all initial settings and reads are done. When finished with find phase program will output the time it took to find the results and after this it will write coordinates of the found solutions. They will be written in the form of list of all possible dimension coordinates where the desired pattern can be found while not violating the constraint about maximum number of errors.
 
@@ -40,7 +34,7 @@ When in need of sparse data, second script named \textit{generate\_Gauss.py} can
 
 $$python\quad generate\_Gauss.py\quad dim\quad length\quad density\quad results\quad pSize\quad pFile\quad output$$ 
 
-Where dim and length have the same meaning as in the script above, density says the ration between generated and empty cells (value from interval <0,1> is expected), results means how many results should be generated in comparison to the size of data, value from interval <0,1> is expected as it is approximate chance for the pattern to be generated. Parameters pSize and pFile specify the size of the pattern in one dimension and the input file with the generated pattern (CSV file is expected). Output parameter means the name of a newly created file with generated data.
+Where dim and length have the same meaning as in the script above, density says the ration between generated and empty cells (value from interval $<0,1>$ is expected), results means how many results should be generated in comparison to the size of data, value from interval $<0,1>$ is expected as it is approximate chance for the pattern to be generated. Parameters pSize and pFile specify the size of the pattern in one dimension and the input file with the generated pattern (CSV file is expected). Output parameter means the name of a newly created file with generated data.
 
 The actual generating is based on three Gaussian distributions with the centers set in three different positions:
 \begin{itemize}
@@ -82,7 +76,7 @@ Not to miss any possible solution, every ``row'' of pattern is compared with the
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{skipDim}
-\caption{Skip dim}
+\caption{Illustration of comparison between pattern and data. \cite{mdApproxPM}}
 \label{fig_skipDim}
 \end{figure}
 
