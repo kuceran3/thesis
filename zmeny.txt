@@ -33,21 +33,18 @@ ze to umi pracovat s binarnim formatem (plusy) napsat i do abstraktu a uvodu a z
 
 multidim. appr. pat. match. znova pripomenout o co tam jde, moc hodne textu trochu rozsekat
 
-prvni dve stranky ze sablony proste smazat
-odstranit ze sablony ten cesky abstrakt
-
-jen nejaky tabulky a jen nejaky grafy
-nejdulezitejsi testy vzdycky tabulkou
-
 treba neco o kernelovych metodach na polich
 
 amr zaradit pod quadstromy a napsat jak se to k nim poji
 mat je spis indexovaci metoda a mozna zkratit
 
-
 mapreduce dat taky pod neco
 
 marginals taky zanorit do neco
 pridat treba k agregacnim problemum od soroushe
+
+je to na drive
+
+
 
 patek 13:00
