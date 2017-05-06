@@ -1,6 +1,3 @@
-multidimensional array data structure a indexing treba 
-kmp dat k pattern matchingu na stringach
-
 at se nejmenujou kapitoly stejne jako clanky
 
 ten learning to hash se similarity hashem spojit nebo napsat jak se k sobe poji

@@ -6,7 +6,7 @@
 \contentsline {chapter}{\chapternumberline {1}Related work}{3}{chapter.1}
 \contentsline {chapter}{\chapternumberline {2}Analysis}{5}{chapter.2}
 \contentsline {section}{\numberline {2.1}Problem specification}{5}{section.2.1}
-\contentsline {section}{\numberline {2.2}Multidimensional array model}{7}{section.2.2}
+\contentsline {section}{\numberline {2.2}Multidimensional array data structure}{7}{section.2.2}
 \contentsline {subsection}{\numberline {2.2.1}Indexing}{7}{subsection.2.2.1}
 \contentsline {subsubsection}{\numberline {2.2.1.1}Spatial Indexing}{7}{subsubsection.2.2.1.1}
 \contentsline {subsubsection}{\numberline {2.2.1.2}Bitmap Indexing}{8}{subsubsection.2.2.1.2}
@@ -48,30 +48,30 @@
 \contentsline {subsection}{\numberline {2.4.4}Efficient window aggregate method on array database system}{23}{subsection.2.4.4}
 \contentsline {section}{\numberline {2.5}Multidimensional Approximate Pattern Matching}{25}{section.2.5}
 \contentsline {subsection}{\numberline {2.5.1}Multidimensional Searching Algorithms}{26}{subsection.2.5.1}
-\contentsline {section}{\numberline {2.6}Machine Learning Based Methods}{26}{section.2.6}
+\contentsline {subsection}{\numberline {2.5.2}Knuth--Morris--Pratt Algorithm}{27}{subsection.2.5.2}
+\contentsline {section}{\numberline {2.6}Machine Learning Based Methods}{27}{section.2.6}
 \contentsline {subsection}{\numberline {2.6.1}KNN}{27}{subsection.2.6.1}
-\contentsline {subsection}{\numberline {2.6.2}Kernel based methods}{27}{subsection.2.6.2}
-\contentsline {section}{\numberline {2.7}Adaptive Mesh Refinement}{27}{section.2.7}
+\contentsline {subsection}{\numberline {2.6.2}Kernel based methods}{28}{subsection.2.6.2}
+\contentsline {section}{\numberline {2.7}Adaptive Mesh Refinement}{28}{section.2.7}
 \contentsline {section}{\numberline {2.8}Medial Axis Transformation}{29}{section.2.8}
-\contentsline {subsection}{\numberline {2.8.1}Types of MAT}{31}{subsection.2.8.1}
+\contentsline {subsection}{\numberline {2.8.1}Types of MAT}{32}{subsection.2.8.1}
 \contentsline {subsubsection}{\numberline {2.8.1.1}SPAN}{32}{subsubsection.2.8.1.1}
 \contentsline {subsubsection}{\numberline {2.8.1.2}GrayMat}{32}{subsubsection.2.8.1.2}
 \contentsline {subsubsection}{\numberline {2.8.1.3}GradMat}{32}{subsubsection.2.8.1.3}
 \contentsline {subsubsection}{\numberline {2.8.1.4}MMMAT}{32}{subsubsection.2.8.1.4}
-\contentsline {subsubsection}{\numberline {2.8.1.5}QMAT}{32}{subsubsection.2.8.1.5}
-\contentsline {section}{\numberline {2.9}Knuth--Morris--Pratt Algorithm}{34}{section.2.9}
-\contentsline {section}{\numberline {2.10}Similarity join}{34}{section.2.10}
-\contentsline {section}{\numberline {2.11}Computing marginals using MapReduce}{34}{section.2.11}
+\contentsline {subsubsection}{\numberline {2.8.1.5}QMAT}{33}{subsubsection.2.8.1.5}
+\contentsline {section}{\numberline {2.9}Similarity join}{33}{section.2.9}
+\contentsline {section}{\numberline {2.10}Computing marginals using MapReduce}{33}{section.2.10}
 \contentsline {chapter}{\chapternumberline {3}Implementation}{37}{chapter.3}
 \contentsline {section}{\numberline {3.1}Output Format}{37}{section.3.1}
-\contentsline {section}{\numberline {3.2}Input Data}{38}{section.3.2}
+\contentsline {section}{\numberline {3.2}Input Data}{37}{section.3.2}
 \contentsline {subsection}{\numberline {3.2.1}Format}{38}{subsection.3.2.1}
 \contentsline {subsection}{\numberline {3.2.2}Generating Data}{38}{subsection.3.2.2}
 \contentsline {subsection}{\numberline {3.2.3}Filtering}{39}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}Chunking}{40}{subsection.3.2.4}
+\contentsline {subsection}{\numberline {3.2.4}Chunking}{39}{subsection.3.2.4}
 \contentsline {section}{\numberline {3.3}Exact pattern matching}{40}{section.3.3}
 \contentsline {subsection}{\numberline {3.3.1}Brute Force}{40}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Baeza-Yates and Navarro modification}{41}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.2}Baeza-Yates and Navarro modification}{40}{subsection.3.3.2}
 \contentsline {section}{\numberline {3.4}Approximate pattern matching}{41}{section.3.4}
 \contentsline {subsection}{\numberline {3.4.1}Brute Force}{41}{subsection.3.4.1}
 \contentsline {subsection}{\numberline {3.4.2}Fast Filter Searching}{42}{subsection.3.4.2}

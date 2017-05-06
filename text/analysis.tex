@@ -58,7 +58,7 @@ Solutions to this problem are useful and used in every day life for example in: 
 Next chapter focuses on explaining all important terms, algorithms and methods that are commonly used for solving the problem of approximate pattern matching.
 
 
-\section{Multidimensional array model}
+\section{Multidimensional array data structure}
 In contrary to usual array the multidimensional ones contain dimensions and consists of cells \cite{samet}. Cell is a tuple of attributes. To split these array into grid one can use Regularly gridded chunking where chunks have equal shape and do not overlap or Irregularly gridded chunking which is used by the RasDaMan model \cite{rasdaman}.
 To perform selection queries on these arrays there is a need to constraint the query either by dimension or attribute constraint or both of them.
 \subsection{Indexing}
@@ -411,13 +411,15 @@ Percentile operator is a bit different from operators above. it is counted as $n
 Solution of this problem can be used in the field of text searching, pattern recognition or computational biology.
 First and easiest approach is to compute the Edit distance between the pattern and data but it can be used only when the problem consists of one dimension and it computes exact pattern match. Another solution (this time for approximate match) can be performed by dynamic programming which tries to find all segments whose edit distance to pattern is maximally k, where k is greater than zero and lesser then complete match. This solution can be improved by filters.
 
-When the problem consists of two dimensions there can be uses a variety of methods. Subset of this solutions works only for string data and the main algorithms were developed by: Bird and Baker, Amir and Landau, Zhu and Takaoka, Karkkäinen and Ukkonen.
+When the problem consists of two dimensions there can be uses a variety of methods. Subset of this solutions works only for string data and the main algorithms were developed by: Bird and Baker, Amir and Landau, Zhu and Takaoka, K{\"a}rkk{\"a}inen and Ukkonen.
 
 Scientists Krithivasan and Sitalakshmi developed The KS model which given two images of the same size, the edit distance is the sum of the edit distance of the corresponding row images. When used for approximate matching the sub-image of size $MxM$ is searched into a large image of size $NxN$, where they are using a generalization of the classical one-dimensional algorithm.
 
 When fast searching under the KS model patterns and texts are rectangular. Special distance measure allows errors along rows but not along columns. Variations of this model are Exact Partitioning which is best for larger patterns, Superimposed Automata which is best for small patterns, Counting is best for small patterns and One error. There are two useful functions defined for this model. First of them is C(m,k,r) function which defines cost per text character to search r patterns of length m with k errors, and second is L(m,r) function that says the value for k/m where the one dimensional algorithm does not work anymore.
 
 Another option to solve this problem is R model where each row is treated as a single string which is compared to other rows using one dimensional algorithm. Whole rows can be inserted and deleted. Modification of this model is RC model. If this algorithms encounter more than two dimensional problem it can be functional only if it has two hypercubes to compare which are reasonably close in size.
+
+When tasked with a string pattern matching, various methods can be used for improving of the comparisons time, like for example Knuth--Morris--Pratt algorithm described in the section...reference.
 
 %\subsection{Approximate array pattern matching}
 %This is a special case on the field of searching problems where user defines template pattern, similarity measure and an error bound. The algorithm then tries to find a set of locations where the distance in the array is closer to the patter then the given error. However these algorithm have problems such as complexity or processing of big data.
@@ -427,6 +429,11 @@ To search across multiple dimension there are various algorithms to use, four of
 Second one is Fast filter for multidimensional approximate searching. This algorithm splits pattern across every dimension and then it searches sub-patterns the same way as exact solution, but all solutions found are checked by using the dynamic programming. Third is A stricter filter which says that whenever a piece appears the neighborhood can be checked. Its phase of finding possible solution positions is the same as in the previous algorithm but before checking the neighborhood with the use of dynamic programming the phase known as \textit{preverification} happens, in this phase all pieces of the pattern are checked one by one to see if they match where they should and only when finding sufficient number of pieces (i.e. size of the pattern minus errors that can happen along every dimension) that fit exactly then dynamic check can happen. Last algorithm presented is focused on adapting the filter to simpler distances. \cite{mdApproxPM}
 
 These algorithms were not implemented by anyone yet, but I will provide detailed description of my solutions in section Implementation.
+
+\subsection{Knuth--Morris--Pratt Algorithm}
+This algorithm was first presented in 1977 by scientists Knuth, Morris and Pratt \cite{kmp}. In their work they describe new algorithm usable for a string searching. The main idea of it is to remember for each position of the pattern P the length of the longest suffix P which matches to the prefix of the P. unlike the naive algorithm that after every mismatch shifts only by one position, which causes some parts of the data to be read again, KMP notices that it is possible to 
+move by more than one position, this information is gained when comparing previous characters. To be able to remember all the extra information the algorithm uses is stored in a pre-computed table.
+
 
 \section{Machine Learning Based Methods}
 Main use of Machine Learning methods is in situations when in need of data analysis because people can often make mistakes, which make it difficult to find certain solutions.
@@ -567,9 +574,6 @@ Each created tree is unique and also has distance value stored in each black nod
 \caption{QMAT tree of the Sample Image}
 \end{figure}
 
-\section{Knuth--Morris--Pratt Algorithm}
-This algorithm was first presented in 1977 by scientists Knuth, Morris and Pratt \cite{kmp}. In their work they describe new algorithm usable for a string searching. The main idea of it is to remember for each position of the pattern P the length of the longest suffix P which matches to the prefix of the P. unlike the naive algorithm that after every mismatch shifts only by one position, which causes some parts of the data to be read again, KMP notices that it is possible to 
-move by more than one position, this information is gained when comparing previous characters. To be able to remember all the extra information the algorithm uses is stored in a pre-computed table.
 
 
 \section{Similarity join}
