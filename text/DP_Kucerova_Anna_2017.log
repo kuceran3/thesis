@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.10.27)  6 MAY 2017 09:49
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.10.27)  6 MAY 2017 10:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1078,7 +1078,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <6> on input line 54.
 
-<cvut-logo-bw.pdf, id=125, 91.34125pt x 69.25874pt>
+<cvut-logo-bw.pdf, id=113, 91.34125pt x 69.25874pt>
 File: cvut-logo-bw.pdf Graphic file (type pdf)
  <use cvut-logo-bw.pdf>
 Package pdftex.def Info: cvut-logo-bw.pdf used on input line 54.
@@ -1126,20 +1126,17 @@ LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <10.95> not available
 ] [9] [10
 
 ]
-(./DP_Kucerova_Anna_2017.toc
-Underfull \vbox (badness 1077) has occurred while \output is active []
+(./DP_Kucerova_Anna_2017.toc) [11] [12] (./DP_Kucerova_Anna_2017.lof) [13
 
- [11])
-[12] (./DP_Kucerova_Anna_2017.lof) [13
+]
+[14
 
-] [14
-
-] (./DP_Kucerova_Anna_2017.lot)
-[15] [16
+] (./DP_Kucerova_Anna_2017.lot) [15] [16
 
 ] (./introduction.tex [1
 
-] [2] [3
+] [2]
+[3
 
 ]) (./analysis.tex [4] [5
 
@@ -1148,139 +1145,130 @@ Underfull \hbox (badness 10000) in paragraph at lines 42--44
 
  []
 
-[6] [7] [8] [9] [10]
-Overfull \hbox (1.90024pt too wide) in paragraph at lines 140--141
+[6] [7] <amr_obr.png, id=333, 324.412pt x 324.412pt>
+File: amr_obr.png Graphic file (type png)
+ <use amr_obr.png>
+Package pdftex.def Info: amr_obr.png used on input line 86.
+(pdftex.def)             Requested size: 162.2056pt x 162.2056pt.
+ [8]
+[9 <./amr_obr.png>] <MAT_todo.png, id=353, 275.429pt x 275.429pt>
+File: MAT_todo.png Graphic file (type png)
+
+<use MAT_todo.png>
+Package pdftex.def Info: MAT_todo.png used on input line 127.
+(pdftex.def)             Requested size: 92.25pt x 92.24931pt.
+ <MAT_done.png, id=354, 275.429pt x 275.429pt>
+File: MAT_done.png Graphic file (type png)
+
+<use MAT_done.png>
+Package pdftex.def Info: MAT_done.png used on input line 133.
+(pdftex.def)             Requested size: 92.25pt x 92.24931pt.
+ [10] <mat3d_todo.png, id=362, 323.609pt x 319.594pt>
+File: mat3d_todo.png Graphic file (type png)
+
+<use mat3d_todo.png>
+Package pdftex.def Info: mat3d_todo.png used on input line 159.
+(pdftex.def)             Requested size: 161.8041pt x 159.7966pt.
+ <mat3d_todo_numbered.png, id=363, 323.609pt x 319.594pt>
+File: mat3d_todo_numbered.png Graphic file (type png)
+
+<use mat3d_todo_numbered.png>
+Package pdftex.def Info: mat3d_todo_numbered.png used on input line 164.
+(pdftex.def)             Requested size: 161.8041pt x 159.7966pt.
+ <mat3d_strom.png, id=364, 839.938pt x 184.69pt>
+File: mat3d_strom.png Graphic file (type png)
+
+<use mat3d_strom.png>
+Package pdftex.def Info: mat3d_strom.png used on input line 169.
+(pdftex.def)             Requested size: 369.0pt x 81.13983pt.
+ [11 <./MAT_todo.png> <./MAT_done.png>] [12 <./mat3d_todo.png> <./mat3d_todo_nu
+mbered.png> <./mat3d_strom.png>] [13]
+<qmat_picture.png, id=392, 321.2pt x 321.2pt>
+File: qmat_picture.png Graphic file (type png)
+ <use qmat_picture.png>
+Package pdftex.def Info: qmat_picture.png used on input line 202.
+(pdftex.def)             Requested size: 160.59961pt x 160.59961pt.
+
+<quadtree.png, id=393, 347.699pt x 253.748pt>
+File: quadtree.png Graphic file (type png)
+ <use quadtree.png>
+Package pdftex.def Info: quadtree.png used on input line 204.
+(pdftex.def)             Requested size: 173.84908pt x 126.87367pt.
+
+<QMATtree.png, id=394, 347.699pt x 256.96pt>
+File: QMATtree.png Graphic file (type png)
+ <use QMATtree.png>
+Package pdftex.def Info: QMATtree.png used on input line 206.
+(pdftex.def)             Requested size: 173.84908pt x 128.47968pt.
+ [14] [15 <./qmat_picture.png> <./quadtree.png> <./QMATtree.png>]
+Overfull \hbox (1.90024pt too wide) in paragraph at lines 233--234
 \OT1/lmr/m/n/10.95 mar-gin learn-ing, se-quen-tial learn-ing, clus-ter-ing ana-
 lysis, semi-supervised learn-
  []
 
 
-Overfull \hbox (5.06062pt too wide) in paragraph at lines 149--150
+Overfull \hbox (5.06062pt too wide) in paragraph at lines 242--243
 []\OT1/lmr/m/n/10.95 In ma-chine learn-ing, re-cent re-search is fo-cused on le
 ver-aging data-dependent
  []
 
-[11] [12] [13] [14] [15] [16] [17] [18] [19]
-Underfull \vbox (badness 1163) has occurred while \output is active []
+[16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28]
+<marg1d.png, id=553, 460.922pt x 379.819pt>
+File: marg1d.png Graphic file (type png)
+ <use marg1d.png>
+Package pdftex.def Info: marg1d.png used on input line 485.
+(pdftex.def)             Requested size: 230.46043pt x 189.90903pt.
 
- [20]
-[21] [22] [23] <windowAM.PNG, id=512, 906.38625pt x 635.37375pt>
+<marg2d.png, id=554, 460.922pt x 381.425pt>
+File: marg2d.png Graphic file (type png)
+ <use marg2d.png>
+Package pdftex.def Info: marg2d.png used on input line 490.
+(pdftex.def)             Requested size: 230.46043pt x 190.71202pt.
+
+<windowAM.PNG, id=556, 906.38625pt x 635.37375pt>
 File: windowAM.PNG Graphic file (type png)
-
-<use windowAM.PNG>
-Package pdftex.def Info: windowAM.PNG used on input line 384.
+ <use windowAM.PNG>
+Package pdftex.def Info: windowAM.PNG used on input line 501.
 (pdftex.def)             Requested size: 221.40225pt x 155.19772pt.
- <windowAM_sum1.PNG, id=518, 1108.14pt x 501.37312pt>
+ [29]
+[30 <./marg1d.png> <./marg2d.png>]
+<windowAM_sum1.PNG, id=573, 1108.14pt x 501.37312pt>
 File: windowAM_sum1.PNG Graphic file (type png)
-
-<use windowAM_sum1.PNG>
-Package pdftex.def Info: windowAM_sum1.PNG used on input line 393.
+ <use windowAM_sum1.PNG>
+Package pdftex.def Info: windowAM_sum1.PNG used on input line 510.
 (pdftex.def)             Requested size: 258.29887pt x 116.8664pt.
- <windowAM_sum2.PNG, id=521, 976.39781pt x 521.69907pt>
+
+<windowAM_sum2.PNG, id=576, 976.39781pt x 521.69907pt>
 File: windowAM_sum2.PNG Graphic file (type png)
-
-<use windowAM_sum2.PNG>
-Package pdftex.def Info: windowAM_sum2.PNG used on input line 400.
+ <use windowAM_sum2.PNG>
+Package pdftex.def Info: windowAM_sum2.PNG used on input line 517.
 (pdftex.def)             Requested size: 232.4718pt x 124.2073pt.
- [24 <./windowAM.PNG> <./windowAM_sum1.PNG>] [25 <./windowAM_sum2.PNG>]
-Underfull \vbox (badness 2478) has occurred while \output is active []
 
- [26]
-Underfull \vbox (badness 3590) has occurred while \output is active []
-
- [27]
-<amr_obr.png, id=557, 324.412pt x 324.412pt>
-File: amr_obr.png Graphic file (type png)
- <use amr_obr.png>
-Package pdftex.def Info: amr_obr.png used on input line 477.
-(pdftex.def)             Requested size: 162.2056pt x 162.2056pt.
- [28]
-<MAT_todo.png, id=566, 275.429pt x 275.429pt>
-File: MAT_todo.png Graphic file (type png)
- <use MAT_todo.png>
-Package pdftex.def Info: MAT_todo.png used on input line 495.
-(pdftex.def)             Requested size: 92.25pt x 92.24931pt.
-
-<MAT_done.png, id=567, 275.429pt x 275.429pt>
-File: MAT_done.png Graphic file (type png)
- <use MAT_done.png>
-Package pdftex.def Info: MAT_done.png used on input line 501.
-(pdftex.def)             Requested size: 92.25pt x 92.24931pt.
- [29 <./amr_obr.png>] <mat3d_todo.png, id=573, 323.609pt x 319.594pt>
-File: mat3d_todo.png Graphic file (type png)
- <use mat3d_todo.png>
-Package pdftex.def Info: mat3d_todo.png used on input line 527.
-(pdftex.def)             Requested size: 161.8041pt x 159.7966pt.
-
-<mat3d_todo_numbered.png, id=574, 323.609pt x 319.594pt>
-File: mat3d_todo_numbered.png Graphic file (type png)
-
-<use mat3d_todo_numbered.png>
-Package pdftex.def Info: mat3d_todo_numbered.png used on input line 532.
-(pdftex.def)             Requested size: 161.8041pt x 159.7966pt.
- <mat3d_strom.png, id=575, 839.938pt x 184.69pt>
-File: mat3d_strom.png Graphic file (type png)
-
-<use mat3d_strom.png>
-Package pdftex.def Info: mat3d_strom.png used on input line 537.
-(pdftex.def)             Requested size: 369.0pt x 81.13983pt.
- [30 <./MAT_todo.png> <./MAT_done.png>] [31 <./mat3d_todo.png> <./mat3d_todo_nu
-mbered.png> <./mat3d_strom.png>] [32]
-<qmat_picture.png, id=602, 321.2pt x 321.2pt>
-File: qmat_picture.png Graphic file (type png)
- <use qmat_picture.png>
-Package pdftex.def Info: qmat_picture.png used on input line 569.
-(pdftex.def)             Requested size: 160.59961pt x 160.59961pt.
-
-<quadtree.png, id=603, 347.699pt x 253.748pt>
-File: quadtree.png Graphic file (type png)
- <use quadtree.png>
-Package pdftex.def Info: quadtree.png used on input line 571.
-(pdftex.def)             Requested size: 173.84908pt x 126.87367pt.
-
-<QMATtree.png, id=604, 347.699pt x 256.96pt>
-File: QMATtree.png Graphic file (type png)
- <use QMATtree.png>
-Package pdftex.def Info: QMATtree.png used on input line 573.
-(pdftex.def)             Requested size: 173.84908pt x 128.47968pt.
-
-<simjoin.png, id=606, 974.842pt x 600.644pt>
+[31 <./windowAM.PNG> <./windowAM_sum1.PNG>] [32 <./windowAM_sum2.PNG>] [33]
+[34] <simjoin.png, id=613, 974.842pt x 600.644pt>
 File: simjoin.png Graphic file (type png)
  <use simjoin.png>
-Package pdftex.def Info: simjoin.png used on input line 584.
+Package pdftex.def Info: simjoin.png used on input line 583.
 (pdftex.def)             Requested size: 389.92989pt x 240.25334pt.
 
-Overfull \hbox (20.92989pt too wide) in paragraph at lines 584--585
+Overfull \hbox (20.92989pt too wide) in paragraph at lines 583--584
  [][] 
  []
 
-[33] [34 <./qmat_picture.png> <./quadtree.png> <./QMATtree.png>]
-<marg1d.png, id=624, 460.922pt x 379.819pt>
-File: marg1d.png Graphic file (type png)
- <use marg1d.png>
-Package pdftex.def Info: marg1d.png used on input line 600.
-(pdftex.def)             Requested size: 230.46043pt x 189.90903pt.
+) (./implementation.tex [35 <./simjoin.png>] [36
 
-<marg2d.png, id=625, 460.922pt x 381.425pt>
-File: marg2d.png Graphic file (type png)
- <use marg2d.png>
-Package pdftex.def Info: marg2d.png used on input line 605.
-(pdftex.def)             Requested size: 230.46043pt x 190.71202pt.
-)
-(./implementation.tex [35 <./simjoin.png>] [36 <./marg1d.png> <./marg2d.png>]
+]
 LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 4.
 
 (/usr/share/texmf/tex/latex/lm/ot1lmtt.fd
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [37
-
-]
+) [37]
 Overfull \hbox (49.08134pt too wide) detected at line 35
 \OML/lmm/m/it/10.95 python generate[]Gauss:py dim length density results pSize 
 pFile output
  []
 
-[38] [39] <skipDim.PNG, id=658, 1361.83781pt x 525.46312pt>
+[38] [39] <skipDim.PNG, id=647, 1361.83781pt x 525.46312pt>
 File: skipDim.PNG Graphic file (type png)
  <use skipDim.PNG>
 Package pdftex.def Info: skipDim.PNG used on input line 78.
@@ -1295,7 +1283,7 @@ n to re-cog-nize, whether
 
 Underfull \vbox (badness 1442) has occurred while \output is active []
 
- [41 <./skipDim.PNG>] <slide.png, id=675, 407.27156pt x 293.59688pt>
+ [41 <./skipDim.PNG>] <slide.png, id=664, 407.27156pt x 293.59688pt>
 File: slide.png Graphic file (type png)
  <use slide.png>
 Package pdftex.def Info: slide.png used on input line 102.
@@ -1308,37 +1296,37 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 (./results.tex [45] [46
 
 ] [47]
-<img/baseAll.png, id=709, 1387.584pt x 685.8423pt>
+<img/baseAll.png, id=698, 1387.584pt x 685.8423pt>
 File: img/baseAll.png Graphic file (type png)
  <use img/baseAll.png>
 Package pdftex.def Info: img/baseAll.png used on input line 29.
 (pdftex.def)             Requested size: 295.20113pt x 145.90437pt.
 
-[48 <./img/baseAll.png>] <img/densLeg.png, id=717, 844.65562pt x 79.04532pt>
+[48 <./img/baseAll.png>] <img/densLeg.png, id=706, 844.65562pt x 79.04532pt>
 File: img/densLeg.png Graphic file (type png)
 
 <use img/densLeg.png>
 Package pdftex.def Info: img/densLeg.png used on input line 51.
 (pdftex.def)             Requested size: 168.92813pt x 15.80878pt.
- <img/dens0.png, id=718, 1387.584pt x 685.8423pt>
+ <img/dens0.png, id=707, 1387.584pt x 685.8423pt>
 File: img/dens0.png Graphic file (type png)
 
 <use img/dens0.png>
 Package pdftex.def Info: img/dens0.png used on input line 56.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
- <img/dens4.png, id=719, 1387.584pt x 685.8423pt>
+ <img/dens4.png, id=708, 1387.584pt x 685.8423pt>
 File: img/dens4.png Graphic file (type png)
 
 <use img/dens4.png>
 Package pdftex.def Info: img/dens4.png used on input line 60.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
- <img/dens16.png, id=720, 1387.584pt x 685.8423pt>
+ <img/dens16.png, id=709, 1387.584pt x 685.8423pt>
 File: img/dens16.png Graphic file (type png)
 
 <use img/dens16.png>
 Package pdftex.def Info: img/dens16.png used on input line 65.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
- <img/dens64.png, id=721, 1387.584pt x 685.8423pt>
+ <img/dens64.png, id=710, 1387.584pt x 685.8423pt>
 File: img/dens64.png Graphic file (type png)
 
 <use img/dens64.png>
@@ -1346,91 +1334,91 @@ Package pdftex.def Info: img/dens64.png used on input line 69.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
  [49 <./img/densLeg.png> <./img/dens0.png> <./img/dens4.png> <./img/dens16.png>
  <./img/dens64.png>]
-<img/dimLeg.png, id=733, 643.6547pt x 80.55093pt>
+<img/dimLeg.png, id=722, 643.6547pt x 80.55093pt>
 File: img/dimLeg.png Graphic file (type png)
  <use img/dimLeg.png>
 Package pdftex.def Info: img/dimLeg.png used on input line 86.
 (pdftex.def)             Requested size: 128.72865pt x 16.1099pt.
 
-<img/dim0.png, id=734, 1387.584pt x 685.8423pt>
+<img/dim0.png, id=723, 1387.584pt x 685.8423pt>
 File: img/dim0.png Graphic file (type png)
  <use img/dim0.png>
 Package pdftex.def Info: img/dim0.png used on input line 91.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
 
-<img/dim4.png, id=735, 1387.584pt x 685.8423pt>
+<img/dim4.png, id=724, 1387.584pt x 685.8423pt>
 File: img/dim4.png Graphic file (type png)
  <use img/dim4.png>
 Package pdftex.def Info: img/dim4.png used on input line 95.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
 
-<img/dim16.png, id=736, 1387.584pt x 685.8423pt>
+<img/dim16.png, id=725, 1387.584pt x 685.8423pt>
 File: img/dim16.png Graphic file (type png)
  <use img/dim16.png>
 Package pdftex.def Info: img/dim16.png used on input line 100.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
 
-<img/dim64.png, id=737, 1387.584pt x 685.8423pt>
+<img/dim64.png, id=726, 1387.584pt x 685.8423pt>
 File: img/dim64.png Graphic file (type png)
  <use img/dim64.png>
 Package pdftex.def Info: img/dim64.png used on input line 104.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
  [50 <./img/dimLeg.png> <./img/dim0.png> <./img/dim4.png> <./img/dim16.png> <./
-img/dim64.png>] <img/patLeg.png, id=749, 907.13907pt x 81.30376pt>
+img/dim64.png>] <img/patLeg.png, id=738, 907.13907pt x 81.30376pt>
 File: img/patLeg.png Graphic file (type png)
  <use img/patLeg.png>
 Package pdftex.def Info: img/patLeg.png used on input line 121.
 (pdftex.def)             Requested size: 181.42459pt x 16.26045pt.
 
-<img/pat0.png, id=750, 1387.584pt x 685.8423pt>
+<img/pat0.png, id=739, 1387.584pt x 685.8423pt>
 File: img/pat0.png Graphic file (type png)
  <use img/pat0.png>
 Package pdftex.def Info: img/pat0.png used on input line 126.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
 
-<img/pat4.png, id=751, 1387.584pt x 685.8423pt>
+<img/pat4.png, id=740, 1387.584pt x 685.8423pt>
 File: img/pat4.png Graphic file (type png)
  <use img/pat4.png>
 Package pdftex.def Info: img/pat4.png used on input line 130.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
 
-<img/pat16.png, id=752, 1387.584pt x 685.8423pt>
+<img/pat16.png, id=741, 1387.584pt x 685.8423pt>
 File: img/pat16.png Graphic file (type png)
  <use img/pat16.png>
 Package pdftex.def Info: img/pat16.png used on input line 135.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
 
-<img/pat64.png, id=753, 1387.584pt x 685.8423pt>
+<img/pat64.png, id=742, 1387.584pt x 685.8423pt>
 File: img/pat64.png Graphic file (type png)
  <use img/pat64.png>
 Package pdftex.def Info: img/pat64.png used on input line 139.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
  [51 <./img/patLeg.png> <./img/pat0.png> <./img/pat4.png> <./img/pat16.png> <./
-img/pat64.png>] <img/sizeLeg.png, id=766, 1406.25375pt x 79.79813pt>
+img/pat64.png>] <img/sizeLeg.png, id=755, 1406.25375pt x 79.79813pt>
 File: img/sizeLeg.png Graphic file (type png)
 
 <use img/sizeLeg.png>
 Package pdftex.def Info: img/sizeLeg.png used on input line 156.
 (pdftex.def)             Requested size: 281.24576pt x 15.95934pt.
- <img/size0.png, id=767, 1387.584pt x 685.8423pt>
+ <img/size0.png, id=756, 1387.584pt x 685.8423pt>
 File: img/size0.png Graphic file (type png)
 
 <use img/size0.png>
 Package pdftex.def Info: img/size0.png used on input line 161.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
- <img/size4.png, id=768, 1387.584pt x 685.8423pt>
+ <img/size4.png, id=757, 1387.584pt x 685.8423pt>
 File: img/size4.png Graphic file (type png)
 
 <use img/size4.png>
 Package pdftex.def Info: img/size4.png used on input line 165.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
- <img/size16.png, id=769, 1387.584pt x 685.8423pt>
+ <img/size16.png, id=758, 1387.584pt x 685.8423pt>
 File: img/size16.png Graphic file (type png)
 
 <use img/size16.png>
 Package pdftex.def Info: img/size16.png used on input line 170.
 (pdftex.def)             Requested size: 184.5pt x 91.19286pt.
- <img/size64.png, id=770, 1387.584pt x 685.8423pt>
+ <img/size64.png, id=759, 1387.584pt x 685.8423pt>
 File: img/size64.png Graphic file (type png)
 
 <use img/size64.png>
@@ -1510,7 +1498,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 99.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 99.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 99.
 Package rerunfilecheck Info: File `DP_Kucerova_Anna_2017.out' has not changed.
-(rerunfilecheck)             Checksum: 2E2023BCBBBBADE39E5E46A37FDA92BB;3979.
+(rerunfilecheck)             Checksum: 7A7DF0C810BA5BC241E1203C5CF5445F;3367.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1518,10 +1506,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 99.
  ) 
 Here is how much of TeX's memory you used:
- 24358 strings out of 494985
- 396401 string characters out of 6180355
- 508740 words of memory out of 5000000
- 26899 multiletter control sequences out of 15000+600000
+ 24355 strings out of 494985
+ 396378 string characters out of 6180355
+ 509830 words of memory out of 5000000
+ 26897 multiletter control sequences out of 15000+600000
  64221 words of font info for 43 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  69i,13n,94p,1215b,577s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1541,10 +1529,10 @@ ri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf
 /fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy6
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/
 type1/public/lm/lmtt10.pfb>
-Output written on DP_Kucerova_Anna_2017.pdf (81 pages, 1849628 bytes).
+Output written on DP_Kucerova_Anna_2017.pdf (81 pages, 1807433 bytes).
 PDF statistics:
- 1007 PDF objects out of 1200 (max. 8388607)
- 816 compressed objects within 9 object streams
- 266 named destinations out of 1000 (max. 500000)
- 424 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 996 PDF objects out of 1000 (max. 8388607)
+ 805 compressed objects within 9 object streams
+ 265 named destinations out of 1000 (max. 500000)
+ 400 words of extra memory for PDF output out of 10000 (max. 10000000)
 

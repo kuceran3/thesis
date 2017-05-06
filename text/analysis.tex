@@ -65,6 +65,29 @@ To perform selection queries on these arrays there is a need to constraint the q
 The main purpose of indexing is to ensure that data objects closer to each other in the data space are also closer on the storage medium which should allow faster access to the data. There are two common approaches usable and they are: nearby points will be close or far away points will be far. 
 \subsubsection{Spatial Indexing}
 Spatial indexing can be done four main styles. First of them is by using Point access methods in which belong B-tree with its variants, Multidimensional range tree, Quadtree, KD-tree and R-trees. \cite{Rtree} Second is by spatial access methods which is used for indexing more complex spatial data, e.g. Strip tree, Arc tree, MX quadtree. Third choice is to use Space filling curves which is good for maping the space into one dimension, like Peano-Hilbert, Z-order, row-prime order. Fourth choice is for Tilings of the domain space.\cite{joinFractal} This arrays usually have high value locality so the choice is to index individual cels or certain vale ranges as an object. Retrieval of the array indexing of arrays can be done by DFS, but this method is not space efficient. \cite{MDindexingBTree}
+
+When using Quadtree method on of the ways of creating it is to use the Adaptive Mesh Refinement algorithm described below.
+
+\paragraph{Adaptive Mesh Refinement}
+AMR is a function with input parameters of Interval of values, spatial selection and its output is a set of cells with its values. To be returned by the function the cell must satisfy three conditions which are:
+\begin{itemize}
+\item cell must be uncovered
+\item cell belongs to the spatial selection
+\item value of the cell belongs in the Interval of values
+\end{itemize}
+AMR structure is contains of levels and refinement ratio. \cite{AMRindexing} First (coarsest) level is a box (defined by lower and upper corner). Every level can be decomposed into a disjoint union of boxes. A cell contains a pair of information and that is level it belongs to and its position by coordinates. By uncovered it is meant that the cell lies in the last (the least coarse) level. Spatial selection needs to be interpreted within the coordinate system of the first level and a cell in the spatial selection if its coordinates belongs inside the first level selection. Interval of values is simply the interval of values that the elements inside AMR structure can have. Values returned by function are in the pair with structure $<cell, value>$.
+
+Construction of AMR Index tree consists of two phases where in the first one the object is split into boxes which create first level and then in the potential valuable boxes creates another level by splitting the box into smaller ones and so on, if the splitting is needed. In the second phase it creates a tree for every box which is covered by another (smaller) boxes.
+
+The query process itself then first of all filters boxes that do not belong in the spatial selection, then filters boxes which values are outside of desired interval of values and finally it filters covered boxes as in the result it is required to have only uncovered boxes that belong to the most refined level.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{amr_obr.png}
+\caption{Example of AMR decomposition, different levels are represented by different colors}
+\end{figure}
+
+
 \subsubsection{Bitmap Indexing}
 Bitmap indexing is very useful for its variety. It provides efficient way to evaluate logical conditions on large data sets, because of efficient implementation of the bitwise logical AND, OR and NOT. It also provides significant opportunities for compression (there are also compression algorithms that support compressed domain implementations of the bitwise logical operations and enables query processors to operate directly on compressed bitmaps without the need to decompress). Most of the newer compression algorithms use run-length encoding. Low level bitmaps can be used to index single attribute value and high level ones are used for multiple values. Structure uses binning strategy which reduces overall number of bitmaps required to index the data, but increases the number of cells later needed to verify. This is called Candidate check. 
 
@@ -87,8 +110,105 @@ Compressed spatial hierarchical bitmap index \cite{cSHB} creates a spatial hiera
 \subsubsection{Inverted Indexing}
 Unlike classical indexing methods this methods goal is to create a set of all unique values in the data where each value has a list of the documents containing it. This solutions is mainly used for databases containing text to allow full text searches. But when a new document is added the processing cost is increased. \cite{invertIndex}
 
+\subsubsection{Medial Axis Transformation}
+Before defining Medial Axis Transformation (MAT) there is first needed to explain what a \textit{disk} is.
+Disk is some specified shape or neighborhood of some specific point and it also has a radii, it belongs in the object and can not reach out of the object bounds. Object can then be defined as the union of the maximal disks it contains.
 
-\subsection{Efficient representation of multidimensional data over hierarchical domains}
+Medial axis transform of S consists of the centers of these disks together with their radii. The distance of a point x in S from S is then the length of the shortest path from x to the complement S. MAT can also be defined as the set of all points in S which do not belong to the minimal path of any other point, together with their distances. This can be imagined like constitution of a skeleton.
+
+Each object is then defined by the triple $(c, d_c, w_c)$ where $c$ is the cell, $s_c$ is the largest square in which it is contained with width $w_c$. Set of these triples is called MAT of object S. This is very compact method for simple shapes.
+
+In the field of digital pictures disks are approximated by squares and their orientation depend on the definition of grid distance, which also defines the type of the skeleton.
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+ \centering
+ \includegraphics[width=.5\linewidth]{MAT_todo.png}
+  \caption{Objects and cells that MAT algorithm will be performed at}
+  \label{fig:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+ \centering
+ \includegraphics[width=.5\linewidth]{MAT_done.png}
+ \caption{MAT for the collection of objects and cells, maximal block is anchored at the unit-size element at its center}
+\end{subfigure}
+\end{figure}
+
+Base types of distances that can be used are:
+\begin{itemize}
+\item Chess-board distance - disks are upright squares
+\item city block distance - disks are approximation of diagonal squares
+\item Euclidean distance - disks are discs, also more appropriate in continuous space
+\item Absolute value distance - disks are diamonds
+\end{itemize}
+
+When using irregular grid it can decompose the space using hyperplanes resulting in collection of blocks. By this there can be recreated irregular block sized grid, where no recursion is involved and block decomposition is handled by explicit representation. These blocks are not congruent (this will add access structure containing linear scales which indicates position of partitioning hyperplane).
+
+Representation of block decomposition can be done by using different types of quadtree or octree. Most commonly used decompositions are:
+\begin{itemize}
+\item Multicoloured quadtree - can contain more than two colours and also more block labels
+\item Binary quadtree - for black and white values only
+\item Block specified by a pair of coordinates - specified by upper left corner coordinate and size of the side
+\item Morton block - encoded by localization code (variant of Morton number), which is power of two and Morton ordering is NW, NE, SW, SE
+\item Scan of resulting representation from extreme right end to first zero valued bit
+\item Sorting the values in increasing order - Efficient pixel interleaving compression technique (EPICT)
+\end{itemize}
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{mat3d_todo.png}
+\caption{Object that block decomposition will be used on}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{mat3d_todo_numbered.png}
+\caption{Region octree block decomposition of the picture above}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{mat3d_strom.png}
+\caption{Octree block decomposition of the picture in Figure 1}
+\end{figure}
+
+Typical usage for this algorithm is at nearest neighbor finding query.
+In this task the goal is to locate neighbor of the element, which can be done by following ancestor links until finding nearest common ancestor and then descending to the leaf.
+For this task there can be used the Spaghettis algorithm \cite{spaghettis} which has only one parameter and it is the number of pivots used. As because the parameter it is clear that the algorithm is pivot based, mapping metric space to k-dimensional vector space. Its competitive algorithm is AESA (Approximating Eliminating Search Algorithm). The distance function of this algorithm has metric properties. Similarity queries solved can be divided into two categories and these are range queries (retrieve all elements which are within distance r to q) and nearest neighbor queries (retrieve the closest elements to q in U). The algorithm steps are: For each pivot calculate and save the distances to each database element. Sort each array saving the permutation with respect to the preceding array (from array to array only the successful traversals are followed). Given k intervals, define k sets (k is number of pivots). Obtain the index intervals corresponding to each set and follow each point through the pointers to find out if it falls inside all the index intervals. If a point falls inside all the index intervals it is in the intersection.
+
+There is also a modification for nearest neighbor queries by selecting unchecked point do range query and if it returns more than one element repeat with lower range else stop. In this case random selection is not totally ineffective.
+
+There is range of types of MAT algorithm, varying from different measures to data organization.
+\paragraph{SPAN}
+%\subsubsection{SPAN}
+The Spacial Piecewise Approximation by Neighborhoods is the generalized version of MAT algorithm trying to compute maximal homogeneous disks. It is the same for pictures with two values (white/black) as there it is looking for constant values. But it is expensive to compute.
+\paragraph{GrayMat}
+This algorithm uses Gray-weighted distance. To use it effectively there is a need to segment the picture into two classes. First class is marked as 0 (e.g. background of the picture without objects) and second class is labeled as non 0 (e.g. objects in the picture, not the background).
+\paragraph{GradMat}
+In this approach there can be computed a specific score for each point P of a picture based on the gradient magnitudes at all pairs of points that have P as their midpoint. These scores are high for points that lie midway between pairs of anti-parallel edges. They define a weighted "medial axis". 
+Advantage of this algorithm lies in its sensitivity to noise and irregularities in region edges.
+\paragraph{MMMAT}
+This variation of the MAT uses Min Max algorithm and is insensitive to noise. It is based on the fact that the MAT of a set S can be constructed by a process of iterative shrinking and re-expanding which corresponds with local MIN and MAX operations. When this construction is used it can be applied to gray-scale pictures. \cite{MMMAT}
+\paragraph{QMAT}
+Mentioned method is appropriate for processing pictures containing only binary values. It can be imagined that this picture is like an array of $2^n x 2^n$ pixels, which id going to be repeatedly subdivided into quadrants until blocks which consist of a single value are obtained.
+Quadtree skeleton then consists of the set of black blocks in the image satisfying three conditions and its radius. The conditions are:
+\begin{itemize}
+\item Whole image is spanned by the skeleton
+\item Elements of skeleton are the blocks with the largest distance transform values
+\item No block in the set of blocks but not in the tree requires more than one element of the tree for its subsumation.
+\end{itemize}
+Each created tree is unique and also has distance value stored in each black node (in white nodes there is no need to store it as there would be 0 value).
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{qmat_picture.png}
+\caption{Sample Image}
+\includegraphics[scale=0.5]{quadtree.png}
+\caption{Quadtree of the Sample Image}
+\includegraphics[scale=0.5]{QMATtree.png}
+\caption{QMAT tree of the Sample Image}
+\end{figure}
+
+
+\subsection{Representation of multidimensional data}
 When representing hierarchical domains there are three categories of different approaches.
 
 First approach is that there can be used the $K^n-treap$ which is an extension of $k^2-treap$ and it uses $k^n-tree$ to store its topology. It is an efficient representation of wide empty areas which splits each dimension into k equal sized parts and saves it as a structure of values and tree structure. It can be searched from root to leaves for aggregated values of a range cells using the depth-first multi-branch traversal.
@@ -104,39 +224,12 @@ This method was proposed in 1998 for approximate nearest neighbor search in high
 
 Usage of this approach is mainly in finding near-duplicate web pages, image detection, clustering and so on. 
 Main types of this method can be split into several categories.
-First of them is based on the $l_p$ distance:
-\begin{itemize}
-\item LSH with $p$-stable distributions
-\item Leech lattice LSH
-\item Spherical LSH
-\item Beyond LSH
-\end{itemize}
-Another type is split by the usage of Angle-Based distance:
-\begin{itemize}
-\item Random projection
-\item Super-bit LSH
-\item Kernel LSH
-\item LSH with learned metric
-\item Concomitant LSH
-\item Hyperplane hashing
-\end{itemize}
-Next type of Locality Sensitive Hashing is based on Hamming distance. There are also types dependent on Jaccard coefficient:
-\begin{itemize}
-\item Min-hash
-\item K-min sketch
-\item Min-max hash
-\item B-bit minwise hashing
-\item Sim-min-hash
-\end{itemize}
-Among other similarities hashes belongs:
-\begin{itemize}
-\item Rank similarity
-\item Shift invariant kernels
-\item Non-metric distance
-\item Arbitrary distance measures
-\end{itemize}
+First of them is based on the $l_p$ distance: LSH with $p$-stable distributions, Leech lattice, Spherical LSH, Beyond LSH.
+Another type is split by the usage of Angle-Based distance: Random projection, Super-bit LSH, Kernel LSH, LSH with learned metric, Concomitant LSH, Hyperplane hashing.
+Next type of Locality Sensitive Hashing is based on Hamming distance. There are also types dependent on Jaccard coefficient: Min-hash, K-min sketch, Min-max hash, B-bit minwise hashing, Sim-min-hash.
+Among other similarities hashes belongs: Rank similarity, Shift invariant kernels, Non-metric distance, Arbitrary distance measures.
 Usability of this method highly depends on the quality of hashing method used.
-\subsection{Learning to Hash}
+\subsubsection{Learning to Hash}
 Goal of this method is to learn dependencies in the data and create task-specific hash function that gives compact binary codes to achieve good search accuracy. \cite{learnHash} For achieving of this goal several sophisticated machine learning tool and algorithms have been adapted to hash functions design. Among the most important belong: boosting algorithm, distance metric learning, asymmetric binary embedding, kernel methods, compressed sensing, maximum margin learning, sequential learning, clustering analysis, semi-supervised learning, supervised learning, graph learning, ....
 
 This concept can be used for solving of hashing-based ANN search.
@@ -209,30 +302,6 @@ Generally there is a request for measures to have properties of a metric but the
 Similarity measures can be divided into five main categories depending on their domain or character. In the following sections all these categories will be described and their main methods mentioned.
 
 For more informations about similarity measures see: \cite{clusteringSimMeasure} \cite{simDissim} \cite{simMeasuresLecture}.
-\subsection{Similarity measures on arrays}
-When searching for similarity in 2D array one can use Aho-Corasick's multi-string searching algorithm \cite{ahocor} which uses a finite automaton or there can be used an algorithm by Baeza-Yates and R{\' e}gnier \cite{baeza1993fast} which uses Aho-Corasick's algorithm in every row and Knuth-Morris-Pratt algorithm on every column, searching for the row indices of the pattern. If there is only one pattern to search for there exists optimal algorithm from K{\"a}rkk{\"a}inen and Ukkonen who improved an algorithm from Baeza-Yates and R{\' e}gnier so it achieves $O(n^2 \log_\sigma (m) / m^2)$ where $\sigma$ is the size of an alphabet, $n$ is the size of a text and $m$ is the length of a pattern \cite{karkoptimal}. 
-
-On the other hand, when searching for higher number of patterns (thousands) in one string and allowing maximum of one mistake Muth and Manber proposed a solution in \cite{1erroronly}.
-
-If tasked with probabilistic 2D pattern matching algorithms are proposed by \cite{kr87} but running time ($O(n^2)$) makes it unusable in practice. Its improvement was introduced by \cite{zt89} where are two versions, one using Knuth-Morris-Pratt algorithm and second with a variant of the Boyer-Moore algorithm.
-
-If the pattern can be scaled (i.e pattern of a picture appears at a different size), there can be used the work of \cite{realscaledmatch} and \cite{alphscalematch}. And if it can be rotated some important studies are: \cite{patternrotation1,patternrotation2,patternrotation3}.
-
-\subsubsection{KS}
-Krithivasan and Sitalakshmi (KS) defined the edit distance in two dimensions as the sum of the edit distance of the corresponding row images. Using this model they search a subimage of size $m \times m$ into a large image of size $n \times n$ using a generalization of the classical one-dimensional edit distance algorithm.
-The KS model can be extended into more than two dimensions, but it allows errors along one of the dimensions only.
-\subsubsection{R,C}
-In this model, each row (column) is treated as a single string which is compared to other rows using the one-dimensional edit distance, but 
-whole rows can be inserted and deleted as well.
-Generalization of R,C model is RC model where errors can occur along rows or columns at any time. This model is much more robust and useful for more applications.
-\subsubsection{L}
-If it is needed to change both the row and column at the same time (for example when scaling) there could be used the L-shape for decomposition of the subimage and thus have the same extensions for rows and columns. When comparing L-shapes they are seen as two one-dimensional strings. L-shape string consists of the first (left) $j$ elements of the \textit{i}-th row and the first (top) $i-1$ elements of the \textit{j}-th column.
-
-This idea was first presented by Raffaele Giancarlo \cite{lshape} where it is used for building of Lsuffix tree with the use of Lstrings which can only be used for square matrices of text. Giancarlo divides the application of his solution into two sections: dictionary matching algorithms and pattern retrieval algorithms.
-
-\subsubsection{All}
-This model uses both decompositions at the same time (RC and L) computing the minimal value of all possible cases. It
-is easy to show that $KS(A,B) \geq R(A,B) \geq RC(A,B) \geq All(A,B)$ and that $L(A,B) \geq All(A,B) $ because each case is a subset of the next. On the other hand, there are cases where $RC(A,B)$ will be less than $L(A,B)$ and vice versa. 
 
 \subsection{Numeric methods}
 This methods can be used for numeric attributes where it can be treated as a vector $\bar{x}=(x_1,...,x_N)$ for attributes numbered $1,...,N$. One of the most commonly used methods are shown in the list below.
@@ -268,6 +337,32 @@ $ME(A,B)=\frac{1}{\lvert A \rvert} \sum_{i=1}^{\lvert A \rvert} max (sim(A_i, B_
 If strings contain multiple words then choose words as tokens and use internal similarity function to calculate similarity between sets of tokens as the ratio of the number of shared attributes (AND operator) and the number possessed by OR operator.
 \subsubsection{Tf-idf}
 Term frequency (tf) weight measures importance of term in a document and inverse document frequency (idf) measures importance in collection (this reflects the amount of information carried by the document). These two measures are then multiplied with some heuristic modifications.
+
+\subsection{Similarity measures on arrays}
+When searching for similarity in 2D array one can use Aho-Corasick's multi-string searching algorithm \cite{ahocor} which uses a finite automaton or there can be used an algorithm by Baeza-Yates and R{\' e}gnier \cite{baeza1993fast} which uses Aho-Corasick's algorithm in every row and Knuth-Morris-Pratt algorithm on every column, searching for the row indices of the pattern. If there is only one pattern to search for there exists optimal algorithm from K{\"a}rkk{\"a}inen and Ukkonen who improved an algorithm from Baeza-Yates and R{\' e}gnier so it achieves $O(n^2 \log_\sigma (m) / m^2)$ where $\sigma$ is the size of an alphabet, $n$ is the size of a text and $m$ is the length of a pattern \cite{karkoptimal}. 
+
+On the other hand, when searching for higher number of patterns (thousands) in one string and allowing maximum of one mistake Muth and Manber proposed a solution in \cite{1erroronly}.
+
+If tasked with probabilistic 2D pattern matching algorithms are proposed by \cite{kr87} but running time ($O(n^2)$) makes it unusable in practice. Its improvement was introduced by \cite{zt89} where are two versions, one using Knuth-Morris-Pratt algorithm and second with a variant of the Boyer-Moore algorithm.
+
+If the pattern can be scaled (i.e pattern of a picture appears at a different size), there can be used the work of \cite{realscaledmatch} and \cite{alphscalematch}. And if it can be rotated some important studies are: \cite{patternrotation1,patternrotation2,patternrotation3}.
+
+\subsubsection{KS}
+Krithivasan and Sitalakshmi (KS) defined the edit distance in two dimensions as the sum of the edit distance of the corresponding row images. Using this model they search a subimage of size $m \times m$ into a large image of size $n \times n$ using a generalization of the classical one-dimensional edit distance algorithm.
+The KS model can be extended into more than two dimensions, but it allows errors along one of the dimensions only.
+\subsubsection{R,C}
+In this model, each row (column) is treated as a single string which is compared to other rows using the one-dimensional edit distance, but 
+whole rows can be inserted and deleted as well.
+Generalization of R,C model is RC model where errors can occur along rows or columns at any time. This model is much more robust and useful for more applications.
+\subsubsection{L}
+If it is needed to change both the row and column at the same time (for example when scaling) there could be used the L-shape for decomposition of the subimage and thus have the same extensions for rows and columns. When comparing L-shapes they are seen as two one-dimensional strings. L-shape string consists of the first (left) $j$ elements of the \textit{i}-th row and the first (top) $i-1$ elements of the \textit{j}-th column.
+
+This idea was first presented by Raffaele Giancarlo \cite{lshape} where it is used for building of Lsuffix tree with the use of Lstrings which can only be used for square matrices of text. Giancarlo divides the application of his solution into two sections: dictionary matching algorithms and pattern retrieval algorithms.
+
+\subsubsection{All}
+This model uses both decompositions at the same time (RC and L) computing the minimal value of all possible cases. It
+is easy to show that $KS(A,B) \geq R(A,B) \geq RC(A,B) \geq All(A,B)$ and that $L(A,B) \geq All(A,B) $ because each case is a subset of the next. On the other hand, there are cases where $RC(A,B)$ will be less than $L(A,B)$ and vice versa. 
+
 
 \subsubsection{Vector space model}
 The procedure of this model can be split into three stages. First phase is document indexing when the words that do not describe the content are removed (in English words like: the, is) so the document will be represented only by words bearing content. Second phase is term weighting which is based entirely on single term statistics. Term weighting has three main factors and that is: term frequency factor, collection frequency and length normalization factor. These factors are then multiplied together to make the resulting weight. Third stage is the final computation of similarity coefficient which is usually determined by the cosine coefficient by measuring the angle between the document vector and the query vector. Other usable measures can be Jaccard and Dice coefficient.
@@ -369,13 +464,35 @@ Each cell must contain a data type recognizable by SciDB (e.g. native types, use
 \subsection{Sparse Data}
 When data are sparse that means that some attributes can contain 0 or null or empty value. The data can then be viewed as a sparse matrix containing 0 values at the position with no attribute or 0 valued attribute. Because of the nature of this data they offer a big opportunity for using various compressing algorithms to avoid looking through positions with none or 0 values. SciDB treats empty cells like they are non existent i.e. they are not evaluated with the count aggregate. Some Linear Algebra operators process them as 0 values and during join, sort and unpack operations they are disregarded.
 
-\subsection{ArrayLoop}
-ArrayLoop is a middle-ware system that translates queries expressed in the model into queries executable by the SciDB. It uses iterative array model, which means there is an array being modified during iteration. Termination condition of this function is represented as an AQL function. This model is interested in major steps that can be decomposed into a minor ones which gives us possibility of parallel evaluation. By major steps its meant that function operates on all cells in array and minor step is otherwise. First of all there is need to assign what to do which is done by \textit{Pi} function. Then it is needed to compute aggregate function separately for each group. After that the records are updated with the new values and this generates new subset containing the results.
+\subsection{ArrayLoop system}
+ArrayLoop is a middle-ware system that translates queries expressed in the model into queries executable by the SciDB. It uses iterative array model, which means there is an array being modified during iteration. Termination condition of this function is represented as an AQL function. This model is interested in major steps that can be decomposed into a minor ones which gives us possibility of parallel evaluation. By major steps its meant that function operates on all cells in array and minor step is otherwise. First of all there is need to assign what to do which is done by \textit{Pi} function. Then it is needed to compute aggregate function separately for each group.  This computation can be done with the help of an algorithm presented in \cite{marginals} and described in the section below \ref{marginals}. After that the records are updated with the new values and this generates new subset containing the results.
 For best usage of this algorithm was developed FixPoint function where user specifies the logic of iterative algorithm and it will translate it into ArrayLoop which prepares it into AQL and then SciDB can finally process it.
 
 To transform the function into the AQL format, ArrayLoop first automatically expands and rewrites the operation into an incremental implementation, if it is possible, and efficiently computes the last state of iterative array with the use of the updated cell in each iteration. Then it extracts (for each array chunk) the overlap area of neighboring chunks and stores this overlaps together with the original chunk which provides both the core and overlap data to the operator during processing. In the final step it identifies outlines of the structures on a low resolution array and then refines details onto high resolution arrays. \cite{arrayloop}
 
-\subsection{Efficient window aggregate method on array database system}
+\subsubsection{Computing marginals} \label{marginals}
+As a marginal of a data cube it can be understood the aggregation of the data in all those tuples that have fixed values in a subset of the dimensions of the cube. Order of the marginal is the number of dimensions over which aggregation is happening. Mapping of reducers q and replication rate r is that no reducer associated with more than q inputs and for every output there is some reducer that is associated with all the inputs that output needs for its computation. Dimensions in this case have same number of different values.
+Function C(n,m,k) defines minimum number of sets of size m out of n elements that every set of k out of the same n elements is contained in one of the sets of size m, and it is called the covering number.
+Different sets of n,m,k are handled differently but when approached with unknown values it can be solved as: one group of handles contains dimensions to m-k+1 plus any k-1 dimensions from group 2, and others are formed recursively to cover the dimensions of group 2 and have none of the members of group 1.
+This problem can be generalizes as a problem with weights of dimensions and dividing dimensions into several groups. \cite{marginals}
+
+Example of computing marginal in three dimensional space (as seen in the pictures 10 and 11):\\
+SELECT SUM(V) \\
+FROM DataCube \\
+WHERE D1 = x, D2 = y, D3 = z;\\
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{marg1d.png}
+\caption{Example of DataCube and selecting dimensions where y=2 and z=3}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{marg2d.png}
+\caption{Example of DataCube and selecting dimensions where x=2}
+\end{figure}
+
+
+\subsection{Window aggregation}
 Window aggregate executes aggregate operators over a sliding window (sub-array), as seen in the picture \ref{windowAMwin}. It has five types of operators: min, max, sum, average and percentile.
 Its computation scheme is incremental and has two stages. It tries to maintain intermediate aggregate results of the current area and reuse them. Inside the staged it moves basic window in the first N-1 dimensions, then it moves the window along with the last dimension and incrementally compute the aggregate result for each window. After all windows derived from the basic one are processed it is completed and it returns to the first step until all computation rounds of the basic windows are processed.
 
@@ -455,124 +572,6 @@ Most of the machine learning based algorithms was developed for the usage in lin
 Among the algorithms using this method belong Support Vector Machines, Principal Component Analysis, Ridge regression, Linear Adaptive Filters and others. All linear models can be changed into non-linear by using kernel functions instead of its predictors. \cite{kernel} \cite{machineLearning}
 
 
-\section{Adaptive Mesh Refinement}
-AMR is a function with input parameters of Interval of values, spatial selection and its output is a set of cells with its values. To be returned by the function the cell must satisfy three conditions which are:
-\begin{itemize}
-\item cell must be uncovered
-\item cell belongs to the spatial selection
-\item value of the cell belongs in the Interval of values
-\end{itemize}
-AMR structure is contains of levels and refinement ratio. \cite{AMRindexing} First (coarsest) level is a box (defined by lower and upper corner). Every level can be decomposed into a disjoint union of boxes. A cell contains a pair of information and that is level it belongs to and its position by coordinates. By uncovered it is meant that the cell lies in the last (the least coarse) level. Spatial selection needs to be interpreted within the coordinate system of the first level and a cell in the spatial selection if its coordinates belongs inside the first level selection. Interval of values is simply the interval of values that the elements inside AMR structure can have. Values returned by function are in the pair with structure <cell, value>.
-
-Construction of AMR Index tree consists of two phases where in the first one the object is split into boxes which create first level and then in the potential valuable boxes creates another level by splitting the box into smaller ones and so on, if the splitting is needed. In the second phase it creates a tree for every box which is covered by another (smaller) boxes.
-%1. faze:
-%rozdeli objekt na boxy, ktere tvori pocatecni vrsrtvu a pak v kazde dalsi vrtstve rozdeli nektere boxy na mensi, pokud je v danem boxu dalsi deleni treba. 
-%2. faze:
-%Vytvori strom  pro kazdy box, ktery je covered dalsimi (mensimi) boxy
-
-The query process itself then first of all filters boxes that do not belong in the spatial selection, then filters boxes which values are outside of desired interval of values and finally it filters covered boxes as in the result it is required to have only uncovered boxes that belong to the most refined level.
-
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{amr_obr.png}
-\caption{Example of AMR decomposition, different levels are represented by different colors}
-\end{figure}
-
-\section{Medial Axis Transformation}
-Before defining Medial Axis Transformation (MAT) there is first needed to explain what a \textit{disk} is.
-Disk is some specified shape or neighborhood of some specific point and it also has a radii, it belongs in the object and can not reach out of the object bounds. Object can then be defined as the union of the maximal disks it contains.
-
-Medial axis transform of S consists of the centers of these disks together with their radii. The distance of a point x in S from S is then the length of the shortest path from x to the complement S. MAT can also be defined as the set of all points in S which do not belong to the minimal path of any other point, together with their distances. This can be imagined like constitution of a skeleton.
-
-Each object is then defined by the triple $(c, d_c, w_c)$ where $c$ is the cell, $s_c$ is the largest square in which it is contained with width $w_c$. Set of these triples is called MAT of object S. This is very compact method for simple shapes.
-
-In the field of digital pictures disks are approximated by squares and their orientation depend on the definition of grid distance, which also defines the type of the skeleton.
-
-\begin{figure}
-\centering
-\begin{subfigure}{.5\textwidth}
- \centering
- \includegraphics[width=.5\linewidth]{MAT_todo.png}
-  \caption{Objects and cells that MAT algorithm will be performed at}
-  \label{fig:sub1}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
- \centering
- \includegraphics[width=.5\linewidth]{MAT_done.png}
- \caption{MAT for the collection of objects and cells, maximal block is anchored at the unit-size element at its center}
-\end{subfigure}
-\end{figure}
-
-Base types of distances that can be used are:
-\begin{itemize}
-\item Chess-board distance - disks are upright squares
-\item city block distance - disks are approximation of diagonal squares
-\item Euclidean distance - disks are discs, also more appropriate in continuous space
-\item Absolute value distance - disks are diamonds
-\end{itemize}
-
-When using irregular grid it can decompose the space using hyperplanes resulting in collection of blocks. By this there can be recreated irregular block sized grid, where no recursion is involved and block decomposition is handled by explicit representation. These blocks are not congruent (this will add access structure containing linear scales which indicates position of partitioning hyperplane).
-
-Representation of block decomposition can be done by using different types of quadtree or octree. Most commonly used decompositions are:
-\begin{itemize}
-\item Multicoloured quadtree - can contain more than two colours and also more block labels
-\item Binary quadtree - for black and white values only
-\item Block specified by a pair of coordinates - specified by upper left corner coordinate and size of the side
-\item Morton block - encoded by localization code (variant of Morton number), which is power of two and Morton ordering is NW, NE, SW, SE
-\item Scan of resulting representation from extreme right end to first zero valued bit
-\item Sorting the values in increasing order - Efficient pixel interleaving compression technique (EPICT)
-\end{itemize}
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{mat3d_todo.png}
-\caption{Object that block decomposition will be used on}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{mat3d_todo_numbered.png}
-\caption{Region octree block decomposition of the picture above}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{mat3d_strom.png}
-\caption{Octree block decomposition of the picture in Figure 1}
-\end{figure}
-
-Typical usage for this algorithm is at nearest neighbor finding query.
-In this task the goal is to locate neighbor of the element, which can be done by following ancestor links until finding nearest common ancestor and then descending to the leaf.
-For this task there can be used the Spaghettis algorithm \cite{spaghettis} which has only one parameter and it is the number of pivots used. As because the parameter it is clear that the algorithm is pivot based, mapping metric space to k-dimensional vector space. Its competitive algorithm is AESA (Approximating Eliminating Search Algorithm). The distance function of this algorithm has metric properties. Similarity queries solved can be divided into two categories and these are range queries (retrieve all elements which are within distance r to q) and nearest neighbor queries (retrieve the closest elements to q in U). The algorithm steps are: For each pivot calculate and save the distances to each database element. Sort each array saving the permutation with respect to the preceding array (from array to array only the successful traversals are followed). Given k intervals, define k sets (k is number of pivots). Obtain the index intervals corresponding to each set and follow each point through the pointers to find out if it falls inside all the index intervals. If a point falls inside all the index intervals it is in the intersection.
-
-There is also a modification for nearest neighbor queries by selecting unchecked point do range query and if it returns more than one element repeat with lower range else stop. In this case random selection is not totally ineffective.
-\subsection{Types of MAT}
-There is range of types of MAT algorithm, varying from different measures to data organization.
-\subsubsection{SPAN}
-The Spacial Piecewise Approximation by Neighborhoods is the generalized version of MAT algorithm trying to compute maximal homogeneous disks. It is the same for pictures with two values (white/black) as there it is looking for constant values. But it is expensive to compute.
-\subsubsection{GrayMat}
-This algorithm uses Gray-weighted distance. To use it effectively there is a need to segment the picture into two classes. First class is marked as 0 (e.g. background of the picture without objects) and second class is labeled as non 0 (e.g. objects in the picture, not the background).
-\subsubsection{GradMat}
-In this approach there can be computed a specific score for each point P of a picture based on the gradient magnitudes at all pairs of points that have P as their midpoint. These scores are high for points that lie midway between pairs of anti-parallel edges. They define a weighted "medial axis". 
-Advantage of this algorithm lies in its sensitivity to noise and irregularities in region edges.
-\subsubsection{MMMAT}
-This variation of the MAT uses Min Max algorithm and is insensitive to noise. It is based on the fact that the MAT of a set S can be constructed by a process of iterative shrinking and re-expanding which corresponds with local MIN and MAX operations. When this construction is used it can be applied to gray-scale pictures. \cite{MMMAT}
-\subsubsection{QMAT}
-Mentioned method is appropriate for processing pictures containing only binary values. It can be imagined that this picture is like an array of $2^n x 2^n$ pixels, which id going to be repeatedly subdivided into quadrants until blocks which consist of a single value are obtained.
-Quadtree skeleton then consists of the set of black blocks in the image satisfying three conditions and its radius. The conditions are:
-\begin{itemize}
-\item Whole image is spanned by the skeleton
-\item Elements of skeleton are the blocks with the largest distance transform values
-\item No block in the set of blocks but not in the tree requires more than one element of the tree for its subsumation.
-\end{itemize}
-Each created tree is unique and also has distance value stored in each black node (in white nodes there is no need to store it as there would be 0 value).
-
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{qmat_picture.png}
-\caption{Sample Image}
-\includegraphics[scale=0.5]{quadtree.png}
-\caption{Quadtree of the Sample Image}
-\includegraphics[scale=0.5]{QMATtree.png}
-\caption{QMAT tree of the Sample Image}
-\end{figure}
 
 
 
@@ -585,24 +584,4 @@ When applied on arrays the result dimension is union of joined arrays dimensions
 \caption{Similarity join of 2 different arrays, first 2 dimensional, second 1 dimensional with condition array $\ell$. Result is in the 3 dimensional cube.}
 \end{figure}
 
-\section{Computing marginals using MapReduce}
-As a marginal of a data cube it can be understood the aggregation of the data in all those tuples that have fixed values in a subset of the dimensions of the cube. Order of the marginal is the number of dimensions over which aggregation is happening. Mapping of reducers q and replication rate r is that no reducer associated with more than q inputs and for every output there is some reducer that is associated with all the inputs that output needs for its computation. Dimensions in this case have same number of different values.
-Function C(n,m,k) defines minimum number of sets of size m out of n elements that every set of k out of the same n elements is contained in one of the sets of size m, and it is called the covering number.
-Different sets of n,m,k are handled differently but when approached with unknown values it can be solved as: one group of handles contains dimensions to m-k+1 plus any k-1 dimensions from group 2, and others are formed recursively to cover the dimensions of group 2 and have none of the members of group 1.
-This problem can be generalizes as a problem with weights of dimensions and dividing dimensions into several groups. \cite{marginals}
-
-Example of computing marginal in three dimensional space (as seen in the pictures 10 and 11):\\
-SELECT SUM(V) \\
-FROM DataCube \\
-WHERE D1 = x, D2 = y, D3 = z;\\
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{marg1d.png}
-\caption{Example of DataCube and selecting dimensions where y=2 and z=3}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{marg2d.png}
-\caption{Example of DataCube and selecting dimensions where x=2}
-\end{figure}
 
