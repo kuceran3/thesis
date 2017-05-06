@@ -19,10 +19,6 @@ multidim. appr. pat. match. znova pripomenout o co tam jde, moc hodne textu troc
 
 treba neco o kernelovych metodach na polich
 
-mapreduce dat taky pod neco
-
-nejdriv multidimensionalni pole a pak teprve o Scidb, po SciDB usecase ze SciDB
-
 v implementaci:
 konkretnejsi, rozepsat 
 o generovani napsat nejaky pravdepodobnosti, nakreslit obrazky treba (asi jak vypadaj ty gausovky), jeste to vic rozepsat
@@ -31,10 +27,16 @@ u algoritmu rozepsat vic do detailu, pridat slozitosti
 output presunout za input, nebo na konec
 dat priklad input dat, 
 u chunkovani priklady, obrazky, 
+
+misto exact a approximate bude jedna kapitola, python vedle, pak sekce dalsi napady a blabal
+
 neni potreba v kazdym odstavci rikat ze je na to pythoni script, misto toho dat na zacatek implementace seznam vsech toolu a ze jsou v pythonu
 nebude v tech castech ani jednou slovo python
+
 nepsat ze to umi jen s intama a vsechno ostatni jsou stringy, misto toho napsat ze to umi s floatama (protoze ty to pretypuje na int a bude v pohode)
+
 popisy parametru nejsou podstatny
+
 popsat implementacni challenge - ze lokalita je zajistena chunkama a tak
 odvodit jednoduchou pametovou slozitost typu, v jednu chvili jedno vlakne nepotrebuje vic nez blabla*chunku mista
 
@@ -48,11 +50,7 @@ klidne v ty teoreticky sekci to vzit jako navaruv clanek a prevysvetlit to svyma
 to s hashovanou preverifikaci vic vysvetlit, lepe vysvetlit proc to neni vyhodny, kdybych to ja zahashovala jednou predem, tak mam super index ktery by to hodne urychlil
 proc teda nemit jeden malej index u toho pole, lip to rozvist, duvod ze jsme se otlik nezamerovali na indexy ale spis na matchovani
 
-misto exact a approximate bude jedna kapitola, python vedle, pak sekce dalsi napady a blabal
-
 4GB je malo sloupcu, ty patterny do toho nemichat, chtelo by to 1GB file mezi tim
-
-projet chybu od 0 do 128, pro ten standard file
 
 v ty velikosti dat slo o to aby to zevnitr melo 256 MB, protoze to ze tam nemam dimenze muze byt i u vstupniho filu, takze to je spatne a je potreba to bud predelat, 
 nebo si to obhajit nejak, ten dense neskaluje s dimenzionalitou stejne jako ty chunky
@@ -64,4 +62,3 @@ u tech realnych datasetu, nepsat jako duvod ze jsou moc maly
 to dynamicky programovani z toho vytahnout
 
 pak o kazdy kapitole rict, ze to je muj prinos a nikdo to jeste neudelal
-

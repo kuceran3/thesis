@@ -474,9 +474,9 @@ To transform the function into the AQL format, ArrayLoop first automatically exp
 As a marginal of a data cube it can be understood the aggregation of the data in all those tuples that have fixed values in a subset of the dimensions of the cube. Order of the marginal is the number of dimensions over which aggregation is happening. Mapping of reducers q and replication rate r is that no reducer associated with more than q inputs and for every output there is some reducer that is associated with all the inputs that output needs for its computation. Dimensions in this case have same number of different values.
 Function C(n,m,k) defines minimum number of sets of size m out of n elements that every set of k out of the same n elements is contained in one of the sets of size m, and it is called the covering number.
 Different sets of n,m,k are handled differently but when approached with unknown values it can be solved as: one group of handles contains dimensions to m-k+1 plus any k-1 dimensions from group 2, and others are formed recursively to cover the dimensions of group 2 and have none of the members of group 1.
-This problem can be generalizes as a problem with weights of dimensions and dividing dimensions into several groups. \cite{marginals}
+This problem can be generalized as a problem with weights of dimensions and dividing dimensions into several groups. \cite{marginals}
 
-Example of computing marginal in three dimensional space (as seen in the pictures 10 and 11):\\
+Example of computing marginal in three dimensional space (as seen in the pictures \ref{margin1} and \ref{margin2}):\\
 SELECT SUM(V) \\
 FROM DataCube \\
 WHERE D1 = x, D2 = y, D3 = z;\\
@@ -484,11 +484,13 @@ WHERE D1 = x, D2 = y, D3 = z;\\
 \centering
 \includegraphics[scale=0.5]{marg1d.png}
 \caption{Example of DataCube and selecting dimensions where y=2 and z=3}
+\label{margin1}
 \end{figure}
 \begin{figure}
 \centering
 \includegraphics[scale=0.5]{marg2d.png}
 \caption{Example of DataCube and selecting dimensions where x=2}
+\label{margin2}
 \end{figure}
 
 

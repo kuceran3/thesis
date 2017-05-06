@@ -630,6 +630,7 @@ vector<vector<unsigned int> *> find(Reader * cache, void * * hashP, void * * dat
 			++it;
 		}
 	}
+
 	sec = chrono::system_clock::now() - start;
     cout << "Preverification took " << sec.count() << " seconds\n";
     /*for (unsigned int i = 0; i < res.size(); ++i) {
