@@ -5,45 +5,45 @@ The style file: iso690.bst
 Database file #1: bibliography.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Warning--empty chapter and pages in simDissim
-You've used 69 entries,
+You've used 77 entries,
             3146 wiz_defined-function locations,
-            1109 strings with 17090 characters,
-and the built_in function-call counts, 38588 in all, are:
-= -- 3153
-> -- 1087
-< -- 104
-+ -- 567
-- -- 313
-* -- 2119
-:= -- 4254
-add.period$ -- 207
-call.type$ -- 69
-change.case$ -- 343
+            1150 strings with 18222 characters,
+and the built_in function-call counts, 43421 in all, are:
+= -- 3546
+> -- 1213
+< -- 117
++ -- 632
+- -- 349
+* -- 2374
+:= -- 4779
+add.period$ -- 231
+call.type$ -- 77
+change.case$ -- 387
 chr.to.int$ -- 0
-cite$ -- 70
-duplicate$ -- 3556
-empty$ -- 3405
-format.name$ -- 366
-if$ -- 8577
+cite$ -- 78
+duplicate$ -- 4008
+empty$ -- 3840
+format.name$ -- 407
+if$ -- 9662
 int.to.chr$ -- 0
-int.to.str$ -- 69
-missing$ -- 824
-newline$ -- 230
-num.names$ -- 138
-pop$ -- 1746
+int.to.str$ -- 77
+missing$ -- 926
+newline$ -- 254
+num.names$ -- 154
+pop$ -- 1968
 preamble$ -- 1
-purify$ -- 284
+purify$ -- 318
 quote$ -- 0
-skip$ -- 1629
+skip$ -- 1843
 stack$ -- 0
-substring$ -- 1950
-swap$ -- 2131
-text.length$ -- 104
+substring$ -- 2220
+swap$ -- 2398
+text.length$ -- 117
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 264
+type$ -- 296
 warning$ -- 1
-while$ -- 290
-width$ -- 71
-write$ -- 666
+while$ -- 329
+width$ -- 79
+write$ -- 740
 (There was 1 warning)

@@ -1,23 +1,6 @@
-v problem specu dat priklady
-
-ze specifikace dat odkazy do textu kde se to dal rozviji
-
-!!
 na konci introduction rozepsat do detailu co je cil kazdy kapitoly, odstavec skoro o kazdym
-!!
 
-v similarity measures proc jsme tak preskocili do vektoru najednou, na zacatek dopsat proc zase tohle
 vsude dopisovat co se tam bude dit
-
-obhajit si domain-dependent sekci simil measures
-neco jako ze jsou measures pro vsechny tyhle kategorie a ja se zamerila na tohle
-
-binarni format presunout do apendixu, mozna ze ty posledni measures taky
-scidb trochu rozsekcovat je to moc velkej blok textu
-
-multidim. appr. pat. match. znova pripomenout o co tam jde, moc hodne textu trochu rozsekat
-
-treba neco o kernelovych metodach na polich
 
 v implementaci:
 konkretnejsi, rozepsat 

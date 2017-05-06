@@ -7,6 +7,11 @@
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\biburl{#2}}
 
+\bibitem{mdApproxPM}
+Baeza-Yates, R.; Navarro, G. New models and algorithms for multidimensional
+  approximate pattern matching. \emph{J. Discret. Algorithms}, volume~1, no.~1,
+  2000: pp. 21--49.
+
 \bibitem{windowAggr}
 Jiang, L.; Kawashima, H.; et al. Efficient Window Aggregate Method on Array
   Database System. \emph{Journal of Information Processing}, volume~24, no.~6,
@@ -48,15 +53,47 @@ Papadopoulos, A.~N.; Manolopoulos, Y. Multiple range query optimization in
   spatial databases. In \emph{East European Symposium on Advances in Databases
   and Information Systems}, Springer, 1998, pp. 71--82.
 
+\bibitem{kernelArray}
+Evgeniou, T.; Micchelli, C.~A.; et al. Learning multiple tasks with kernel
+  methods. \emph{Journal of Machine Learning Research}, volume~6, no. Apr,
+  2005: pp. 615--637.
+
+\bibitem{minhashuse}
+Broder, A.~Z. On the resemblance and containment of documents. In
+  \emph{Compression and Complexity of Sequences 1997. Proceedings}, IEEE, 1997,
+  pp. 21--29.
+
+\bibitem{simvzorecky}
+Cha, S.-H. Comprehensive survey on distance/similarity measures between
+  probability density functions. \emph{City}, volume~1, no.~2, 2007: p.~1.
+
+\bibitem{hamming}
+Norouzi, M.; Fleet, D.~J.; et al. Hamming distance metric learning. In
+  \emph{Advances in neural information processing systems}, 2012, pp.
+  1061--1069.
+
 \bibitem{ubtRangeQuery}
 Skopal, T.; Kr{\'a}tk{\`y}, M.; et al. A new range query algorithm for
   Universal B-trees. \emph{Information Systems}, volume~31, no.~6, 2006: pp.
   489--511.
 
-\bibitem{mdApproxPM}
-Baeza-Yates, R.; Navarro, G. New models and algorithms for multidimensional
-  approximate pattern matching. \emph{J. Discret. Algorithms}, volume~1, no.~1,
-  2000: pp. 21--49.
+\bibitem{editDist}
+Ukkonen, E. On approximate string matching. In \emph{Foundations of Computation
+  Theory}, Springer, 1983, pp. 487--495.
+
+\bibitem{tokenDist}
+Wang, J.; Li, G.; et al. Fast-join: An efficient method for fuzzy token
+  matching based string similarity join. In \emph{Data Engineering (ICDE), 2011
+  IEEE 27th International Conference on}, IEEE, 2011, pp. 458--469.
+
+\bibitem{hybrmeasure}
+Cohen, W.; Ravikumar, P.; et al. A comparison of string metrics for matching
+  names and records. In \emph{Kdd workshop on data cleaning and object
+  consolidation}, volume~3, 2003, pp. 73--78.
+
+\bibitem{kernelstring}
+Hofmann, T.; Sch{\"o}lkopf, B.; et al. Kernel methods in machine learning.
+  \emph{The annals of statistics}, 2008: pp. 1171--1220.
 
 \bibitem{sim2Dstrings}
 Baeza-Yates, R.~A. Similarity in two-dimensional strings. In
