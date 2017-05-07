@@ -1,6 +1,6 @@
 \setsecnumdepth{part}
 \chapter{Conclusion}
-The goal of this work was to get to know with the various methods of solving pattern matching problem, because of its diverse usability in the modern databases. Solution of this problem can be split into two categories based on the allowance of mistakes in the search. According to this criterion it can be called approximate pattern matching or exact pattern matching, where this work was more focused on solving of the approximate version as it can have numerous advantages like possibility of searching with spelling errors or partially specified search. 
+The goal of this work was to get to know with the various methods of solving pattern matching problem, because of its diverse usability in the modern databases. Common solutions of this problem can be split into two categories based on the allowance of mistakes in the search. According to this criterion it can be called exact pattern matching or approximate pattern matching, where this work was more focused on solving of the approximate version as it can have numerous advantages. 
 
 As was presented in the analysis part of the work majority of the research is focusing primarily on one or two dimensional data and algorithms processing higher dimensional spaces are usually low dimensional algorithms generalized into high dimensional spaces or methods reducing the dimensionality of both data and pattern. 
 
@@ -8,7 +8,8 @@ Outcome of this work is an algorithm allowing of approximate pattern matching in
 
 The algorithms were measured using pseudo randomly generated data, but also using some real world datasets. Finally eight algorithms were implemented, two for solution of exact pattern matching (brute force and Exact Multidimensional Pattern Matching algorithm) and six for approximate pattern matching, where two of the methods by Navarro--Baeza-Yates were only proposed (Fast Filter for Searching, Stricter Filter) but not implemented until now. Then there is one brute solution and three methods using hashes.
 
-Due to the properties of EPM its solutions achieved lower times than APM approaches, however they were not the main concern of this work so they were not researched further.
-FFS and SF algorithms proved to be about twice as fast as APM brute solution in average case.
+Due to the properties of exact pattern matching its solutions achieved lower times than approximate approaches, however they were not the main concern of this work so they were not researched further.
+FFS and SF algorithms proved to be about twice as fast as approximate brute solution in average case.
 HS algorithm proved to be worse than other non-brute APM solutions, because it hashes data every time the hash is needed, while the HS1 and HR algorithms hash the data only once which can improve the time needed for finding of the possible solutions to preverification and dynamic check, because of the possible reusability of the hashed value. This approach is highly dependent on the quality of the used hashing function as the collision rate hinges on it.
 
+A weak point of the implementation is a work with the sparse data, although it is usable even on the data with arbitrary sparsity. However for the data with very low density so it could be a goal of the future work. 

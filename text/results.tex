@@ -150,11 +150,11 @@ Stricter Filter algorithm is always slightly better than FFS because preverifica
 \end{figure}
 
 \subsection{Dependency on size of dataset}
-In the last figure \ref{fig_sizeRes} there can be seen comparison of standard (orange) file and file of the size 4 GB but measured twice, first with the pattern of size $64\times64\times64$ and second with the standard pattern (size $16\times16\times16$), the large pattern was selected so the ratio of pattern size and file size is more similar. Also this graphs are displayed with logarithmic scale due to the large difference in time. 
+In the figure \ref{fig_sizeRes} there can be seen comparison of standard (orange) file and file of the size 4 GB but measured twice, first with the pattern of size $64\times64\times64$ and second with the standard pattern (size $16\times16\times16$), the large pattern was selected so the ratio of pattern size and file size is more similar. Also these figures are displayed with logarithmic scale due to the large difference in time. 
 
 As the file contains approximately 18 times more positions to check the time is about 20 times longer for the bigger file. This is probably due to the increased need of handling the cache and also may be affected by the number of found partial solutions because the file contains just pseudo randomly generated data.
 
-The difference in the pattern size proved to have only a slight effect on the final reached times.
+An effect of a difference in the pattern size, which was not tested by itself, is also visible in these figures. As expected it has only a slight effect on the final times and probably mostly due to inconsistencies in number of found positions due to the nature of the data.
 
 \begin{figure}
 \begin{minipage}{\linewidth}
@@ -190,9 +190,23 @@ In all the figures mentioned in previous sections, there can be seen that concer
 
 Both of the Navaro and Baeza-Yates algorithms act very similarly in a way that their run time decreases the bigger the error rate. This is caused by decreased find time as it needs to compare smaller parts. The drawback of this algorithms in this part could be in finding more solutions but this is not the case.
 
-In the solutions using hashing the find parts behave the same as for previous solutions in term of increasing the speed however the number of returned possible solutions to preverify is considerably higher, so the overall speed of find parts increases while the preverification decreases with the higher error rate. In the HR algorithm the number of collisions is so high that the preverification cost gradually outweighs every other part.
+In the solutions using hashing the find parts behave the same as for previous solutions in term of increasing the speed however the number of returned possible solutions to preverify is considerably higher, so the overall speed of find parts increases while the preverification decreases with the higher error rate. In the HR algorithm the number of collisions is so high that the preverification cost gradually outweighs every other part. This can be seen in the figures: \ref{fig_errA} which shows the the change of computation time based on the error rate and figure \ref{fig_errF} showing the difference between hashed and non-hashed find phase. The noticeable changes are caused by the change of $j$. That is because there is the same number of comparisons but smaller parts to compare.
 
 Even though the $j$ number is optimized for the FFS and SF algorithms the usage of hashing changes some dependencies and thus the change of the calculation of $j$ could offer better scaling.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{img/errorAll}
+\caption{Dependency of computation time of selected algorithms on error rate using the standard input file .}
+\label{fig_errA}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{img/errorFind}
+\caption{Computation time of only the find phase.}
+\label{fig_errF}
+\end{figure}
 
 \section{Memory usage} \label{memoryuse}
 Implemented solutions uses a cache like memory system with the size of $C~=~max(64, m)$ where $m$ is the size of the pattern. This means that when the requested file is not in the memory it will be loaded into cache and if the cache is full the oldest data are discarded. 
@@ -202,3 +216,4 @@ When taking brute solution as a base line that uses only cache and pattern memor
 \subsection{Binary chunking}
 Performed data chunking creates one meta file, which contains the header presented in the implementation and an information needed to recognize the bin files containing the actual data, which are also created by chunking. Last, and usually the largest, file is a mask file. The size of this file is the main reason for low density data files to be less effectively chunked. As the mask always contains a bit for each cell, its size for the file with 2 \% density is more than 70 \% of the total size of chunked data. On the other hand, in the dense file the mask only takes up about 10 \% of the total size. 
 
+Memory usage of algorithms using chunked data is $\mathcal{O}(N*C)$.

@@ -126,15 +126,16 @@ In the field of digital pictures disks are approximated by squares and their ori
 
 \begin{figure}
 \centering
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}[t]{.48\textwidth}
  \centering
- \includegraphics[width=.5\linewidth]{MAT_todo.png}
+ \includegraphics[width=.8\linewidth]{MAT_todo.png}
   \caption{Objects and cells that MAT algorithm will be performed at}
   \label{fig:sub1}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\hfill%
+\begin{subfigure}[t]{.48\textwidth}
  \centering
- \includegraphics[width=.5\linewidth]{MAT_done.png}
+ \includegraphics[width=.8\linewidth]{MAT_done.png}
  \caption{MAT for the collection of objects and cells, maximal block is anchored at the unit-size element at its center}
 \end{subfigure}
 \end{figure}
@@ -149,7 +150,7 @@ Base types of distances that can be used are:
 
 When using irregular grid it can decompose the space using hyperplanes resulting in collection of blocks. By this there can be recreated irregular block sized grid, where no recursion is involved and block decomposition is handled by explicit representation. These blocks are not congruent (this will add access structure containing linear scales which indicates position of partitioning hyperplane).
 
-Representation of block decomposition can be done by using different types of quadtree or octree. Most commonly used decompositions are:
+Representation of block decomposition can be done by using different types of quadtree or octree (\ref{octree}). Most commonly used decompositions are:
 \begin{itemize}
 \item Multicoloured quadtree - can contain more than two colours and also more block labels
 \item Binary quadtree - for black and white values only
@@ -161,19 +162,45 @@ Representation of block decomposition can be done by using different types of qu
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.5]{mat3d_todo.png}
-\caption{Object that block decomposition will be used on}
-\end{figure}
-\begin{figure}
+\begin{subfigure}[t]{.48\textwidth}
+ \centering
+ \includegraphics[width=.8\linewidth]{mat3d_todo}
+  \caption{Object that block decomposition will be used on}
+  \label{fig:sub1}
+\end{subfigure}%
+\hfill%
+\begin{subfigure}[t]{.48\textwidth}
+ \centering
+ \includegraphics[width=0.8\textwidth]{mat3d_todo_other2}
+ \caption{Region octree block decomposition of the picture above}
+\end{subfigure}
+
+\vspace{10px}
+\begin{subfigure}{\textwidth}
 \centering
-\includegraphics[scale=0.5]{mat3d_todo_other2.png}
-\caption{Region octree block decomposition of the picture above}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=\textwidth]{mat3d_strom.png}
+\includegraphics[width=\textwidth]{mat3d_strom}
 \caption{Octree block decomposition of the picture in Figure 1}
+\end{subfigure}
+\label{octree}
+\caption{Example of octree decomposition.}
 \end{figure}
+
+%\begin{figure}
+%\centering
+%\includegraphics[scale=0.5]{mat3d_todo.png}
+%\caption{Object that block decomposition will be used on}
+%\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[scale=0.5]{mat3d_todo_other2.png}
+%\caption{Region octree block decomposition of the picture above}
+%\end{figure}
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=\textwidth]{mat3d_strom.png}
+%\caption{Octree block decomposition of the picture in Figure 1}
+%\end{figure}
 For more informations about typical usage and types of MAT see \ref{appendixMAT}.
 
 

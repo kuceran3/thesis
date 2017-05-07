@@ -6,7 +6,8 @@
 \addvspace {10pt}
 \contentsline {table}{\numberline {2.1}{\ignorespaces Example 2D array data structure\relax }}{6}{table.caption.4}
 \addvspace {10pt}
-\contentsline {table}{\numberline {3.1}{\ignorespaces Example of hashing.\relax }}{43}{table.caption.20}
+\contentsline {table}{\numberline {3.1}{\ignorespaces Example of Naive SimHash.\relax }}{41}{table.caption.19}
+\contentsline {table}{\numberline {3.2}{\ignorespaces Example of Modified LSB hashing.\relax }}{42}{table.caption.20}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}

@@ -5,31 +5,30 @@
 \addvspace {10pt}
 \addvspace {10pt}
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Example of AMR decomposition, different levels are represented by different colors\relax }}{9}{figure.caption.5}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Object that block decomposition will be used on\relax }}{12}{figure.caption.7}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Region octree block decomposition of the picture above\relax }}{12}{figure.caption.8}
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Octree block decomposition of the picture in Figure 1\relax }}{12}{figure.caption.9}
-\contentsline {figure}{\numberline {2.6}{\ignorespaces KS and RC error models \cite {mdApproxPM}\relax }}{20}{figure.caption.10}
-\contentsline {figure}{\numberline {2.7}{\ignorespaces Example of DataCube and selecting dimensions where y=2 and z=3\relax }}{26}{figure.caption.11}
-\contentsline {figure}{\numberline {2.8}{\ignorespaces Example of DataCube and selecting dimensions where x=2\relax }}{27}{figure.caption.12}
-\contentsline {figure}{\numberline {2.9}{\ignorespaces Example of a sliding window \cite {windowAggr}. \relax }}{27}{figure.caption.13}
-\contentsline {figure}{\numberline {2.10}{\ignorespaces Initialization of SUM window \cite {windowAggr}.\relax }}{28}{figure.caption.14}
-\contentsline {figure}{\numberline {2.11}{\ignorespaces Processing of a new unit and updating sum-list \cite {windowAggr}.\relax }}{28}{figure.caption.15}
-\contentsline {figure}{\numberline {2.12}{\ignorespaces Example of matching of KMP algorithm \cite {stringJewels}. \relax }}{31}{figure.caption.16}
-\contentsline {figure}{\numberline {2.13}{\ignorespaces Similarity join of 2 different arrays, first 2 dimensional, second 1 dimensional with condition array $\ell $. Result is in the 3 dimensional cube.\relax }}{33}{figure.caption.17}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Example of octree decomposition.\relax }}{12}{figure.caption.7}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces KS and RC error models \cite {mdApproxPM}\relax }}{19}{figure.caption.8}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Example of DataCube and selecting dimensions where y=2 and z=3\relax }}{26}{figure.caption.9}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Example of DataCube and selecting dimensions where x=2\relax }}{26}{figure.caption.10}
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Example of a sliding window \cite {windowAggr}. \relax }}{27}{figure.caption.11}
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Initialization of SUM window \cite {windowAggr}.\relax }}{27}{figure.caption.12}
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Processing of a new unit and updating sum-list \cite {windowAggr}.\relax }}{28}{figure.caption.13}
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Example of matching of KMP algorithm \cite {stringJewels}. \relax }}{30}{figure.caption.14}
+\contentsline {figure}{\numberline {2.11}{\ignorespaces Similarity join of 2 different arrays, first 2 dimensional, second 1 dimensional with condition array $\ell $. Result is in the 3 dimensional cube.\relax }}{32}{figure.caption.15}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Illustration of comparison between pattern and data. \cite {mdApproxPM}\relax }}{39}{figure.caption.18}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Example of sliding window.\relax }}{40}{figure.caption.19}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Example of the space filling with Gaussian functions. \cite {mdApproxPM}\relax }}{35}{figure.caption.16}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Illustration of comparison between pattern and data. \cite {mdApproxPM}\relax }}{37}{figure.caption.17}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Example of sliding window.\relax }}{39}{figure.caption.18}
 \addvspace {10pt}
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Computation time for all implemented algorithms using the standard input file.\relax }}{46}{figure.caption.21}
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Comparison on varying density of data\relax }}{48}{figure.caption.22}
 \contentsline {figure}{\numberline {4.3}{\ignorespaces Comparison on varying number of dimensions.\relax }}{49}{figure.caption.23}
 \contentsline {figure}{\numberline {4.4}{\ignorespaces Comparison using varying frequency of pattern occurrence.\relax }}{50}{figure.caption.24}
 \contentsline {figure}{\numberline {4.5}{\ignorespaces Test on 4GB data file.\relax }}{51}{figure.caption.25}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Dependency of computation time of selected algorithms on error rate using the standard input file .\relax }}{52}{figure.caption.26}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Computation time of only the find phase.\relax }}{52}{figure.caption.27}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {D.1}{\ignorespaces Sample Image for QMAT processing.\relax }}{71}{figure.caption.30}
-\contentsline {figure}{\numberline {D.2}{\ignorespaces Quadtree of the Sample Image\relax }}{71}{figure.caption.30}
-\contentsline {figure}{\numberline {D.3}{\ignorespaces QMAT tree of the Sample Image\relax }}{71}{figure.caption.30}
+\contentsline {figure}{\numberline {D.1}{\ignorespaces Example of QMAT processing.\relax }}{73}{figure.caption.32}

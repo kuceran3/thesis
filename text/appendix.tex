@@ -51,14 +51,30 @@ Quadtree skeleton then consists of the set of black blocks in the image satisfyi
 \item Elements of skeleton are the blocks with the largest distance transform values
 \item No block in the set of blocks but not in the tree requires more than one element of the tree for its subsumation.
 \end{itemize}
-Each created tree is unique and also has distance value stored in each black node (in white nodes there is no need to store it as there would be 0 value).
+Each created tree is unique and also has distance value stored in each black node (in white nodes there is no need to store it as there would be 0 value). Example of this method is in this figure \ref{qmat}.
+
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.5]{qmat_picture.png}
+\begin{subfigure}{\textwidth}
+\centering
+\includegraphics[width=0.5\textwidth]{qmat_picture}
 \caption{Sample Image for QMAT processing.}
-\includegraphics[scale=0.5]{quadtree.png}
-\caption{Quadtree of the Sample Image}
-\includegraphics[scale=0.5]{QMATtree.png}
-\caption{QMAT tree of the Sample Image}
+\end{subfigure}
+\vspace{10px}
+
+\begin{subfigure}[t]{.48\textwidth}
+ \centering
+ \includegraphics[width=.9\linewidth]{quadtree}
+  \caption{Quadtree of the Sample Image.}
+\end{subfigure}%
+\hfill%
+\begin{subfigure}[t]{.48\textwidth}
+ \centering
+ \includegraphics[width=0.9\textwidth]{QMATtree}
+ \caption{QMAT tree of the Sample Image.}
+\end{subfigure}
+\caption{Example of QMAT processing.}
+\label{qmat}
 \end{figure}
+
