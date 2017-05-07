@@ -61,31 +61,36 @@
 \contentsline {subsection}{\numberline {2.7.2}Kernel based methods}{31}{subsection.2.7.2}
 \contentsline {section}{\numberline {2.8}Similarity join}{32}{section.2.8}
 \contentsline {chapter}{\chapternumberline {3}Implementation}{35}{chapter.3}
-\contentsline {section}{\numberline {3.1}Output Format}{35}{section.3.1}
-\contentsline {section}{\numberline {3.2}Input Data}{35}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Format}{36}{subsection.3.2.1}
-\contentsline {subsection}{\numberline {3.2.2}Generating Data}{36}{subsection.3.2.2}
-\contentsline {subsection}{\numberline {3.2.3}Filtering}{37}{subsection.3.2.3}
-\contentsline {subsection}{\numberline {3.2.4}Chunking}{37}{subsection.3.2.4}
-\contentsline {section}{\numberline {3.3}Exact pattern matching}{38}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Brute Force}{38}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Baeza-Yates and Navarro modification}{38}{subsection.3.3.2}
-\contentsline {section}{\numberline {3.4}Approximate pattern matching}{39}{section.3.4}
-\contentsline {subsection}{\numberline {3.4.1}Brute Force}{39}{subsection.3.4.1}
-\contentsline {subsection}{\numberline {3.4.2}Fast Filter Searching}{40}{subsection.3.4.2}
-\contentsline {subsection}{\numberline {3.4.3}Stricter Filter}{41}{subsection.3.4.3}
-\contentsline {subsection}{\numberline {3.4.4}Hashed Stricter Filter }{41}{subsection.3.4.4}
-\contentsline {section}{\numberline {3.5}Possible modifications}{43}{section.3.5}
+\contentsline {section}{\numberline {3.1}Input Data}{35}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Real datasets}{35}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}Format}{36}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}Generating Data}{36}{subsection.3.1.3}
+\contentsline {subsection}{\numberline {3.1.4}Filtering}{37}{subsection.3.1.4}
+\contentsline {subsection}{\numberline {3.1.5}Chunking}{37}{subsection.3.1.5}
+\contentsline {section}{\numberline {3.2}Output Format}{37}{section.3.2}
+\contentsline {section}{\numberline {3.3}Pattern Matching}{37}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Exact pattern matching}{38}{subsection.3.3.1}
+\contentsline {subsubsection}{\numberline {3.3.1.1}Brute Force}{38}{subsubsection.3.3.1.1}
+\contentsline {subsubsection}{\numberline {3.3.1.2}Baeza-Yates and Navarro modification}{38}{subsubsection.3.3.1.2}
+\contentsline {subsection}{\numberline {3.3.2}Approximate pattern matching}{38}{subsection.3.3.2}
+\contentsline {subsubsection}{\numberline {3.3.2.1}Brute Force}{39}{subsubsection.3.3.2.1}
+\contentsline {subsubsection}{\numberline {3.3.2.2}Fast Filter Searching}{39}{subsubsection.3.3.2.2}
+\contentsline {subsubsection}{\numberline {3.3.2.3}Stricter Filter}{41}{subsubsection.3.3.2.3}
+\contentsline {subsubsection}{\numberline {3.3.2.4}Hashed Stricter Filter }{41}{subsubsection.3.3.2.4}
+\contentsline {paragraph}{\numberline {3.3.2.4.1}Naive SimHash}{42}{paragraph.3.3.2.4.1}
+\contentsline {paragraph}{\numberline {3.3.2.4.2}SimHash}{42}{paragraph.3.3.2.4.2}
+\contentsline {paragraph}{\numberline {3.3.2.4.3}LSB Hash}{42}{paragraph.3.3.2.4.3}
+\contentsline {section}{\numberline {3.4}Possible modifications}{43}{section.3.4}
 \contentsline {chapter}{\chapternumberline {4}Results}{45}{chapter.4}
-\contentsline {section}{\numberline {4.1}Time complexity}{45}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Dependency on data density}{46}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Dependency on dimensionality}{47}{subsection.4.1.2}
-\contentsline {subsection}{\numberline {4.1.3}Dependency on frequency of pattern occurrence}{48}{subsection.4.1.3}
-\contentsline {subsection}{\numberline {4.1.4}Dependency on input file size}{49}{subsection.4.1.4}
-\contentsline {subsection}{\numberline {4.1.5}Dependency on error rate}{50}{subsection.4.1.5}
-\contentsline {section}{\numberline {4.2}Memory usage}{51}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Binary chunking}{51}{subsection.4.2.1}
-\contentsline {section}{\numberline {4.3}Real datasets}{52}{section.4.3}
+\contentsline {section}{\numberline {4.1}Problem dimensionality}{45}{section.4.1}
+\contentsline {section}{\numberline {4.2}Time complexity}{46}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Dependency on data density}{47}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Dependency on dimensionality}{47}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Dependency on frequency of pattern occurrence}{48}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Dependency on size of dataset}{49}{subsection.4.2.4}
+\contentsline {subsection}{\numberline {4.2.5}Dependency on error rate}{50}{subsection.4.2.5}
+\contentsline {section}{\numberline {4.3}Memory usage}{51}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Binary chunking}{52}{subsection.4.3.1}
 \contentsline {chapter}{Conclusion}{53}{chapter*.26}
 \contentsline {chapter}{Bibliography}{55}{section*.28}
 \contentsline {appendix}{\chapternumberline {A}Acronyms}{63}{appendix.A}
