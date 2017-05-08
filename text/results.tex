@@ -2,14 +2,15 @@
 This chapter will focus on presenting and discussing the results of all eight implementations (two for exact pattern matching and 6 for approximate pattern matching). First part \ref{problemdim} is focused on explaining all factors that the time could be dependent on. Next part \ref{timecomplex} will discuss measured times and its dependency on size and density of the file, number of dimensions and number of pattern matches. For this task, eight testing files were generated using the Gaussian generating script \ref{generating}. The last part \ref{memoryuse} will focus on explaining memory usage and the chunking algorithm.
 
 \section{Problem dimensionality} \label{problemdim}
-Among the dimensions of the problem which could be worth measuring belong: size of the dataset and pattern, density of dataset, number of dimensions, error rate, algorithm used, size of the chunks and number of occurrences of the pattern in the data.
+Among the dimensions of the problem which could be worth measuring belong: size of the dataset and pattern, density of dataset, number of dimensions, number of errors allowed, algorithm used, size of the chunks and number of occurrences of the pattern in the data.
 
-From all of these categories five were chosen for testing and they are: size of the dataset, density, number of dimensions, occurrences of the pattern and error rate. For each of the categories, all implemented solutions were measured. For the sake of the testing eight files were created with specific values based on these categories. One of the files was called standard file and is referenced in the text also by the name standard file. This standard file was compared with all other files and its parameters were: 
+From all of these categories five were chosen for testing and they are: size of the dataset, density, number of dimensions, occurrences of the pattern and number of errors. For each of the categories, all implemented solutions were measured. For the sake of the testing eight files were created with specific values based on these categories. One of the files was called standard file and is referenced in the text also by the name standard file. This standard file was compared with all other files and its parameters were: 
 \begin{itemize}
 \item size -- 256 MB
 \item density -- 50 \%
 \item number of dimensions -- 3
 \item occurrences of pattern -- 0.1 \%
+\item number of errors - 0, 4, 16, 64
 \end{itemize}
 
 \section{Time complexity} \label{timecomplex}
@@ -31,7 +32,7 @@ Y axis units are always seconds.
 
 Yellow color symbolizes the time needed for finishing of preverification and red color means the time of dynamic check.
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=0.8\textwidth]{img/baseAll}
 \caption{Computation time for all implemented algorithms using the standard input file.}
@@ -45,13 +46,9 @@ Dynamic check has such a low times because of the low number of pattern occurren
 \subsection{Dependency on data density}
 Measuring in this section was done using 3 different files. One of them is the standard file specified in the first section, other 2 files were different only in the density of generated data and its values were $100 \%$ and $2 \%$. When the file is $100 \%$ dense it means there are no missing values, while with the $50 \%$ density on half of the values is present and similarly with $2 \%$ density.
 
-In the figure \ref{fig_densRes}, green color represents dense data, orange $50 \%$ density and blue $2 \%$ density. It is clearly visible that lesser the maximum error allowed the higher the dependency on the data density. Times achieved when allowing up to 4 errors is multiple times worse for the least dense data. This happens because when the density is low there is a lot of positions to check even when there are no data in them, which is caused by the incorrect data manipulation in the implementations, as they are checking each position even when there are continuously missing data. 
+In the figure \ref{fig_densRes}, green color represents dense data, orange $50 \%$ density and blue $2 \%$ density. It is clearly visible that lesser the maximum error allowed the higher the dependency on the data density. Times achieved when allowing up to 4 errors is multiple times worse for the least dense data. This happens because when the density is low there is a lot of positions to check even when there are no data in them, which is caused by the incorrect data manipulation in the implementations, as they are checking each position even when there are continuously missing data. Because of the high sparsity of data, there is much more positions to check in the low dense file which dimensions were $656\times 656 \times 656$ than in the sparser ones (the dense file dimensions were $256\times 256 \times 256$ which worsens the time even more.
 
-However there can be seen that solutions using hashes can reach better times than other algorithms especially in the data with low density. Reason for this is that non-hash algorithms can take a while to reach a position with no data, but when using second and third implementation the overall comparison is quicker because the value of the hash is NULL if some of its value is not in the data. Which means that a lot more positions can be skipped directly.
-
-Solution using variant of LSB hash can be very successful for low errors allowed but rapidly worsens with growing error rate. This is why there is such a peak for error 16 and also its time is not used in the last graph for better scaling. In the last graph the brute solution is also omitted.
-
-\begin{figure}
+\begin{figure}[h]
 \begin{minipage}{\linewidth}
 \centering
 \subfloat{\label{dens:leg}\includegraphics[scale=0.2]{img/densLeg}}
@@ -79,12 +76,13 @@ Solution using variant of LSB hash can be very successful for low errors allowed
 \label{fig_densRes}
 \end{figure}
 
+
+However there can be seen that solutions using hashes can reach better times than other algorithms especially in the data with low density. Reason for this is that non-hash algorithms can take a while to reach a position with no data, but when using second and third implementation the overall comparison is quicker because the value of the hash is NULL if some of its value is not in the data. Which means that a lot more positions can be skipped directly.
+
+Solution using variant of LSB hash can be very successful for low errors allowed but rapidly worsens with growing error rate. This is why there is such a peak for error 16 and also its time is not used in the last graph for better scaling. In the last graph the brute solution is also omitted.
+
 \subsection{Dependency on dimensionality}
 Three different files were used based on the number of dimensions which were: two, three and four. In the figure \ref{fig_dimRes} the green color belongs to the 2D file, orange is for the standard three dimensional file and blue shows four dimensions. It is clear that the bigger the number of dimensions the higher times. This happens because for more dimensions the algorithm gets into higher recursion levels than otherwise.
-
-Second important thing to see in these graphs is that for low error rate and lower dimensionality hash algorithms are way worse than other non-brute solutions. This is caused by a high number of collisions and thus more expensive preverification. Because of the low data dimensionality there is only last dimension of data in the memory that will be hashed which means there is no reusage of already created hashes.
-
-The higher the number of dimensions in chunks the better the reusage rate of hashing algorithms thus better scaling.
 
 \begin{figure}
 \begin{minipage}{\linewidth}
@@ -114,14 +112,16 @@ The higher the number of dimensions in chunks the better the reusage rate of has
 \label{fig_dimRes}
 \end{figure}
 
+Second important thing to see in these graphs is that for low error rate and lower dimensionality hash algorithms are way worse than other non-brute solutions. This is caused by a high number of collisions and thus more expensive preverification. Because of the low data dimensionality there is only last dimension of data in the memory that will be hashed which means there is no reusage of already created hashes.
+
+The higher the number of dimensions in chunks the better the reusage rate of hashing algorithms thus better scaling.
+
 \subsection{Dependency on frequency of pattern occurrence}
 Difference between input files were this time in the number of pattern occurrences. Standard file had the occurrence rate set to $0.1 \%$ while the other two had $1 \%$ and $0.01 \%$. In the figure \ref{fig_patRes} there can be seen only a slight difference in the times of comparing algorithms. This difference is caused only by the preverification step and dynamic checks as they need to control more possible solutions thus lasting longer.
 
-As there is not much else to see in this figure it is possible to notice the general differences between the used algorithms. Brute algorithm is by expectation the worst solution, then both Navaro and Baeza-Yates are very similar because the find part does not find any false positive so the preverification is not necessary to perform. Then from the implemented solutions the first algorithm using hashing does the same number of comparisons, however the hashing function is more time consuming, on the other hand if the hashes are performed only once it significantly improves the find time while also increasing the preverification time as there are more possible solutions to check, but in the end the overall time is still a little lower unless the part size is too small for hashing to be worth it.
+The big leap of HR algorithm between error 4 and 16 is caused by the high number of collisions caused by the change of $j$ value, which is discussed more in the section focusing on the dependency on error rate \ref{depErrRate}.
 
-Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. When using HR solution, its even more dependent on the part size because the hash length is relies on it, so the quality of HR lies mainly in lower error rates.
-
-\begin{figure}
+\begin{figure}[h]
 \begin{minipage}{\linewidth}
 \centering
 \subfloat{\label{pat:leg}\includegraphics[scale=0.2]{img/patLeg}}
@@ -149,12 +149,13 @@ Stricter Filter algorithm is always slightly better than FFS because preverifica
 \label{fig_patRes}
 \end{figure}
 
+As there is not much else to see in this figure it is possible to notice the general differences between the used algorithms. Brute algorithm is by expectation the worst solution, then both Navaro and Baeza-Yates are very similar because the find part does not find any false positive so the preverification is not necessary to perform. Then from the implemented solutions the first algorithm using hashing does the same number of comparisons, however the hashing function is more time consuming, on the other hand if the hashes are performed only once it significantly improves the find time while also increasing the preverification time as there are more possible solutions to check, but in the end the overall time is still a little lower unless the part size is too small for hashing to be worth it.
+
+Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. When using HR solution, its even more dependent on the part size because the hash length is relies on it, so the quality of HR lies mainly in lower error rates.
+
+
 \subsection{Dependency on size of dataset}
 In the figure \ref{fig_sizeRes} there can be seen comparison of standard (orange) file and file of the size 4 GB but measured twice, first with the pattern of size $64\times64\times64$ and second with the standard pattern (size $16\times16\times16$), the large pattern was selected so the ratio of pattern size and file size is more similar. Also these figures are displayed with logarithmic scale due to the large difference in time. 
-
-As the file contains approximately 18 times more positions to check the time is about 20 times longer for the bigger file. This is probably due to the increased need of handling the cache and also may be affected by the number of found partial solutions because the file contains just pseudo randomly generated data.
-
-An effect of a difference in the pattern size, which was not tested by itself, is also visible in these figures. As expected it has only a slight effect on the final times and probably mostly due to inconsistencies in number of found positions due to the nature of the data.
 
 \begin{figure}
 \begin{minipage}{\linewidth}
@@ -180,28 +181,31 @@ An effect of a difference in the pattern size, which was not tested by itself, i
 \subfloat{\label{size:d}\includegraphics[width=\textwidth]{img/size64}\caption*{Error = 64}}
 \end{minipage}\par\medskip
 
-\caption{Test on 4GB data file.}
+\caption{Test of various file and pattern size.}
 \label{fig_sizeRes}
 \end{figure}
 
+As the file contains approximately 18 times more positions to check the time is about 20 times longer for the bigger file. This is probably due to the increased need of handling the cache and also may be affected by the number of found partial solutions because the file contains just pseudo randomly generated data.
 
-\subsection{Dependency on error rate}
+An effect of a difference in the pattern size, which was not tested by itself, is also visible in these figures. As expected it has only a slight effect on the final times and probably mostly due to inconsistencies in number of found positions due to the nature of the data.
+
+\subsection{Dependency on error rate} \label{depErrRate}
 In all the figures mentioned in previous sections, there can be seen that concerning approximate brute force solution the higher the error rate the higher the times. This is caused by the course of action of the algorithm used, i.e. it needs to check more data before the maximum number of errors is found.
 
 Both of the Navaro and Baeza-Yates algorithms act very similarly in a way that their run time decreases the bigger the error rate. This is caused by decreased find time as it needs to compare smaller parts. The drawback of this algorithms in this part could be in finding more solutions but this is not the case.
 
-In the solutions using hashing the find parts behave the same as for previous solutions in term of increasing the speed however the number of returned possible solutions to preverify is considerably higher, so the overall speed of find parts increases while the preverification decreases with the higher error rate. In the HR algorithm the number of collisions is so high that the preverification cost gradually outweighs every other part. This can be seen in the figures: \ref{fig_errA} which shows the the change of computation time based on the error rate and figure \ref{fig_errF} showing the difference between hashed and non-hashed find phase. The noticeable changes are caused by the change of $j$. That is because there is the same number of comparisons but smaller parts to compare.
+In the solutions using hashing the find parts behave the same as for previous solutions in term of increasing the speed however the number of returned possible solutions to preverify is considerably higher, so the overall speed of find parts increases while the preverification decreases with the higher error rate. In the HR algorithm the number of collisions is so high that the preverification cost gradually outweighs every other part. This can be seen in the figures: \ref{fig_errA} which shows the the change of computation time based on the error rate and figure \ref{fig_errF} showing the difference between hashed and non-hashed find phase. The noticeable changes are caused by the change of $j$, where first change is when the $j$ value changes to $2$ then the change to $4$ and then when $j=8$. That is because there is still the same number of comparisons but smaller parts to compare.
 
 Even though the $j$ number is optimized for the FFS and SF algorithms the usage of hashing changes some dependencies and thus the change of the calculation of $j$ could offer better scaling.
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{img/errorAll}
 \caption{Dependency of computation time of selected algorithms on error rate using the standard input file .}
 \label{fig_errA}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{img/errorFind}
 \caption{Computation time of only the find phase.}

@@ -5,9 +5,12 @@
 \addvspace {10pt}
 \addvspace {10pt}
 \contentsline {table}{\numberline {2.1}{\ignorespaces Example 2D array data structure\relax }}{6}{table.caption.4}
+\contentsline {table}{\numberline {2.2}{\ignorespaces Example of sparse data with three attributes.\relax }}{8}{table.caption.5}
 \addvspace {10pt}
-\contentsline {table}{\numberline {3.1}{\ignorespaces Example of Naive SimHash.\relax }}{41}{table.caption.19}
-\contentsline {table}{\numberline {3.2}{\ignorespaces Example of Modified LSB hashing.\relax }}{42}{table.caption.20}
+\addvspace {10pt}
+\contentsline {table}{\numberline {4.1}{\ignorespaces Example of Naive SimHash.\relax }}{41}{table.caption.18}
+\contentsline {table}{\numberline {4.2}{\ignorespaces Example of Modified LSB hashing.\relax }}{42}{table.caption.19}
+\addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}

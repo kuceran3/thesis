@@ -78,3 +78,33 @@ Each created tree is unique and also has distance value stored in each black nod
 \label{qmat}
 \end{figure}
 
+
+\chapter{ArrayLoop System} \label{arrayLoop}
+ArrayLoop is a middle-ware system that translates queries expressed in the model into queries executable by the SciDB. It uses iterative array model, which means there is an array being modified during iteration. Termination condition of this function is represented as an AQL function. This model is interested in major steps that can be decomposed into a minor ones which gives us possibility of parallel evaluation. By major steps its meant that function operates on all cells in array and minor step is otherwise. First of all there is need to assign what to do which is done by \textit{Pi} function. Then it is needed to compute aggregate function separately for each group.  This computation can be done with the help of an algorithm presented in \cite{marginals} and described in the section below \ref{marginals}. After that the records are updated with the new values and this generates new subset containing the results.
+For best usage of this algorithm was developed FixPoint function where user specifies the logic of iterative algorithm and it will translate it into ArrayLoop which prepares it into AQL and then SciDB can finally process it.
+
+To transform the function into the AQL format, ArrayLoop first automatically expands and rewrites the operation into an incremental implementation, if it is possible, and efficiently computes the last state of iterative array with the use of the updated cell in each iteration. Then it extracts (for each array chunk) the overlap area of neighbouring chunks and stores this overlaps together with the original chunk which provides both the core and overlap data to the operator during processing. In the final step it identifies outlines of the structures on a low resolution array and then refines details onto high resolution arrays. \cite{arrayloop}
+
+\section{Computing marginals} \label{marginals}
+As a marginal of a data cube it can be understood the aggregation of the data in all those tuples that have fixed values in a subset of the dimensions of the cube. Order of the marginal is the number of dimensions over which aggregation is happening. Mapping of reducers q and replication rate r is that no reducer associated with more than q inputs and for every output there is some reducer that is associated with all the inputs that output needs for its computation. Dimensions in this case have same number of different values.
+Function $C(n,m,k)$ defines minimum number of sets of size $m$ out of $n$ elements that every set of $k$ out of the same $n$ elements is contained in one of the sets of size $m$, and it is called the covering number.
+Different sets of $n,m,k$ are handled differently but when approached with unknown values it can be solved as: one group of handles contains dimensions to $m-k+1$ plus any $k-1$ dimensions from group $2$, and others are formed recursively to cover the dimensions of group $2$ and have none of the members of group $1$.
+This problem can be generalized as a problem with weights of dimensions and dividing dimensions into several groups. \cite{marginals}
+
+Example of computing marginal in three dimensional space (as seen in the pictures \ref{margin1} and \ref{margin2}):\\
+SELECT SUM(V) \\
+FROM DataCube \\
+WHERE D1 = x, D2 = y, D3 = z;\\
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{marg1d.png}
+\caption{Example of DataCube and selecting dimensions where $y=2$ and $z=3$.}
+\label{margin1}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{marg2d.png}
+\caption{Example of DataCube and selecting dimensions where $x=2$.}
+\label{margin2}
+\end{figure}
+

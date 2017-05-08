@@ -1,9 +1,9 @@
 \chapter{Analysis} \label{analysis}
-Content of this chapter will focus on defining the problem of pattern matching in the first section, after it the specification of multidimensional arrays will follow, succeeded by the explanation of similarity measures. 
+Content of this chapter will focus on defining the problem of pattern matching in the first section \ref{spec}, after it the specification of multidimensional arrays will follow \ref{multidimArrayDataStructure}, succeeded by the explanation of similarity hashing \ref{similHashing} and similarity measures \ref{similMeasures}. 
 
-When solving a pattern matching problem there is first needed to specify what is pattern matching which is done in the first section. Then the solution space is explained together with definition of similar measures and their most common types. Fourth section is devoted to introduction of the scientific database SciDB with its binary data format and some possible ways of working with its data.
+When solving a pattern matching problem there is first needed to specify what is a pattern matching which is done in the section \ref{multidimApprPattMatch}. Another section is devoted to introduction of the scientific database SciDB \ref{scidb} with its binary data format and some possible ways of working with its data.
 
-Fifth section presents multidimensional approximate pattern matching and some of the algorithms solving it. Next part focuses on machine learning methods especially k nearest neighbor and kernel based methods as they can be used for solving or improving of the solution of this problem together with the algorithms presented in the next sections.
+Last section presents machine learning methods \ref{machineLearning} especially K Nearest Neighbor and kernel based methods as they can be used for solving or improving of the solution of this problem together with the algorithms presented in the next sections.
 \section{Problem specification} \label{spec}
 This section will focus on definition of approximate pattern matching. 
 
@@ -34,7 +34,7 @@ New York Rangers & 56 & 96 & 113 & 101 & 102 \\
 \end{table}
 
 Pattern $P$ can be of two types, where the first one is defined as multidimensional array with dimensions $D_p \subseteq D$ and attributes $A_p \subseteq A$ where the number of dimensions $D_p \geq 1$ and number of attributes $A_p \geq 0$.
-This type of pattern is called template pattern and it can be used when the user has an exact idea about the result.
+This type of pattern is called template pattern and it can be used when the user has an exact idea about the result. Example of this pattern using the table \ref{tab1} would be to ask which teams managed to get $107$ points during one season and only $99$ during the next one. Right answer would be St. Louis Blues in the seasons 2015-16 and 2016-17.
 
 And the second type is defined as a condition limiting the values of dimensions and attributes. It consists of a hard constraints in the sense of: Find all parts so that their average value of attribute $A_i$ is lesser than $x$ . This type of pattern is called aggregate pattern, but this type is not used in this work.
 
@@ -62,6 +62,25 @@ To perform selection queries on these arrays there is a need to constraint the q
 
 \subsection{Sparse Data}
 When data are sparse that means that some attributes can contain 0 or null or empty value. The data can then be viewed as a sparse matrix containing 0 values at the position with no attribute or 0 valued attribute. Because of the nature of this data they offer a big opportunity for using various compressing algorithms to avoid looking through positions with none or 0 values. SciDB \cite{scidb} treats empty cells like they are non existent i.e. they are not evaluated with the count aggregate. Some Linear Algebra operators process them as 0 values and during join, sort and unpack operations they are disregarded.
+An example of sparse data can be seen in the table \ref{sparse} where cells containing value 0 are regarded as empty.
+
+\begin{table}
+\centering
+
+\begin{tabular}{| c | c | c |}
+\hline
+Attribute 1 & Attribute 2 & Attribute 3 \\
+\hline
+0 & 0 & 0 \\
+1 & 2 & 0 \\
+1 & 0 & 0 \\
+0 & 0 & 0 \\
+\hline
+\end{tabular}
+\caption{Example of sparse data with three attributes.}
+\label{sparse}
+
+\end{table}
 
 \subsection{Indexing}\label{indexing}
 Indexing improves the speed of data retrieval operation at the cost of additional writes and storage space needed to maintain the index structure. It is used in situations where it is needed to quickly access data without having to search every position. Common methods of indexing are described in the sections below.
@@ -69,9 +88,9 @@ Indexing improves the speed of data retrieval operation at the cost of additiona
 \subsubsection{Spatial Indexing}
 Spatial indexing can be done four main styles. First of them is by using access methods like point or spatial one, which are used for indexing of B-tree with its variants, Multidimensional range tree, Quadtree, KD-tree and R-trees. \cite{Rtree}. Another choice is to use Space filling curves which is good for maping the space into one dimension, like Peano-Hilbert, Z-order, row-prime order. Fourth choice is for Tilings of the domain space.\cite{joinFractal} This arrays usually have high value locality so the choice is to index individual cels or certain vale ranges as an object. Retrieval of the array indexing of arrays can be done by Depth First Search, but this method is not space efficient. \cite{MDindexingBTree}
 
-When using Quadtree method on of the ways of creating it is to use the Adaptive Mesh Refinement algorithm described below.
+When using Quadtree method on of the ways of creating it is to use the Adaptive Mesh Refinement algorithm described below \ref{AMR}.
 
-\paragraph{Adaptive Mesh Refinement}\label{AMR}
+\subsubsection{Adaptive Mesh Refinement}\label{AMR}
 AMR is a function with input parameters of Interval of values, spatial selection and its output is a set of cells with its values. To be returned by the function the cell must satisfy three conditions which are:
 \begin{itemize}
 \item cell must be uncovered
@@ -409,12 +428,6 @@ In the list below there are measures useful for categorical data:
 
 \end{itemize}
 
-%\subsubsection{Binary vectors}
-%Simple Matching Distance or Simple weighted Matching Distance can be counted for symmetric binary attributes (i.e. both 0 and 1 values have equal importance).
-%When having asymmetric attributes possibilities are: Jaccard distance, Weighted Jaccard distance, Non-binary categorical attributes and Simple Matching distance.
-%To fully understand binary classification there is a need of explaining what a confusion matrix is. A confusion matrix is a table used to describe the performance of a classification model on a data the true values are known. Ranges of the table is usually 2x2 (for two classes) and in the upper left corner there is a true positive value which signifies how many values are correctly classified as the first class. In contrary in the bottom right corner there is a number of true negative values, i.e. values that are correctly clasified as second class. In the upper right corner there is a number of falsely classified positive values hence false positive and similarly in the bottom left corner there is a number of falsely classified negative values hence false negative.
-
-
 
 \section{SciDB}\label{scidb}
 Nonexistence of usable scientific database gave birth to the SciDB. It was created to fulfill requirements given by scientists. Between the main requirements was to be able to contain multi-petabyte amounts of data, the preponderance of the data to be arrays, to be able to perform complex analytics, to have open source code, data can never be overwritten, it needs to be able to do provenance (trace backward), must work with uncertainty (because data comes with error bars) and must implement version control. This system was developed in C++ and supports Linux systems.
@@ -447,40 +460,13 @@ Third tenet is to use a cost-based optimizer. SciDB tries to perform simple cost
 
 As to the provenance task. The database admin is allowed to specify exact amount of space he is willing to allocate for the provenance data. \cite{scidbarch}
 
+For more detailed information about SciDB queries processing see appendix \ref{arrayLoop}.
+
 \subsection{Use case}
 
 Between most common use cases of this database belong satellite imagery, astronomy applications, genomics and commercial applications.
 
 Everyone can create their own queries because this database supports user defined data types and functions, but with specified amount of overlap. It can also work with uncertain cell values, but not uncertain dimensions and in-situ data, so you can use SciDB without loading your data.
-
-\subsection{ArrayLoop System}
-ArrayLoop is a middle-ware system that translates queries expressed in the model into queries executable by the SciDB. It uses iterative array model, which means there is an array being modified during iteration. Termination condition of this function is represented as an AQL function. This model is interested in major steps that can be decomposed into a minor ones which gives us possibility of parallel evaluation. By major steps its meant that function operates on all cells in array and minor step is otherwise. First of all there is need to assign what to do which is done by \textit{Pi} function. Then it is needed to compute aggregate function separately for each group.  This computation can be done with the help of an algorithm presented in \cite{marginals} and described in the section below \ref{marginals}. After that the records are updated with the new values and this generates new subset containing the results.
-For best usage of this algorithm was developed FixPoint function where user specifies the logic of iterative algorithm and it will translate it into ArrayLoop which prepares it into AQL and then SciDB can finally process it.
-
-To transform the function into the AQL format, ArrayLoop first automatically expands and rewrites the operation into an incremental implementation, if it is possible, and efficiently computes the last state of iterative array with the use of the updated cell in each iteration. Then it extracts (for each array chunk) the overlap area of neighbouring chunks and stores this overlaps together with the original chunk which provides both the core and overlap data to the operator during processing. In the final step it identifies outlines of the structures on a low resolution array and then refines details onto high resolution arrays. \cite{arrayloop}
-
-\subsubsection{Computing marginals} \label{marginals}
-As a marginal of a data cube it can be understood the aggregation of the data in all those tuples that have fixed values in a subset of the dimensions of the cube. Order of the marginal is the number of dimensions over which aggregation is happening. Mapping of reducers q and replication rate r is that no reducer associated with more than q inputs and for every output there is some reducer that is associated with all the inputs that output needs for its computation. Dimensions in this case have same number of different values.
-Function $C(n,m,k)$ defines minimum number of sets of size $m$ out of $n$ elements that every set of $k$ out of the same $n$ elements is contained in one of the sets of size $m$, and it is called the covering number.
-Different sets of $n,m,k$ are handled differently but when approached with unknown values it can be solved as: one group of handles contains dimensions to $m-k+1$ plus any $k-1$ dimensions from group $2$, and others are formed recursively to cover the dimensions of group $2$ and have none of the members of group $1$.
-This problem can be generalized as a problem with weights of dimensions and dividing dimensions into several groups. \cite{marginals}
-
-Example of computing marginal in three dimensional space (as seen in the pictures \ref{margin1} and \ref{margin2}):\\
-SELECT SUM(V) \\
-FROM DataCube \\
-WHERE D1 = x, D2 = y, D3 = z;\\
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{marg1d.png}
-\caption{Example of DataCube and selecting dimensions where $y=2$ and $z=3$.}
-\label{margin1}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[scale=0.5]{marg2d.png}
-\caption{Example of DataCube and selecting dimensions where $x=2$.}
-\label{margin2}
-\end{figure}
 
 
 \subsection{Window aggregation}
@@ -514,13 +500,22 @@ MIN and MAX operators are handled by creating a heap data structure. The operato
 
 Percentile operator is a bit different from operators above. it is counted as $n=(P/100)*N+1/2$ and its structure is Self balancing binary search tree (SBST). Steps are: generate basic window, initialize SBST, insert all the values of the basic window into SBST, move the window forward along with the last dimension, insert new elements into SBST and delete old ones (i.e. ones not longer present in the current window). Then move forward and proceed to new basic window. \cite{windowAggr}
 
+\subsection{Similarity join}
+This join can be used on array data model which means a model where multidimensional array is defined by a set of dimensions and a set of attributes. Each dimension is a finite totally ordered discrete set and all cells in a given array have the same type. It must allow chunking and have shared-nothing architecture. Array join is a join of dimensions and union of attributes. The goal of the similarity join is to find all the pairs of points such that the distance between them is smaller than some Epsilon.
+When applied on arrays the result dimension is union of joined arrays dimensions, result cells are the ones satisfying the given condition ($k=j+l$ in the picture), this can handle arrays with various dimensionality. Most general algorithm used for this is nested loop join. \cite{simJoin}
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{simjoin.png}
+\caption{Similarity join of 2 different arrays, first 2 dimensional, second 1 dimensional with condition array $\ell$. Result is in the 3 dimensional cube.}
+\end{figure}
 
-\section{Multidimensional Approximate Pattern Matching}\label{multidimApprPattMatch}
+
+\chapter{Multidimensional Approximate Pattern Matching}\label{multidimApprPattMatch}
 As was already stated in the problem specification \ref{spec} to successfully solve this problem, the user needs to specify certain pattern that will be searched for in the data. There are two options on how to look for the pattern i.e. with or without allowance of errors. According to this condition the problem is said to be approximate pattern matching when errors are allowed and exact vice versa.
 
 Solution of this problem can be used in the field of text searching, pattern recognition or computational biology.
 
-\subsection{Existing Solutions}
+\section{Existing Solutions}
 
 First and easiest approach is to compute the Edit distance between the pattern and data but it can be used only when the problem consists of one dimension and it computes exact pattern match. Another solution (this time for approximate match) can be performed by dynamic programming which tries to find all segments whose edit distance to pattern is maximally k, where k is greater than zero and lesser then complete match. This solution can be improved by filters.
 
@@ -534,7 +529,7 @@ Another option to solve this problem is R model where each row is treated as a s
 
 When tasked with a string pattern matching, various methods can be used for improving of the comparisons time, like for example Knuth--Morris--Pratt algorithm described in the section \ref{KMP}.
 
-\subsection{Multidimensional Pattern Matching Algorithms}
+\section{Multidimensional Pattern Matching Algorithms}
 To search across multiple dimension there are various algorithms to use, four of them are mentioned here. 
 
 First of them is Exact Multidimensional Pattern Matching which divides the space along one dimension to obtain patterns of one dimension less. Then it searches all sub-patterns in each of the dimensional subtexts.
@@ -547,14 +542,15 @@ Last algorithm presented is focused on adapting the filter to simpler distances.
 
 These algorithms were not implemented by anyone yet, but I will provide detailed description of my solutions in section Implementation.
 
-\subsection{Knuth--Morris--Pratt Algorithm}\label{KMP}
+\section{Knuth--Morris--Pratt Algorithm}\label{KMP}
 This algorithm was first presented in 1977 by scientists Knuth, Morris and Pratt \cite{kmp}. In their work they describe new algorithm usable for a string searching. The main idea of it is to remember for each position of the pattern P the length of the longest suffix P which matches to the prefix of the P. unlike the naive algorithm that after every mismatch shifts only by one position, which causes some parts of the data to be read again, KMP notices that it is possible to 
-move by more than one position, this information is gained when comparing previous characters. To be able to remember all the extra information the algorithm uses is stored in a pre-computed table.
+move by more than one position, this information is gained when comparing previous characters. To be able to remember all the extra information the algorithm uses is stored in a pre-computed table. Example of the steps KMP algorithm is shown in the figure \ref{kmp}.
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.4]{KMP}
 \caption{Example of matching of KMP algorithm \cite{stringJewels}. }
+\label{kmp}
 \end{figure}
 
 \section{Machine Learning Based Methods}\label{machineLearning}
@@ -577,14 +573,5 @@ Most of the machine learning based algorithms was developed for the usage in lin
 Among the algorithms using this method belong Support Vector Machines, Principal Component Analysis, Ridge regression, Linear Adaptive Filters and others. All linear models can be changed into non-linear by using kernel functions instead of its predictors. \cite{kernel} \cite{machineLearning}
 
 All of these methods can be converted to work when using array data structure as mentioned in this paper \cite{kernelArray}. Also this paper \cite{kernelstring} explains how to define kernels on structured objects like strings. The main idea is to define a kernel between parts of the object by using a suitable similarity measure. Because of this, the kernel function can be designed even for graphs.
-
-\section{Similarity join}
-This join can be used on array data model which means a model where multidimensional array is defined by a set of dimensions and a set of attributes. Each dimension is a finite totally ordered discrete set and all cells in a given array have the same type. It must allow chunking and have shared-nothing architecture. Array join is a join of dimensions and union of attributes. The goal of the similarity join is to find all the pairs of points such that the distance between them is smaller than some Epsilon.
-When applied on arrays the result dimension is union of joined arrays dimensions, result cells are the ones satisfying the given condition ($k=j+l$ in the picture), this can handle arrays with various dimensionality. Most general algorithm used for this is nested loop join. \cite{simJoin}
-\begin{figure}
-\centering
-\includegraphics[scale=0.4]{simjoin.png}
-\caption{Similarity join of 2 different arrays, first 2 dimensional, second 1 dimensional with condition array $\ell$. Result is in the 3 dimensional cube.}
-\end{figure}
 
 
