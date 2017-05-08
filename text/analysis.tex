@@ -1,4 +1,4 @@
-\chapter{Analysis}
+\chapter{Analysis} \label{analysis}
 Content of this chapter will focus on defining the problem of pattern matching in the first section, after it the specification of multidimensional arrays will follow, succeeded by the explanation of similarity measures. 
 
 When solving a pattern matching problem there is first needed to specify what is pattern matching which is done in the first section. Then the solution space is explained together with definition of similar measures and their most common types. Fourth section is devoted to introduction of the scientific database SciDB with its binary data format and some possible ways of working with its data.
@@ -150,7 +150,7 @@ Base types of distances that can be used are:
 
 When using irregular grid it can decompose the space using hyperplanes resulting in collection of blocks. By this there can be recreated irregular block sized grid, where no recursion is involved and block decomposition is handled by explicit representation. These blocks are not congruent (this will add access structure containing linear scales which indicates position of partitioning hyperplane).
 
-Representation of block decomposition can be done by using different types of quadtree or octree (\ref{octree}). Most commonly used decompositions are:
+Representation of block decomposition can be done by using different types of quadtree or octree (\ref{octree2}). Most commonly used decompositions are:
 \begin{itemize}
 \item Multicoloured quadtree - can contain more than two colours and also more block labels
 \item Binary quadtree - for black and white values only
@@ -181,8 +181,8 @@ Representation of block decomposition can be done by using different types of qu
 \includegraphics[width=\textwidth]{mat3d_strom}
 \caption{Octree block decomposition of the picture in Figure 1}
 \end{subfigure}
-\label{octree}
 \caption{Example of octree decomposition.}
+\label{octree2}
 \end{figure}
 
 %\begin{figure}
