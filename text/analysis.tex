@@ -1,11 +1,10 @@
 \chapter{Analysis} \label{analysis}
 Content of this chapter will focus on defining the problem of pattern matching in the first section \ref{spec}, after it the specification of multidimensional arrays will follow \ref{multidimArrayDataStructure}, succeeded by the explanation of similarity hashing \ref{similHashing} and similarity measures \ref{similMeasures}. 
 
-When solving a pattern matching problem there is first needed to specify what is a pattern matching which is done in the section 
-%TODO
-\ref{multidimApprPattMatch}. Another section is devoted to introduction of the scientific database SciDB \ref{scidb} with its binary data format and some possible ways of working with its data.
+Another section is devoted to introduction of the scientific database SciDB \ref{scidb} with its binary data format and some possible ways of working with its data.
 
 Last section presents machine learning methods \ref{machineLearning} especially K Nearest Neighbor and kernel based methods as they can be used for solving or improving of the solution of this problem together with the algorithms presented in the next sections.
+
 \section{Problem specification} \label{spec}
 This section will focus on definition of approximate pattern matching. 
 
@@ -235,7 +234,7 @@ Second representation is per CMHD which means Compact representation of Multidim
 Third possibility is to use Queries where elements of the different dimensions are all on the same level in their hierarchies. Different levels contain different labels. It is required to have top down traversal when searching hash tables for labels provided by the query for different dimensions to locate corresponding nodes. From nodes it traverse each hierarchy upwards to find out its depth and child that must be followed to reach it \cite{efficientRepre}.
 
 \section{Similarity hashing}\label{similHashing}
-Hashing approach is based on transforming the data item into a low-dimensional representation or a short code composed of a sequence of bits.
+Hashing approach is based on transforming the data item into a low-di\-men\-sio\-nal representation or a short code composed of a sequence of bits.
 
 This method is used to hash similar items into the same buckets, it is used in similarity searching systems. To measure similarity a feature based distance can be used. When hashing data it is the same approach as transforming them into a low dimensional space. Specific hashing approaches used in implementation will be explained in the section Implementation.
 
@@ -263,7 +262,7 @@ This type of hashing covers e.g. the LSH family and has been popular due to its 
 
 First of them is the Random Projection Based Hashing which is based on an idea of preserving the locality in the original Hamming space.
 
-In machine learning, recent research is focused on leveraging data-dependent and task-specific information for improving efficiency of hash functions like this. Some of the examples are: using kernel learning with LSH \cite{kernelLSH}, boosted LSH \cite{boostLSH} and non-metric LSH \cite{nonMLSH}.
+In machine learning, recent research is focused on leveraging data-de\-pen\-dent and task-specific information for improving efficiency of hash functions like this. Some of the examples are: using kernel learning with LSH \cite{kernelLSH}, boosted LSH \cite{boostLSH} and non-metric LSH \cite{nonMLSH}.
 
 Second type is hashing based on random permutations. This method is also known as min-wise independent permutation hashing or MinHash. Originaly the Minhash was applied in clustering and for eliminating of near-duplicates among web documents represented as sets of the words. \cite{minhashuse}
 
@@ -278,7 +277,7 @@ First of them is unsupervised which methods try to integrate data properties lik
 \item Spectral Hashing -- idea of this hashing is to hash similarity based on Hamming distance and use only a small number of hash bits
 \item Graph Hashing -- this method revolves around hashing graphs i.e. nodes and edges
 \item Kernelized LSH -- this approach is focused on using kernel functions as a hashing functions
-\item Spherical Hashing -- basic idea is to use a hypersphere to formulate a spherical hash function
+\item Spherical Hashing -- basic idea is to use a hypersphere to formulate a~spherical hash function
 \end{itemize}
 
 Second is supervised learning which ranges from usage of kernel methods and metrics (defined in section \ref{similMeasures}) to deep learning. Examples of this approach are introduced in papers \cite{LM1} and 
@@ -295,7 +294,7 @@ This type is based on the type of function used to create hashes, e.g. when usin
 When using traditional hashing the goal is to map the data into \textit{non-weighted} Hamming space. However sometimes it can be easily observed that different bits are behaving differently \cite{learnHash}. Because of this a technique were designed that learns a specific weight for each bit of the original hash.
 
 \section{Similarity measures}\label{similMeasures}
-By using a term similarity there is meant measure of how ``close'' to each other two instances are by quantifying the dependency between two sequences. The closer they are the larger the similarity value. However there are two ways of approaching the similarity measure. First of them is dissimilarity, which is a measure of how different two instances are. Dissimilarity is larger the more different the instances are. Some scientists use word proximity by which they refer to either similarity or dissimilarity.
+By using a term similarity there is meant measure of how ``close'' to each other two instances are by quantifying the dependency between two sequences. The closer they are the larger the similarity value. However there are two ways of approaching the similarity measure. First of them is dissimilarity, which is a~measure of how different two instances are. Dissimilarity is larger the more different the instances are. Some scientists use word proximity by which they refer to either similarity or dissimilarity.
 
 Similarity can be measured between strings, numbers, tuples, objects, images and so on, and its value is normalizes, which means in the interval [0,1], where 1 is for exact match and 0 for completely different objects \cite{simDissim}.
 
@@ -442,7 +441,7 @@ Nonexistence of usable scientific database was the main reason of the creation o
 
 \subsection{Data model}
 
-Because of these requirements the native data model chosen was array data where objects are N-dimensional array and not tables. Arrays with integer dimensions are divided into storage chunks which are composed of a stride in each dimension. Also, arrays are uniform, which means that all cells in a given array have the same collection of values \cite{scidb}.
+Because of these requirements the native data model chosen was array data where objects are N-dimensional array and not tables. Arrays with integer dimensions are divided into storage chunks which are composed of a stride in each dimension. Also, arrays are uniform, which means that all cells in a~given array have the same collection of values \cite{scidb}.
 
 This database supports schema migration, so attributes can be promoted to dimensions and dimensions can be deprecated to attributes. These operations can be performed by the transform command which pushes all dimension values up one to make a slot for new data. It can also reshape and array, flip dimensions for attributes and transform one or more dimensions into polar coordinates.
 
@@ -451,7 +450,7 @@ This database supports schema migration, so attributes can be promoted to dimens
 SciDB was developed to work with functional and SQL-like query language. The functional language is called AFL (array functional language) and the SQL-like is called AQL (array query language) and is then compiled into AFL. Array query language has SQL like construction and is able to compute linear algebra queries. It also contains loose coupling model for analytics which in this case is ScaLAPACK running alongside SciDB performing matrix operations.
 
 \subsection{Data storage}
-Arrays are stored on disk in fixed-sized chunks with extra storage chunks where the ``not valid'' cells are. These chunks are heavily encoded. Chunks are distributed with the use of hashing, range partitioning or a block-cyclic algorithm. It is usually a two level chunk/tile scheme where chunks are split into tiles. The chunking strategy is supporting multidimensional queries in a straightforward way i.e. chunking automatically provides an index, however this suffers from skew problems (e.g. think of density of people living in Manhattan and village). This problem can be solved by creating super-chunks from sparse chunks or by creating variable sized chunks. Because of this the database supports arbitrary number of splits to keep the chunk size below the threshold.
+Arrays are stored on disk in fixed-sized chunks with extra storage chunks where the ``not valid'' cells are. These chunks are heavily encoded. Chunks are distributed with the use of hashing, range partitioning or a block-cyclic algorithm. It is usually a two level chunk/tile scheme where chunks are split into tiles. The chunking strategy is supporting multidimensional queries in a~straightforward way i.e. chunking automatically provides an index, however this suffers from skew problems (e.g. think of density of people living in Manhattan and village). This problem can be solved by creating super-chunks from sparse chunks or by creating variable sized chunks. Because of this the database supports arbitrary number of splits to keep the chunk size below the threshold.
 
 Because of the need to never discard data even when wrong, the storage strategy was chosen as no overwrite. There is a special dimension for each array version. This is managed by special integer counter which begins at zero and increases with each update until array is destroyed. Need to trace backwards is arranged by backward deltas which contain a chain of references to previous versions. When in need of inserting and updating certain cell the database will put new values at the appropriate version in the array while delete operation will simply put ``not valid'' label to the cell. Version can be tied to wall-clock or special version names.
 

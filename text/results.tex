@@ -23,9 +23,9 @@ Abbreviations on the x axis correspond with these algorithms:
 \item BA -- Brute Force for approximate pattern matching
 \item FFS -- Fast Filter Searching
 \item SF -- Stricter Filter
-\item HS -- Naive Hashed Stricter Filter
-\item HS1 -- Hashed Stricter Filter second implementation
-\item HR -- Hashed Stricter Filter third implementation
+\item NSH -- Naive SimHashed Stricter Filter
+\item SH -- SimHash Stricter Filter
+\item LSB -- LSB Hash Stricter Filter
 \end{itemize}
 
 Y axis units are always seconds.
@@ -119,7 +119,7 @@ The higher the number of dimensions in chunks the better the reusage rate of has
 \subsection{Dependency on frequency of pattern occurrence}
 Difference between input files were this time in the number of pattern occurrences. Standard file had the occurrence rate set to $0.1 \%$ while the other two had $1 \%$ and $0.01 \%$. In the figure \ref{fig_patRes} there can be seen only a slight difference in the times of comparing algorithms. This difference is caused only by the preverification step and dynamic checks as they need to check more possible solutions thus lasting longer.
 
-The big leap of HR algorithm between error 4 and 16 is caused by the high number of collisions caused by the change of $j$ value, which is discussed more in the section focusing on the dependency on error rate \ref{depErrRate}.
+The big leap of LSB algorithm between error 4 and 16 is caused by the high number of collisions caused by the change of $j$ value, which is discussed more in the section focusing on the dependency on error rate \ref{depErrRate}.
 
 \begin{figure}[h]
 \begin{minipage}{\linewidth}
@@ -151,7 +151,7 @@ The big leap of HR algorithm between error 4 and 16 is caused by the high number
 
 As there is not much else to see in this figure it is possible to notice the general differences between the used algorithms. Brute algorithm is by expectation the worst solution, then both Navaro and Baeza-Yates are very similar because the find part does not find any false positive so the preverification is not necessary to perform. Then from the implemented solutions the first algorithm using hashing does the same number of comparisons, however the hashing function is more time consuming, on the other hand if the hashes are performed only once it significantly improves the find time while also increasing the preverification time as there are more possible solutions to check, but in the end the overall time is still a little lower unless the part size is too small for hashing to be worth it.
 
-Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. When using HR solution, its even more dependent on the part size because the hash length relies on it, so the quality of HR lies mainly in lower error rates.
+Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. When using LSB solution, its even more dependent on the part size because the hash length relies on it, so the quality of LSB lies mainly in lower error rates.
 
 
 \subsection{Dependency on size of dataset}
@@ -192,9 +192,9 @@ An effect of a difference in the pattern size, which was not tested by itself, i
 \subsection{Dependency on error rate} \label{depErrRate}
 In all the figures mentioned in previous sections, there can be seen that concerning approximate brute force solution the higher the error rate the higher the times. This is caused by the course of action of the algorithm used, i.e. it needs to check more data before the maximum number of errors is found.
 
-Both of the Navaro and Baeza-Yates algorithms act very similarly in a way that their run time decreases the bigger the error rate. This is caused by decreased find time as it needs to compare smaller parts. The drawback of this algorithms in this part could be in finding more solutions but this is not the case.
+Both of the Navaro and Baeza-Yates algorithms act very similarly in a~way that their run time decreases the bigger the error rate. This is caused by decreased find time as it needs to compare smaller parts. The drawback of this algorithms in this part could be in finding more solutions but this is not the case.
 
-In the solutions using hashing the find parts behave the same as for previous solutions in term of increasing the speed however the number of returned possible solutions to preverify is considerably higher, so the overall speed of find parts increases while the preverification decreases with the higher error rate. In the HR algorithm the number of collisions is so high that the preverification cost gradually outweighs every other part. This can be seen in the figures: \ref{fig_errA} which shows the the change of computation time based on the error rate and figure \ref{fig_errF} showing the difference between hashed and non-hashed find phase. The noticeable changes are caused by the change of $j$, where first change is when the $j$ value changes to $2$ then the change to $4$ and then when $j=8$. That is because there is still the same number of comparisons but smaller parts to compare.
+In the solutions using hashing the find parts behave the same as for previous solutions in term of increasing the speed however the number of returned possible solutions to preverify is considerably higher, so the overall speed of find parts increases while the preverification decreases with the higher error rate. In the LSB algorithm the number of collisions is so high that the preverification cost gradually outweighs every other part. This can be seen in the figures: \ref{fig_errA} which shows the the change of computation time based on the error rate and figure \ref{fig_errF} showing the difference between hashed and non-hashed find phase. The noticeable changes are caused by the change of $j$, where first change is when the $j$ value changes to $2$ then the change to $4$ and then when $j=8$. That is because there is still the same number of comparisons but smaller parts to compare.
 
 Even though the $j$ number is optimized for the FFS and SF algorithms the usage of hashing changes some dependencies and thus the change of the calculation of $j$ could offer better scaling.
 
@@ -215,7 +215,7 @@ Even though the $j$ number is optimized for the FFS and SF algorithms the usage 
 \section{Memory usage} \label{memoryuse}
 Implemented solutions uses a cache like memory system with the size of $C~=~max(64, m)$ where $m$ is the size of the pattern. This means that when the requested file is not in the memory it will be loaded into cache and if the cache is full the oldest data are discarded. 
 
-When taking brute solution as a base line that uses only cache and pattern memory, FFS and SF algorithms do not use any added memory except for dynamic check that needs only extra space for creating of matrix of size $m\times m$ for the alignment purposes. HS algorithm needs extra space only for the one data hash at a time and hashed all parts of the pattern so the increase is negligible. On the other hand, both HS1 and HR need to remember all hashes for the currently used data chunk, but because it is stored in the same structure as the data the complexity is increased to a theoretical maximum of $2\times C \times N$ where $N$ is the maximum number of cells stored in one chunk file. However the number of hashes is lower than the number of cells, because in this stage, as was explained in the implementation, only a part of the data are actually compared with the pattern.
+When taking brute solution as a base line that uses only cache and pattern memory, FFS and SF algorithms do not use any added memory except for dynamic check that needs only extra space for creating of matrix of size $m\times m$ for the alignment purposes. SH algorithm needs extra space only for the one data hash at a time and hashed all parts of the pattern so the increase is negligible. On the other hand, both NSH and LSB need to remember all hashes for the currently used data chunk, but because it is stored in the same structure as the data the complexity is increased to a theoretical maximum of $2\times C \times N$ where $N$ is the maximum number of cells stored in one chunk file. However the number of hashes is lower than the number of cells, because in this stage, as was explained in the implementation, only a part of the data are actually compared with the pattern.
 
 \subsection{Binary chunking}
 Performed data chunking creates one meta file, which contains the header presented in the implementation and an information needed to recognize the bin files containing the actual data, which are also created by chunking. Last, and usually the largest, file is a mask file. The size of this file is the main reason for low density data files to be less effectively chunked. As the mask always contains a bit for each cell, its size for the file with 2 \% density is more than 70 \% of the total size of chunked data. On the other hand, in the dense file the mask only takes up about 10 \% of the total size. 

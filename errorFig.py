@@ -45,8 +45,8 @@ plt.rcParams.update({'font.size': 40})
 
 fig, ax = plt.subplots()
 rects1 = ax.plot(x, sf, lw=2, marker='.', ms=20, color = 'royalblue', label='SF')
-rects2 = ax.plot(x, hs, lw=2, marker='.', ms=20, color = 'darkorange', label='HS')
-rects3 = ax.plot(x, hr, lw=2, marker='.', ms=20, color = 'seagreen', label='HR')
+rects2 = ax.plot(x, hs, lw=2, marker='.', ms=20, color = 'darkorange', label='SH')
+rects3 = ax.plot(x, hr, lw=2, marker='.', ms=20, color = 'seagreen', label='LSB')
 
 #ax.yaxis.set_label_coords(-0.1, 0.55)
 ax.set_ylabel('sec', rotation='horizontal')
@@ -64,8 +64,8 @@ plt.show()
 
 fig, ax = plt.subplots()
 rects1 = ax.plot(x, sf2, lw=2, marker='.', ms=20, color = 'royalblue', label='SF')
-rects2 = ax.plot(x, hs2, lw=2, marker='.', ms=20, color = 'darkorange', label='HS')
-rects3 = ax.plot(x, hr2, lw=2, marker='.', ms=20, color = 'seagreen', label='HR')
+rects2 = ax.plot(x, hs2, lw=2, marker='.', ms=20, color = 'darkorange', label='SH')
+rects3 = ax.plot(x, hr2, lw=2, marker='.', ms=20, color = 'seagreen', label='LSB')
 
 #ax.yaxis.set_label_coords(-0.1, 0.55)
 ax.set_ylabel('sec', rotation='horizontal')
