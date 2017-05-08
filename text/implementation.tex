@@ -1,12 +1,12 @@
 \chapter{Implementation} \label{implementation}
 This chapter will discuss the implementation. It presents all implemented solutions ranging from brute force exact pattern matching \ref{bruteepm} and approximate pattern matching \ref{bruteapm} up to exact solution using skipping dimensions \ref{bynepm}, approximate algorithm using dynamic check \ref{ffsapm}, algorithm using preverification phases \ref{sfapm} and solution using various hash functions \ref{hsfapm}.
 
-Primary languages were C++ and Python. For compilation of *.cpp programs user needs at least compiler of version 2011 (flag \texttt{-std=c++11}). All python scripts were run using version 3.0. A \textit{numpy} library is also needed. A \textit{Makefile} was created in order to simplify the C++ compilation.
+Primary languages were C++ and Python. For compilation of *.cpp programs user needs at least compiler of version 2011 (flag \texttt{-std=c++11}). All Python scripts were run using version 3.0. A \textit{numpy} library is also needed. A \textit{Makefile} was created in order to simplify the C++ compilation.
 
 Libraries used in C++ were iostream, fstream, string, vector, math.h and chrono which are all included in the C++11 standard.
 
 \section{Input Data}
-A large part of the database search revolves around used data structures, so this section will focus on the specifications of used formats and other properties. For this task three Python script were implemented and their usage and descriptions are in the sections below focused on generating of data \ref{generating}, data filtering and chunking \ref{chunking}, all of these scripts expect CSV data as input format, because it is one of the most common data storage format. However first section \ref{format} is explaining input data format which the scripts can process.
+A large part of the database search revolves around used data structures, so this section will focus on the specifications of used formats and other properties. For this task three Python scripts were implemented and their usage and descriptions are in the sections below focused on generating of data \ref{generating}, data filtering and chunking \ref{chunking}, all of these scripts expect CSV data as input format, because it is one of the most common data storage format. However first section \ref{format} is explaining input data format which the scripts can process.
 
 \subsection{Real datasets}
 Implementations were also tested using some real datasets \footnote{Provided by \url{archive.ics.uci.edu/ml/datasets}}. However there is a need of preprocessing of the data, as they are missing proper headers. The chunking can be done by the provided script. After these operations the datasets can be used the same way as testing data.
@@ -14,9 +14,9 @@ Implementations were also tested using some real datasets \footnote{Provided by 
 \subsection{Format}\label{format}
 Data format (file extension) that can be successfully processed is of types CSV and BIN where CSV data must have a header in the format:
 \begin{itemize}
-\item 0:DIMX$_0$, 1:DIMX$_1$, ... , N:DIMX$_N$, ATTR1:TYPE, ATTR2:TYPE, ... , ATTRL:TYPE
+\item 0:DIMX$_0$, 1:DIMX$_1$, \ldots , N:DIMX$_N$, ATTR1:TYPE, ATTR2:TYPE, \ldots , ATTRL:TYPE
 \end{itemize}
-In this format $(0, N)$ is an order of the dimension whilst $(X_0, X_1, ... , X_n)$ is a number of unique values that are in this dimension. $(ATTR1, ATTRL)$ specifies the name of the attribute and TYPE parameter contains the type of the values in the attribute, only one type per attribute is allowed. 
+In this format $(0, N)$ is an order of the dimension whilst $(X_0, X_1, \ldots , X_n)$ is a number of unique values that are in this dimension. $(ATTR1, \ldots, ATTRL)$ specifies the name of the attribute and TYPE parameter contains the type of the values in the attribute, only one type per attribute is allowed. 
 
 Various examples of this format can be: 
 \begin{itemize}
@@ -51,7 +51,7 @@ All tested data are represented in binary format and chunked into files which re
 
 Attribute values are added into the relevant file, which is determined by the dimension values. Created files have their names same as the input file with the dimension numbers added to signify which data are stored in them. For example, if the input data are two dimensional, there are two possible options to perform chunking based on the size of the data and maximal chunk size. First, if the data are small enough, the chunking would use only one bin file. Otherwise, for each ``row'' a single bin file would be created to easily determine what data are stored in them.
 
-As was already specified SciDB has its own binary format and the chunking uses exactly the same format. This means there is always one special file with meta information about the chunked binary files. In meta file there can be found header of the original data as this file is not binary encoded. There is also a mask file that specifies if a cell is in the data or not by using one bit per each cell (0 means the cell is not in the data and vice versa). Other files created by the script are binary of a binary type that contain a sequence of cell values. For the sake of testing attributes were only of integer type, but implementation can also work with other values.
+As was already specified SciDB has its own binary format and the chunking uses exactly the same format. This means there is always one special file with meta information about the chunked binary files. In meta file there can be found header of the original data as this file is not binary encoded. There is also a mask file that specifies if a cell is in the data or not by using one bit per each cell (0 means the cell is not in the data and vice versa). Other files created by the script are of a binary type that contain a sequence of cell values. For the sake of testing attributes were only of integer type, but implementation can also work with other values.
 
 The main advantage of the chunking is that the algorithm does not need to hold all data in the memory and instead read only currently processed sections.
 
@@ -69,14 +69,14 @@ Every other algorithm is a type of pattern matching. This section will present i
 \subsubsection{Brute Force} \label{bruteepm}
 As the name suggests this algorithm goes through every position in data and starts to compare the pattern from the ``top-left'' corner until it encounters error. This solution is very simple, on the other hand there is obviously no possibility not to find every position of the pattern.
 
-Just to clarify things, the algorithm iterates over every dimensions and in it over every values, thus the returned positions are sorted.
+Just to clarify things, the algorithm iterates over every dimension and in it over every value, thus the returned positions are sorted.
 
 \subsubsection{Baeza-Yates and Navarro modification}\label{bynepm}
 This algorithm was proposed by Baeza-Yates and Navarro \cite{mdApproxPM}. Its process is similar to the brute force algorithm, however one dimension which is present in both the pattern and the data is selected. While iterating through this dimension instead of taking steps of length 1, steps of length $m$ are taken.
 
 Not to miss any possible solution, every ``row'' of pattern is compared with the given part of the data. This process is better illustrated in the figure \ref{fig_skipDim}.
 
-Search cost in the worst case corresponds to verifying all text positions the same way as brute force algorithm, which gives $ \mathcal{O} (rm^dn^d)$ where $r$ is the number of searched patterns (in this case $1$), $m$ is the size of pattern in one dimension and $n$ is the size of data in one dimension, for simplicity the algorithms will work only with square shaped data, $d$ specifies the number of dimensions. \cite{mdApproxPM}
+Search cost in the worst case corresponds to verifying all text positions the same way as brute force algorithm, which gives $ \mathcal{O} (rm^dn^d)$ where $r$ is the number of searched patterns (in this case $1$), $m$ is the size of pattern in one dimension and $n$ is the size of data in one dimension, for simplicity the algorithms will work only with square shaped data, $d$ specifies the number of dimensions \cite{mdApproxPM}.
 
 \begin{figure}
 \centering

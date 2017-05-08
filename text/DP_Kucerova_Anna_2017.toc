@@ -93,10 +93,10 @@
 \contentsline {appendix}{\chapternumberline {B}Contents of enclosed USB}{67}{appendix.B}
 \contentsline {appendix}{\chapternumberline {C}Binary SciDB file format}{69}{appendix.C}
 \contentsline {appendix}{\chapternumberline {D}Usage and Types of MAT}{71}{appendix.D}
-\contentsline {paragraph}{\numberline {D.0.0.0.1}SPAN}{71}{paragraph.D.0.0.0.1}
-\contentsline {paragraph}{\numberline {D.0.0.0.2}GrayMat}{72}{paragraph.D.0.0.0.2}
-\contentsline {paragraph}{\numberline {D.0.0.0.3}GradMat}{72}{paragraph.D.0.0.0.3}
-\contentsline {paragraph}{\numberline {D.0.0.0.4}MMMAT}{72}{paragraph.D.0.0.0.4}
-\contentsline {paragraph}{\numberline {D.0.0.0.5}QMAT}{72}{paragraph.D.0.0.0.5}
+\contentsline {paragraph}{\numberline {D.0.1.0.4}SPAN}{71}{paragraph.D.0.1.0.4}
+\contentsline {paragraph}{\numberline {D.0.1.0.5}GrayMat}{72}{paragraph.D.0.1.0.5}
+\contentsline {paragraph}{\numberline {D.0.1.0.6}GradMat}{72}{paragraph.D.0.1.0.6}
+\contentsline {paragraph}{\numberline {D.0.1.0.7}MMMAT}{72}{paragraph.D.0.1.0.7}
+\contentsline {paragraph}{\numberline {D.0.1.0.8}QMAT}{72}{paragraph.D.0.1.0.8}
 \contentsline {appendix}{\chapternumberline {E}ArrayLoop System}{75}{appendix.E}
 \contentsline {section}{\numberline {E.1}Computing marginals}{75}{section.E.1}

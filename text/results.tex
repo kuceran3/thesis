@@ -1,5 +1,5 @@
 \chapter{Results} \label{results}
-This chapter will focus on presenting and discussing the results of all eight implementations (two for exact pattern matching and 6 for approximate pattern matching). First part \ref{problemdim} is focused on explaining all factors that the time could be dependent on. Next part \ref{timecomplex} will discuss measured times and its dependency on size and density of the file, number of dimensions and number of pattern matches. For this task, eight testing files were generated using the Gaussian generating script \ref{generating}. The last part \ref{memoryuse} will focus on explaining memory usage and the chunking algorithm.
+This chapter will focus on presenting and discussing the results of all eight implementations (two for exact pattern matching and six for approximate pattern matching). First part \ref{problemdim} is focused on explaining all factors that the time could be dependent on. Next part \ref{timecomplex} will discuss measured times and its dependency on size and density of the file, number of dimensions and number of pattern matches. For this task, eight testing files were generated using the Gaussian generating script \ref{generating}. The last part \ref{memoryuse} will focus on explaining memory usage and the chunking algorithm.
 
 \section{Problem dimensionality} \label{problemdim}
 Among the dimensions of the problem which could be worth measuring belong: size of the dataset and pattern, density of dataset, number of dimensions, number of errors allowed, algorithm used, size of the chunks and number of occurrences of the pattern in the data.
@@ -39,14 +39,14 @@ Yellow color symbolizes the time needed for finishing of preverification and red
 \label{fig_compT}
 \end{figure}
 
-As can be seen in the figure \ref{fig_compT}, solutions of exact approach achieve higher performance than approximate solutions. This is because whenever exact algorithms encounter a mistake they can dismiss this possible solution while approximate approach has to control until $k$ mistakes are found. Because of this distinct difference exact algorithms are not considered in another graphs.
+As can be seen in the figure \ref{fig_compT}, solutions of exact approach achieve higher performance than approximate solutions. This is because whenever exact algorithms encounter a mistake they can dismiss this possible solution while approximate approach has to check until $k$ errors are found. Because of this distinct difference exact algorithms are not considered in another graphs.
 
-Dynamic check has such a low times because of the low number of pattern occurrences in the data and thus very quickly verification. Preverification times are higher when using hashing algorithms because of the higher number of possible solutions found.
+Dynamic check has such a low times because of the low number of pattern occurrences in the data and thus very quick verification. Preverification times are higher when using hashing algorithms because of the higher number of possible solutions found.
 
 \subsection{Dependency on data density}
 Measuring in this section was done using 3 different files. One of them is the standard file specified in the first section, other 2 files were different only in the density of generated data and its values were $100 \%$ and $2 \%$. When the file is $100 \%$ dense it means there are no missing values, while with the $50 \%$ density on half of the values is present and similarly with $2 \%$ density.
 
-In the figure \ref{fig_densRes}, green color represents dense data, orange $50 \%$ density and blue $2 \%$ density. It is clearly visible that lesser the maximum error allowed the higher the dependency on the data density. Times achieved when allowing up to 4 errors is multiple times worse for the least dense data. This happens because when the density is low there is a lot of positions to check even when there are no data in them, which is caused by the incorrect data manipulation in the implementations, as they are checking each position even when there are continuously missing data. Because of the high sparsity of data, there is much more positions to check in the low dense file which dimensions were $656\times 656 \times 656$ than in the sparser ones (the dense file dimensions were $256\times 256 \times 256$ which worsens the time even more.
+In the figure \ref{fig_densRes}, green color represents dense data, orange $50 \%$ density and blue $2 \%$ density. It is clearly visible that lesser the maximum error allowed the higher the dependency on the data density. Times achieved when allowing up to 4 errors is multiple times worse for the least dense data. This happens because when the density is low there is a lot of positions to check even when there are no data in them, which is caused by the incorrect data manipulation in the implementations, as they are checking each position even when there are continuously missing data. Because of the high sparsity of data, there is much more positions to check in the low dense file which dimensions were $656\times 656 \times 656$ than in the sparser ones (the dense file dimensions were $256\times 256 \times 256$ which worsens the time even more).
 
 \begin{figure}[h]
 \begin{minipage}{\linewidth}
@@ -117,7 +117,7 @@ Second important thing to see in these graphs is that for low error rate and low
 The higher the number of dimensions in chunks the better the reusage rate of hashing algorithms thus better scaling.
 
 \subsection{Dependency on frequency of pattern occurrence}
-Difference between input files were this time in the number of pattern occurrences. Standard file had the occurrence rate set to $0.1 \%$ while the other two had $1 \%$ and $0.01 \%$. In the figure \ref{fig_patRes} there can be seen only a slight difference in the times of comparing algorithms. This difference is caused only by the preverification step and dynamic checks as they need to control more possible solutions thus lasting longer.
+Difference between input files were this time in the number of pattern occurrences. Standard file had the occurrence rate set to $0.1 \%$ while the other two had $1 \%$ and $0.01 \%$. In the figure \ref{fig_patRes} there can be seen only a slight difference in the times of comparing algorithms. This difference is caused only by the preverification step and dynamic checks as they need to check more possible solutions thus lasting longer.
 
 The big leap of HR algorithm between error 4 and 16 is caused by the high number of collisions caused by the change of $j$ value, which is discussed more in the section focusing on the dependency on error rate \ref{depErrRate}.
 
@@ -151,7 +151,7 @@ The big leap of HR algorithm between error 4 and 16 is caused by the high number
 
 As there is not much else to see in this figure it is possible to notice the general differences between the used algorithms. Brute algorithm is by expectation the worst solution, then both Navaro and Baeza-Yates are very similar because the find part does not find any false positive so the preverification is not necessary to perform. Then from the implemented solutions the first algorithm using hashing does the same number of comparisons, however the hashing function is more time consuming, on the other hand if the hashes are performed only once it significantly improves the find time while also increasing the preverification time as there are more possible solutions to check, but in the end the overall time is still a little lower unless the part size is too small for hashing to be worth it.
 
-Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. When using HR solution, its even more dependent on the part size because the hash length is relies on it, so the quality of HR lies mainly in lower error rates.
+Stricter Filter algorithm is always slightly better than FFS because preverification step is quicker than dynamic check. When using HR solution, its even more dependent on the part size because the hash length relies on it, so the quality of HR lies mainly in lower error rates.
 
 
 \subsection{Dependency on size of dataset}
