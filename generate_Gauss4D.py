@@ -113,7 +113,7 @@ def genPos(dim, length, density, percres, patS):
 	return patPos, distr
 
 if (len(sys.argv) < 7):
-	print("Usage: python generate_Gauss.py <NUMBER_OF_DIM> <DIM_SIZE> <%_DENSITY> <%_OF_RESULTS> <PATTERN_SIZE> <PATTERN_FILE> <OUTPUT_FILE>")
+	print("Usage: python generate_Gauss4D.py <NUMBER_OF_DIM> <DIM_SIZE> <%_DENSITY> <%_OF_RESULTS> <PATTERN_SIZE> <PATTERN_FILE> <OUTPUT_FILE>")
 	exit()
 
 script = sys.argv[0]
