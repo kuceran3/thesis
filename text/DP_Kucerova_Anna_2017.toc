@@ -52,7 +52,7 @@
 \contentsline {subsubsection}{\numberline {2.5.6.1}Computing marginals}{25}{subsubsection.2.5.6.1}
 \contentsline {subsection}{\numberline {2.5.7}Window aggregation}{26}{subsection.2.5.7}
 \contentsline {section}{\numberline {2.6}Multidimensional Approximate Pattern Matching}{28}{section.2.6}
-\contentsline {subsection}{\numberline {2.6.1}Existing Solutions}{28}{subsection.2.6.1}
+\contentsline {subsection}{\numberline {2.6.1}Existing Solutions}{29}{subsection.2.6.1}
 \contentsline {subsection}{\numberline {2.6.2}Multidimensional Pattern Matching Algorithms}{29}{subsection.2.6.2}
 \contentsline {subsection}{\numberline {2.6.3}Knuth--Morris--Pratt Algorithm}{30}{subsection.2.6.3}
 \contentsline {section}{\numberline {2.7}Machine Learning Based Methods}{31}{section.2.7}

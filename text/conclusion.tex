@@ -10,6 +10,6 @@ The algorithms were measured using pseudo randomly generated data, but also usin
 
 Due to the properties of exact pattern matching its solutions achieved lower times than approximate approaches, however they were not the main concern of this work so they were not researched further.
 FFS and SF algorithms proved to be about twice as fast as approximate brute solution in average case.
-HS algorithm proved to be worse than other non-brute APM solutions, because it hashes data every time the hash is needed, while the HS1 and HR algorithms hash the data only once which can improve the time needed for finding of the possible solutions to preverification and dynamic check, because of the possible reusability of the hashed value. This approach is highly dependent on the quality of the used hashing function as the collision rate hinges on it.
+HS algorithm proved to be worse than other non-brute approximate solutions, because it hashes data every time the hash is needed, while the HS1 and HR algorithms hash the data only once which can improve the time needed for finding of the possible solutions to preverification and dynamic check, because of the possible reusability of the hashed value. This approach is highly dependent on the quality of the used hashing function as the collision rate hinges on it.
 
 A weak point of the implementation is a work with the sparse data, although it is usable even on the data with arbitrary sparsity. However for the data with very low density so it could be a goal of the future work. 

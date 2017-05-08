@@ -461,8 +461,8 @@ To transform the function into the AQL format, ArrayLoop first automatically exp
 
 \subsubsection{Computing marginals} \label{marginals}
 As a marginal of a data cube it can be understood the aggregation of the data in all those tuples that have fixed values in a subset of the dimensions of the cube. Order of the marginal is the number of dimensions over which aggregation is happening. Mapping of reducers q and replication rate r is that no reducer associated with more than q inputs and for every output there is some reducer that is associated with all the inputs that output needs for its computation. Dimensions in this case have same number of different values.
-Function C(n,m,k) defines minimum number of sets of size m out of n elements that every set of k out of the same n elements is contained in one of the sets of size m, and it is called the covering number.
-Different sets of n,m,k are handled differently but when approached with unknown values it can be solved as: one group of handles contains dimensions to m-k+1 plus any k-1 dimensions from group 2, and others are formed recursively to cover the dimensions of group 2 and have none of the members of group 1.
+Function $C(n,m,k)$ defines minimum number of sets of size $m$ out of $n$ elements that every set of $k$ out of the same $n$ elements is contained in one of the sets of size $m$, and it is called the covering number.
+Different sets of $n,m,k$ are handled differently but when approached with unknown values it can be solved as: one group of handles contains dimensions to $m-k+1$ plus any $k-1$ dimensions from group $2$, and others are formed recursively to cover the dimensions of group $2$ and have none of the members of group $1$.
 This problem can be generalized as a problem with weights of dimensions and dividing dimensions into several groups. \cite{marginals}
 
 Example of computing marginal in three dimensional space (as seen in the pictures \ref{margin1} and \ref{margin2}):\\
@@ -472,20 +472,20 @@ WHERE D1 = x, D2 = y, D3 = z;\\
 \begin{figure}
 \centering
 \includegraphics[scale=0.5]{marg1d.png}
-\caption{Example of DataCube and selecting dimensions where y=2 and z=3}
+\caption{Example of DataCube and selecting dimensions where $y=2$ and $z=3$.}
 \label{margin1}
 \end{figure}
 \begin{figure}
 \centering
 \includegraphics[scale=0.5]{marg2d.png}
-\caption{Example of DataCube and selecting dimensions where x=2}
+\caption{Example of DataCube and selecting dimensions where $x=2$.}
 \label{margin2}
 \end{figure}
 
 
 \subsection{Window aggregation}
-Window aggregate executes aggregate operators over a sliding window (sub-array), as seen in the picture \ref{windowAMwin}. It has five types of operators: min, max, sum, average and percentile.
-Its computation scheme is incremental and has two stages. It tries to maintain intermediate aggregate results of the current area and reuse them. Inside the staged it moves basic window in the first N-1 dimensions, then it moves the window along with the last dimension and incrementally compute the aggregate result for each window. After all windows derived from the basic one are processed it is completed and it returns to the first step until all computation rounds of the basic windows are processed.
+Window aggregate executes aggregate operators over a sliding window (sub-array), as seen in the picture \ref{windowAMwin}. It has five types of operators: MIN, MAX, SUM, average and percentile.
+Its computation scheme is incremental and has two stages. It tries to maintain intermediate aggregate results of the current area and reuse them. Inside the staged it moves basic window in the first $N-1$ dimensions, then it moves the window along with the last dimension and incrementally compute the aggregate result for each window. After all windows derived from the basic one are processed it is completed and it returns to the first step until all computation rounds of the basic windows are processed.
 
 \begin{figure}
 \centering
@@ -494,7 +494,7 @@ Its computation scheme is incremental and has two stages. It tries to maintain i
 \label{windowAMwin}
 \end{figure}
 
-Sum and average operators are very similar as average uses sum and divides it by number of the elements. Because of this there will be only sum operator explained. This operator reuses SUM computed in previous windows by creating list structure (SUM-list) which contains sum values of every window unit. It generates basic window, computes its sum and initialize sum-list. Then it moves the window along with the last dimension with one step on one window unit, scans it and calculates the sum and updates the sum-list. Then it proceeds forward and continue to move the basic window down to obtain new ones. An example of creating and moving the SUM window can be seen in the pictures \ref{windowAM1} and \ref{windowAM2}.
+Sum and average operators are very similar as average uses sum and divides it by number of the elements. Because of this there will be only sum operator explained. This operator reuses SUM computed in previous windows by creating list structure (SUM-list) which contains sum values of every window unit. It generates basic window, computes its sum and initialize SUM-list. Then it moves the window along with the last dimension with one step on one window unit, scans it and calculates the SUM and updates the SUM-list. Then it proceeds forward and continue to move the basic window down to obtain new ones. An example of creating and moving the SUM window can be seen in the pictures \ref{windowAM1} and \ref{windowAM2}.
 
 \begin{figure}
 \centering
@@ -510,7 +510,7 @@ Sum and average operators are very similar as average uses sum and divides it by
 \label{windowAM2}
 \end{figure}
 
-Min and max operators are handled by creating a heap data structure. The operator will generate basic window and scan window units in it and compute MIN/MAX for each one while inserting them into MIN/MAX heap. Then it moves the window along with the last dimension, obtains new window, calculates new MIN/MAX and insert it into MIN/MAX heap again. Finally it checks the heap root and removes it if its corresponding window unit is no longer present in the current window (this step is repeated until it corresponds). Proceed forward and calculate MIN of all windows derived while continuing to move the basic window down.
+MIN and MAX operators are handled by creating a heap data structure. The operator will generate basic window and scan window units in it and compute MIN/MAX for each one while inserting them into MIN/MAX heap. Then it moves the window along with the last dimension, obtains new window, calculates new MIN/MAX and insert it into MIN/MAX heap again. Finally it checks the heap root and removes it if its corresponding window unit is no longer present in the current window (this step is repeated until it corresponds). Proceed forward and calculate MIN of all windows derived while continuing to move the basic window down.
 
 Percentile operator is a bit different from operators above. it is counted as $n=(P/100)*N+1/2$ and its structure is Self balancing binary search tree (SBST). Steps are: generate basic window, initialize SBST, insert all the values of the basic window into SBST, move the window forward along with the last dimension, insert new elements into SBST and delete old ones (i.e. ones not longer present in the current window). Then move forward and proceed to new basic window. \cite{windowAggr}
 
@@ -528,7 +528,7 @@ When the problem consists of two dimensions there can be uses a variety of metho
 
 Scientists Krithivasan and Sitalakshmi developed The KS model which given two images of the same size, the edit distance is the sum of the edit distance of the corresponding row images. When used for approximate matching the sub-image of size $MxM$ is searched into a large image of size $NxN$, where they are using a generalization of the classical one-dimensional algorithm.
 
-When fast searching under the KS model \ref{ks} patterns and texts are rectangular. Special distance measure allows errors along rows but not along columns. Variations of this model are Exact Partitioning which is best for larger patterns, Superimposed Automata which is best for small patterns, Counting is best for small patterns and One error. There are two useful functions defined for this model. First of them is C(m,k,r) function which defines cost per text character to search r patterns of length m with k errors, and second is L(m,r) function that says the value for k/m where the one dimensional algorithm does not work any more.
+When fast searching under the KS model \ref{ks} patterns and texts are rectangular. Special distance measure allows errors along rows but not along columns. Variations of this model are Exact Partitioning which is best for larger patterns, Superimposed Automata which is best for small patterns, Counting is best for small patterns and One error. There are two useful functions defined for this model. First of them is $C(m,k,r)$ function which defines cost per text character to search $r$ patterns of length $m$ with $k$ errors, and second is $L(m,r)$ function that says the value for $k/m$ where the one dimensional algorithm does not work any more.
 
 Another option to solve this problem is R model where each row is treated as a single string which is compared to other rows using one dimensional algorithm. Whole rows can be inserted and deleted. Modification of this model is RC model. If this algorithms encounter more than two dimensional problem it can be functional only if it has two hypercubes to compare which are reasonably close in size.
 

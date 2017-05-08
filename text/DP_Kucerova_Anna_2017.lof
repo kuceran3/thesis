@@ -7,8 +7,8 @@
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Example of AMR decomposition, different levels are represented by different colors\relax }}{9}{figure.caption.5}
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Example of octree decomposition.\relax }}{12}{figure.caption.7}
 \contentsline {figure}{\numberline {2.4}{\ignorespaces KS and RC error models \cite {mdApproxPM}\relax }}{19}{figure.caption.8}
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Example of DataCube and selecting dimensions where y=2 and z=3\relax }}{26}{figure.caption.9}
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Example of DataCube and selecting dimensions where x=2\relax }}{26}{figure.caption.10}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Example of DataCube and selecting dimensions where $y=2$ and $z=3$.\relax }}{26}{figure.caption.9}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Example of DataCube and selecting dimensions where $x=2$.\relax }}{26}{figure.caption.10}
 \contentsline {figure}{\numberline {2.7}{\ignorespaces Example of a sliding window \cite {windowAggr}. \relax }}{27}{figure.caption.11}
 \contentsline {figure}{\numberline {2.8}{\ignorespaces Initialization of SUM window \cite {windowAggr}.\relax }}{27}{figure.caption.12}
 \contentsline {figure}{\numberline {2.9}{\ignorespaces Processing of a new unit and updating sum-list \cite {windowAggr}.\relax }}{28}{figure.caption.13}
